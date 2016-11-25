@@ -2,20 +2,26 @@ let db = require('../').db;
 let expect = require('chai').expect;
 
 describe('db.users', function() {
-  let initUsers = [{mail: 'Test user 1'}, {mail: 'Test user 2'}];
+  let initUsers = null;
 
+  function *initTable() {
+    yield db.database.dropAllTable();
+    yield db.database.createAllTable();
+  }
+  function *initData() {
+    initUsers = [{mail: 'Test user 1'}, {mail: 'Test user 2'}];
+    yield* initUsers.map((user, i) => {
+      return db.users.add(user)
+      .then((returnedUser) => {
+        initUsers[i] = returnedUser;
+      });
+    });
+  }
   //clear database and create initUsers and rewrite it.
   beforeEach(function() {
-    initUsers = [{mail: 'Test user 1'}, {mail: 'Test user 2'}];
     return db.tx(function *(t) {
-      yield db.database.dropAllTable();
-      yield db.database.createAllTable();
-      yield* initUsers.map((user, i) => {
-        return db.users.add(user)
-        .then((returnedUser) => {
-          initUsers[i] = returnedUser;
-        });
-      });
+      yield* initTable();
+      yield* initData();
     });
   });
   describe('#customFind()', function() {

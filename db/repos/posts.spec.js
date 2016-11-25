@@ -2,25 +2,31 @@ let db = require('../').db;
 let expect = require('chai').expect;
 
 describe('db.posts', function() {
-  let initUser = {mail: 'Test user 1'};
-  let initPosts = [{content: 'Test content1'}, {content: 'Test content2'}];
-  beforeEach(function() {
+  let initUser = null, initPosts = null;
+
+  function *initTable() {
+    yield db.database.dropAllTable();
+    yield db.database.createAllTable();
+  }
+  function *initData() {
     initUser = {mail: 'Test user 1'};
     initPosts = [{content: 'Test content1'}, {content: 'Test content2'}];
+    yield db.users.add(initUser)
+    .then((user) => {
+      initUser = user;
+    });
+    initPosts.forEach((post) => post.userId = initUser.id);
+    yield* initPosts.map((post, i) => {
+      return db.posts.add(post)
+      .then((returnedPost) => {
+        initPosts[i] = returnedPost;
+      });
+    });
+  }
+  beforeEach(function() {
     return db.tx(function *(t) {
-      yield db.database.dropAllTable();
-      yield db.database.createAllTable();
-      yield db.users.add(initUser)
-      .then((user) => {
-        initUser = user;
-      });
-      initPosts.forEach((post) => post.userId = initUser.id);
-      yield* initPosts.map((post, i) => {
-        return db.posts.add(post)
-        .then((returnedPost) => {
-          initPosts[i] = returnedPost;
-        });
-      });
+      yield* initTable();
+      yield* initData();
     });
   });
   describe('#customFind()', function() {
