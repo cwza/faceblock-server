@@ -1,27 +1,13 @@
 let db = require('../').db;
 let expect = require('chai').expect;
+let dbInit = require('../dbInit');
 
 describe('db.users', function() {
-  let initUsers = null;
+  let initUsers = null, initPosts = null;
 
-  function *initTable() {
-    yield db.database.dropAllTable();
-    yield db.database.createAllTable();
-  }
-  function *initData() {
-    initUsers = [{mail: 'Test user 1'}, {mail: 'Test user 2'}];
-    yield* initUsers.map((user, i) => {
-      return db.users.add(user)
-      .then((returnedUser) => {
-        initUsers[i] = returnedUser;
-      });
-    });
-  }
-  //clear database and create initUsers and rewrite it.
   beforeEach(function() {
-    return db.tx(function *(t) {
-      yield* initTable();
-      yield* initData();
+    return dbInit.initDatabase((initData) => {
+      initUsers = initData.initUsers;
     });
   });
   describe('#customFind()', function() {
@@ -61,7 +47,15 @@ describe('db.users', function() {
     it('get all users', function() {
       return db.users.all()
       .then((users) => {
-        expect(users).to.have.length(initUsers.length);
+        expect(users.sort((a, b) => a.id - b.id)).to.deep.equal(initUsers);
+      });
+    });
+  });
+  describe('#total()', function() {
+    it('calculate count', function() {
+      return db.users.total()
+      .then((total) => {
+        expect(total).to.equal(initUsers.length);
       });
     });
   });

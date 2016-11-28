@@ -1,27 +1,15 @@
 let fetch = require('node-fetch');
 let expect = require('chai').expect;
 let db = require('../db').db;
+let dbInit = require('../db/dbInit');
 
 describe('route.users', function() {
-  let initUsers = null;
+  let initUsers = null, initPosts = null;
 
-  function *initTable() {
-    yield db.database.dropAllTable();
-    yield db.database.createAllTable();
-  }
-  function *initData() {
-    initUsers = [{mail: 'Test user 1'}, {mail: 'Test user 2'}];
-    yield* initUsers.map((user, i) => {
-      return db.users.add(user)
-      .then((returnedUser) => {
-        initUsers[i] = returnedUser;
-      });
-    });
-  }
   beforeEach(function() {
-    return db.tx(function *(t) {
-      yield* initTable();
-      yield* initData();
+    return dbInit.initDatabase((initData) => {
+      initUsers = initData.initUsers;
+      initPosts = initData.initPosts;
     });
   });
   describe('GET /users/id', function() {

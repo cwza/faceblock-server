@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 node ./bin/www",
-    "test": "./node_modules/mocha/bin/mocha  './**/*.spec.js'"
+    "start": "PORT=3001 DEBUG=myapp:* node ./bin/www",
+    "test": "./node_modules/mocha/bin/mocha  './**/*.spec.js'",
+    "db-init": "node -e \"require('./db/dbInit').initDatabase()\""
   },
   "dependencies": {
     "bluebird": "^3.4.6",

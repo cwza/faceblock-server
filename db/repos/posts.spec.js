@@ -1,39 +1,21 @@
 let db = require('../').db;
 let expect = require('chai').expect;
+let dbInit = require('../dbInit');
 
 describe('db.posts', function() {
-  let initUser = null, initPosts = null;
+  let initUsers = null, initPosts = null;
 
-  function *initTable() {
-    yield db.database.dropAllTable();
-    yield db.database.createAllTable();
-  }
-  function *initData() {
-    initUser = {mail: 'Test user 1'};
-    initPosts = [{content: 'Test content1'}, {content: 'Test content2'}];
-    yield db.users.add(initUser)
-    .then((user) => {
-      initUser = user;
-    });
-    initPosts.forEach((post) => post.userId = initUser.id);
-    yield* initPosts.map((post, i) => {
-      return db.posts.add(post)
-      .then((returnedPost) => {
-        initPosts[i] = returnedPost;
-      });
-    });
-  }
   beforeEach(function() {
-    return db.tx(function *(t) {
-      yield* initTable();
-      yield* initData();
+    return dbInit.initDatabase((initData) => {
+      initUsers = initData.initUsers;
+      initPosts = initData.initPosts;
     });
   });
   describe('#customFind()', function() {
     it('find all posts by user Test user 1', function() {
       return db.posts.customFind(`where userId = '${initPosts[0].userid}'`)
       .then((posts) => {
-        expect(posts).to.deep.equal(initPosts);
+        expect(posts.sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
       });
     });
   });
@@ -49,7 +31,7 @@ describe('db.posts', function() {
   });
   describe('#add() & get()', function() {
     it('add an post and then get it', function() {
-      let postToBeAdd = {userid: initUser.id, content: 'Test content3'};
+      let postToBeAdd = {userid: initUsers[0].id, content: 'Test content3'};
       return db.tx(function *(t) {
         let postBeAdded = yield db.posts.add(postToBeAdd);
         return postBeAdded;
@@ -63,7 +45,7 @@ describe('db.posts', function() {
     it('get all posts', function() {
       return db.posts.all()
       .then((posts) => {
-        expect(posts).to.have.length(initPosts.length);
+        expect(posts.sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
       });
     });
   });
