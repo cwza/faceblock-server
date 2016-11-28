@@ -34,7 +34,7 @@ let initDatabase = (resolver = null) => {
   .then(() => {
     initUsers.sort((a, b) => a.id - b.id);
     initPosts.sort((a, b) => a.id - b.id);
-    resolver? resolver({initUsers, initPosts}): console.log('init database end'));
+    resolver? resolver({initUsers, initPosts}): console.log('init database end');
   });
 }
 
