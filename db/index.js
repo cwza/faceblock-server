@@ -1,6 +1,6 @@
 'use strict';
 
-var promise = require('bluebird');
+const promise = require('bluebird');
 
 // Loading all the database repositories separately,
 // because event 'extend' is called multiple times:
@@ -26,13 +26,15 @@ var options = {
 
 };
 
+let env = process.env.NODE_ENV || 'development';
+
 // Database connection parameters:
 var config = {
-    host: 'localhost',
+    host: env === 'development' ? 'localhost' : process.env.DB_HOST,
     port: 5432,
     database: 'faceblock',
     user: 'faceblock',
-    password: 'faceblock'
+    password: env === 'development' ? 'faceblock' : process.env.DB_PWD
 };
 
 // Load and initialize pg-promise:
