@@ -47,7 +47,7 @@ describe('db.users', function() {
     it('get all users', function() {
       return db.users.all()
       .then((users) => {
-        expect(users.sort((a, b) => a.id - b.id)).to.deep.equal(initUsers);
+        expect(users.slice(0).sort((a, b) => a.id - b.id)).to.deep.equal(initUsers);
       });
     });
   });

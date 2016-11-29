@@ -26,6 +26,7 @@ function *initTestData() {
 }
 
 // delete all table, recreate table, and add test data to tables.
+// return id sorted initUsers, initPosts by callback
 let initDatabase = (resolver = null) => {
   return db.tx(function *(t) {
     yield* initTable();

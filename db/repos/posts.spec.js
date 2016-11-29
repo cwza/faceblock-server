@@ -1,6 +1,7 @@
 let db = require('../').db;
 let expect = require('chai').expect;
 let dbInit = require('../dbInit');
+let Constants = require('../../Constants');
 
 describe('db.posts', function() {
   let initUsers = null, initPosts = null;
@@ -15,7 +16,7 @@ describe('db.posts', function() {
     it('find all posts by user Test user 1', function() {
       return db.posts.customFind(`where userId = '${initPosts[0].userid}'`)
       .then((posts) => {
-        expect(posts.sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
+        expect(posts.slice(0).sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
       });
     });
   });
@@ -45,7 +46,7 @@ describe('db.posts', function() {
     it('get all posts', function() {
       return db.posts.all()
       .then((posts) => {
-        expect(posts.sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
+        expect(posts.slice(0).sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
       });
     });
   });
@@ -54,6 +55,15 @@ describe('db.posts', function() {
       return db.posts.total()
       .then((total) => {
         expect(total).to.equal(initPosts.length);
+      });
+    });
+  });
+  describe('#findByParams()', function() {
+    it('get posts by userIds orderby recent', function() {
+      let params = Object.assign({}, db.posts.defaultParams, {userIds: initUsers.map((user) => user.id)});
+      return db.posts.findByParams(params)
+      .then((posts) => {
+        expect(posts.slice(0).sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
       });
     });
   });
