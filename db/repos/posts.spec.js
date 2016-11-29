@@ -1,7 +1,7 @@
-let db = require('../').db;
-let expect = require('chai').expect;
-let dbInit = require('../dbInit');
-let Constants = require('../../Constants');
+const db = require('../').db;
+const expect = require('chai').expect;
+const dbInit = require('../dbInit');
+const Constants = require('../../Constants');
 
 describe('db.posts', function() {
   let initUsers = null, initPosts = null;

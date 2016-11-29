@@ -1,6 +1,6 @@
-let db = require('../').db;
-let expect = require('chai').expect;
-let dbInit = require('../dbInit');
+const db = require('../').db;
+const expect = require('chai').expect;
+const dbInit = require('../dbInit');
 
 describe('db.users', function() {
   let initUsers = null, initPosts = null;

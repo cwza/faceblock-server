@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-let db = require('../db').db;
-let debug = require('debug')('faceblock:router/posts.js');
-let Constants = require('../Constants');
+const express = require('express');
+const router = express.Router();
+const db = require('../db').db;
+const debug = require('debug')('faceblock:router/posts.js');
+const Constants = require('../Constants');
 
 let queryParamsToParams = (queryParams) => {
   let params = Object.assign({}, db.posts.defaultParams);

@@ -1,8 +1,8 @@
 'use strict';
 
-let squel = require("squel");
-let sql = require('../sql').posts;
-let Constants = require('../../Constants');
+const squel = require("squel");
+const sql = require('../sql').posts;
+const Constants = require('../../Constants');
 
 module.exports = (rep, pgp) => {
     let defaultParams = {

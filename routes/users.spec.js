@@ -1,7 +1,7 @@
-let fetch = require('node-fetch');
-let expect = require('chai').expect;
-let db = require('../db').db;
-let dbInit = require('../db/dbInit');
+const fetch = require('node-fetch');
+const expect = require('chai').expect;
+const db = require('../db').db;
+const dbInit = require('../db/dbInit');
 
 describe('route.users', function() {
   let initUsers = null, initPosts = null;

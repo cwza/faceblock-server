@@ -1,4 +1,4 @@
-let db = require('./').db;
+const db = require('./').db;
 
 let initUsers = null, initPosts = null;
 

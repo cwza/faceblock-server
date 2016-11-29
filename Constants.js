@@ -1,9 +1,9 @@
-let ORDERBY = {
+const ORDERBY = {
   recent: 'create_time',
   popular: 'popular',
 }
 
-let COUNT = 15;
+const COUNT = 15;
 
 module.exports = {
   ORDERBY, COUNT

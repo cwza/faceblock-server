@@ -1,7 +1,7 @@
 'use strict';
 
-var squel = require("squel");
-var sql = require('../sql').users;
+const squel = require("squel");
+const sql = require('../sql').users;
 
 module.exports = (rep, pgp) => {
     return {
