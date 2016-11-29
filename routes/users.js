@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db').db;
-const debug = require('debug')('faceblock:router/users.js');
 
 router.get('/:id', (req, res, next) => {
   db.users.find(req.params.id)

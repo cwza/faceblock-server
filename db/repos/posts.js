@@ -3,6 +3,7 @@
 const squel = require("squel");
 const sql = require('../sql').posts;
 const Constants = require('../../Constants');
+const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
     let defaultParams = {
@@ -34,6 +35,7 @@ module.exports = (rep, pgp) => {
               sqlString = squel.select().from('posts').where('userid IN ?', params.userIds).order(params.orderBy, false).order('id').toString();
             else
               sqlString = squel.select().from('posts').order(params.orderBy, false).order('id').toString();
+            logger.info('sqlString: ', sqlString);
             return rep.any(sqlString);
         },
         all: () =>
