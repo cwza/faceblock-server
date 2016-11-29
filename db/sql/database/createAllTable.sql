@@ -1,5 +1,5 @@
 BEGIN;
-CREATE TABLE Users
+CREATE TABLE IF NOT EXISTS Users
 (
     id serial PRIMARY KEY,
     mail text NOT NULL UNIQUE,
@@ -7,7 +7,7 @@ CREATE TABLE Users
     update_time timestamp default current_timestamp
 );
 
-CREATE TABLE Posts
+CREATE TABLE IF NOT EXISTS Posts
 (
     id serial PRIMARY KEY,
     userid int not null references Users(id) ON DELETE CASCADE,

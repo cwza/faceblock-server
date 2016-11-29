@@ -22,7 +22,7 @@ module.exports = (rep, pgp) => {
         drop: () =>
             rep.none('DROP TABLE Posts'),
         empty: () =>
-            rep.none('TRUNCATE TABLE Posts'),
+            rep.none('TRUNCATE TABLE Posts CASCADE'),
         remove: id =>
             rep.result('DELETE FROM Posts WHERE id = $1', id, r => r.rowCount),
         find: id =>
@@ -35,7 +35,7 @@ module.exports = (rep, pgp) => {
               sqlString = squel.select().from('posts').where('userid IN ?', params.userIds).order(params.orderBy, false).order('id').toString();
             else
               sqlString = squel.select().from('posts').order(params.orderBy, false).order('id').toString();
-            logger.info('sqlString: ', sqlString);
+            logger.debug('sqlString for posts::findByParams: ', sqlString);
             return rep.any(sqlString);
         },
         all: () =>

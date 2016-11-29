@@ -55,7 +55,8 @@ module.exports = {
     },
     database: {
       dropAllTable: sql('database/dropAllTable.sql'),
-      createAllTable: sql('database/createAllTable.sql')
+      createAllTable: sql('database/createAllTable.sql'),
+      truncateAllTable: sql('database/truncateAllTable.sql')
     }
 };
 

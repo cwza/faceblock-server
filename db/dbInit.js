@@ -3,7 +3,7 @@ const db = require('./').db;
 let initUsers = null, initPosts = null;
 
 function *initTable() {
-  yield db.database.dropAllTable();
+  yield db.database.truncateAllTable();
   yield db.database.createAllTable();
 }
 
