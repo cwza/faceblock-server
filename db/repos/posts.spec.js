@@ -12,16 +12,8 @@ describe('db.posts', function() {
       initPosts = initData.initPosts;
     });
   });
-  describe('#customFind()', function() {
-    it('find all posts by user Test user 1', function() {
-      return db.posts.customFind(`where userId = '${initPosts[0].userid}'`)
-      .then((posts) => {
-        expect(posts.slice(0).sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
-      });
-    });
-  });
   describe('#remove() & find()', function() {
-    it('remove Test content1 and get null', function() {
+    it('remove Test post 1 and get null', function() {
       return db.tx(function *(t) {
         let deleteCount = yield db.posts.remove(initPosts[0].id);
         expect(deleteCount).to.equal(1);

@@ -41,7 +41,8 @@ const logger = new (winston.Logger)({
     consoleLoggerTransport,
     allLoggerTransport,
     errorTransport
-  ]
+  ],
+  exitOnError: false
 });
 if(env === 'development') {
   logger.remove('all-file');
