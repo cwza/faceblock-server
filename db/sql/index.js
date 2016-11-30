@@ -6,25 +6,24 @@ var path = require('path');
 // Helper for linking to external query files;
 function sql(file) {
 
-    var fullPath = path.join(__dirname, file); // generating full path;
+  var fullPath = path.join(__dirname, file); // generating full path;
 
-    var options = {
+  var options = {
+    // minifying the SQL is always advised;
+    // see also option 'compress' in the API;
+    minify: true,
 
-        // minifying the SQL is always advised;
-        // see also option 'compress' in the API;
-        minify: true,
+    // Showing how to use static pre-formatting parameters -
+    // we have variable 'schema' in each SQL (as an example);
+    params: {
+      schema: 'public' // replace ${schema~} with "public"
+    }
+  };
 
-        // Showing how to use static pre-formatting parameters -
-        // we have variable 'schema' in each SQL (as an example);
-        params: {
-            schema: 'public' // replace ${schema~} with "public"
-        }
-    };
+  return new QueryFile(fullPath, options);
 
-    return new QueryFile(fullPath, options);
-
-    // See QueryFile API:
-    // http://vitaly-t.github.io/pg-promise/QueryFile.html
+  // See QueryFile API:
+  // http://vitaly-t.github.io/pg-promise/QueryFile.html
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,18 +45,18 @@ function sql(file) {
 // diverse example here, but you may just as well put all of your queries into SQL files.
 
 module.exports = {
-    users: {
-        create: sql('users/create.sql'),
-        init: sql('users/init.sql'),
-    },
-    posts: {
-        create: sql('posts/create.sql'),
-    },
-    database: {
-      dropAllTable: sql('database/dropAllTable.sql'),
-      createAllTable: sql('database/createAllTable.sql'),
-      truncateAllTable: sql('database/truncateAllTable.sql')
-    }
+  users: {
+    create: sql('users/create.sql'),
+    init: sql('users/init.sql'),
+  },
+  posts: {
+    create: sql('posts/create.sql'),
+  },
+  database: {
+    dropAllTable: sql('database/dropAllTable.sql'),
+    createAllTable: sql('database/createAllTable.sql'),
+    truncateAllTable: sql('database/truncateAllTable.sql')
+  }
 };
 
 //////////////////////////////////////////////////////////////////////////
