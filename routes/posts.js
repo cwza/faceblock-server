@@ -16,14 +16,17 @@ let queryParamsToParams = (queryParams) => {
   }
   return params;
 }
-//domain/posts?users=["", "", ""]&count=20&orderBy=recent
+//domain/posts?userids=[1, 2]&sort=id&order=asc&page=2
 router.get('/', (req, res, next) => {
   let params = queryParamsToParams(req.query);
   db.posts.findByParams(db.posts.genParams(params))
     .then((data) => {
       res.status(200).json(data);
     }).catch((error) => {
-      next(error);
+      let err = {};
+      err.shortMessage = 'undefined error';
+      err.longMessage = JSON.stringify(error);
+      next(err);
     })
 });
 
