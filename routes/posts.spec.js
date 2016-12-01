@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const expect = require('chai').expect;
+const request = require('supertest');
+const app = require('../app');
 const db = require('../db').db;
 const dbInit = require('../db/dbInit');
 
@@ -12,32 +12,51 @@ describe('route.posts', function() {
       initPosts = initData.initPosts;
     });
   });
-  describe('GET /posts?userids=[1, 2]', function() {
-    let url = 'http://localhost:3001/posts'
-    it('get posts by userids(1) orderBy id asc page 2 limit 5', function() {
+  describe('GET /posts?userids=[1]&sort=id&order=asc&page=2', function() {
+    let path = '/posts?userids=[1]&sort=id&order=asc&page=2';
+    it('should return the 6th to 10th post which userid is 1', function(done) {
       let userids = [initUsers[0].id];
-      return fetch(`${url}?userids=${JSON.stringify(userids)}&sort=id&order=asc&page=2`)
-        .then((res) => {
-          expect(res.status).to.equal(200);
-          return res.json();
-        }).then((json) => {
-          let returnedPosts = json;
-          let expectedPosts = initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10)
-          expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(expectedPosts));
-        });
+      let expectedResponse = JSON.stringify(initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10));
+      request(app)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200, expectedResponse, done);
     });
+    // let url = 'http://localhost:3001/posts'
+    // it('get posts by userids(1) orderBy id asc page 2 limit 5', function() {
+    //   let userids = [initUsers[0].id];
+    //   return fetch(`${url}?userids=${JSON.stringify(userids)}&sort=id&order=asc&page=2`)
+    //     .then((res) => {
+    //       expect(res.status).to.equal(200);
+    //       return res.json();
+    //     }).then((json) => {
+    //       let returnedPosts = json;
+    //       let expectedPosts = initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10)
+    //       expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(expectedPosts));
+    //     });
+    // });
   });
   describe('GET /posts', function() {
-    let url = 'http://localhost:3001/posts'
-    it('get posts by params', function() {
-      return fetch(`${url}?sort=id&order=asc`)
-        .then((res) => {
-          expect(res.status).to.equal(200);
-          return res.json();
-        }).then((json) => {
-          let returnedPosts = json;
-          expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(initPosts.slice(0, 5)));
-        });
+    let path = '/posts?sort=id&order=asc';
+    it('should return the first 5 posts', function(done) {
+      let expectedResponse = JSON.stringify(initPosts.slice(0, 5));
+      request(app)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200, expectedResponse, done);
     });
+    // let url = 'http://localhost:3001/posts'
+    // it('get posts by params', function() {
+    //   return fetch(`${url}?sort=id&order=asc`)
+    //     .then((res) => {
+    //       expect(res.status).to.equal(200);
+    //       return res.json();
+    //     }).then((json) => {
+    //       let returnedPosts = json;
+    //       expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(initPosts.slice(0, 5)));
+    //     });
+    // });
   });
 });

@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const db = require('../db').db;
 const dbInit = require('../db/dbInit');
 
-describe('route.users', function() {
+describe.skip('route.users', function() {
   let initUsers = null, initPosts = null;
 
   beforeEach(function() {

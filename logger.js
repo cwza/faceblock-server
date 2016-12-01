@@ -16,7 +16,7 @@ const consoleLoggerTransport = new (winston.transports.Console)({
   name: 'console',
   timestamp:dateFormat,
   level: env === 'development' ? 'debug' : 'info',
-  handleExceptions: true,
+  // handleExceptions: true,
   colorize:true
 });
 const allLoggerTransport = new DailyRotateFile({
@@ -25,6 +25,7 @@ const allLoggerTransport = new DailyRotateFile({
   timestamp:dateFormat,
   level: 'info',
   maxsize:1024*1024*10,
+  // handleExceptions: true,
   datePattern:'.yyyy-MM-dd'
 });
 const errorTransport = new DailyRotateFile({
@@ -33,7 +34,7 @@ const errorTransport = new DailyRotateFile({
   timestamp:dateFormat,
   level: 'error',
   maxsize:1024*1024*10,
-  handleExceptions: true,
+  // handleExceptions: true,
   datePattern:'.yyyy-MM-dd'
 });
 const logger = new (winston.Logger)({
