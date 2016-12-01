@@ -12,10 +12,10 @@ let genUsers = (n) => {
   return users;
 }
 
-let genPosts = (n, userId) => {
+let genPosts = (n, userid) => {
   let posts = _.range(dummy_num, dummy_num + n).map( num => {
     return {
-      content: 'Test content t' + num, userId
+      content: 'Test content t' + num, userid
     }
   });
   dummy_num += n;

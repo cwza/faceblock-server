@@ -51,11 +51,20 @@ describe('db.posts', function() {
     });
   });
   describe('#findByParams()', function() {
-    it('get posts by userIds orderby recent', function() {
-      let params = Object.assign({}, db.posts.defaultParams, {userIds: initUsers.map((user) => user.id)});
+    it('get posts by userids orderby id asc at page 2 limit 5', function() {
+      let params = {
+        userids: [initUsers[0].id],
+        sort: 'id',
+        order: 'asc',
+        page: 2
+      };
+      params = db.posts.genParams(params);
       return db.posts.findByParams(params)
-      .then((posts) => {
-        expect(posts.slice(0).sort((a, b) => a.id - b.id)).to.deep.equal(initPosts);
+      .then(posts => {
+        expect(posts).to.deep.equal(
+          initPosts.filter(post => params.userids.indexOf(post.userid) !== -1)
+            .slice(params.offset(), params.offset() + params.limit)
+        );
       });
     });
   });

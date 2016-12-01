@@ -7,13 +7,19 @@ const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Posts';
-  let defaultParams = {
-    userIds: [],
-    orderBy: Constants.ORDERBY.recent,
-    count: Constants.COUNT
-  };
+
   return {
-    defaultParams,
+    genParams: (params = {}) => {
+      let defaultParams = {
+        userids: [],
+        sort: 'create_time',
+        order: 'desc',
+        limit: 5,
+        page: 1,
+        offset: function() { return this.limit * (this.page - 1); }
+      }
+      return Object.assign({}, defaultParams, params);
+    },
     create: () =>
       rep.none(sql.create),
     add: post => {
@@ -30,12 +36,12 @@ module.exports = (rep, pgp) => {
       rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id),
     customFind: where =>
       rep.any(`SELECT * FROM ${TABLE_NAME} ` + where),
-    findByParams: (params = defaultParams) => {
+    findByParams: (params = genParams()) => {
       let sql = squel.select().from(TABLE_NAME);
-      if(params.userIds.length > 0)
-        sql = sql.where('userid IN ?', params.userIds).order(params.orderBy, false).order('id').toString();
+      if(params.userids.length > 0)
+        sql = sql.where('userid IN ?', params.userids).order(params.sort, params.order === 'asc').limit(params.limit).offset(params.offset());
       else
-        sql = sql.order(params.orderBy, false).order('id').toString();
+        sql = sql.order(params.sort, params.order === 'asc').limit(params.limit).offset(params.offset());
       logger.debug('sqlString for db.posts.findByParams(): ', sql.toString());
       return rep.any(sql.toString());
     },

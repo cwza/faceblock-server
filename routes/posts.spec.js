@@ -12,17 +12,17 @@ describe('route.posts', function() {
       initPosts = initData.initPosts;
     });
   });
-  describe('GET /posts?userIds=[1, 2]', function() {
+  describe('GET /posts?userids=[1, 2]', function() {
     let url = 'http://localhost:3001/posts'
-    it('get posts by userIds(1, 2) orderBy recent', function() {
-      let userIds = [initUsers[0].id, initUsers[1].id];
-      return fetch(url + '?userIds=' + JSON.stringify(userIds))
+    it('get posts by userids(1) orderBy id asc page 2 limit 5', function() {
+      let userids = [initUsers[0].id];
+      return fetch(`${url}?userids=${JSON.stringify(userids)}&sort=id&order=asc&page=2`)
         .then((res) => {
           expect(res.status).to.equal(200);
           return res.json();
         }).then((json) => {
-          let returnedPosts = json.sort((a, b) => a.id - b.id);
-          let expectedPosts = initPosts.filter((post) => post.userid === initUsers[0].id || initUsers[1].id);
+          let returnedPosts = json;
+          let expectedPosts = initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10)
           expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(expectedPosts));
         });
     });
@@ -30,13 +30,13 @@ describe('route.posts', function() {
   describe('GET /posts', function() {
     let url = 'http://localhost:3001/posts'
     it('get posts by params', function() {
-      return fetch(url)
+      return fetch(`${url}?sort=id&order=asc`)
         .then((res) => {
           expect(res.status).to.equal(200);
           return res.json();
         }).then((json) => {
-          let returnedPosts = json.sort((a, b) => a.id - b.id);
-          expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(initPosts));
+          let returnedPosts = json;
+          expect(JSON.stringify(returnedPosts)).to.deep.equal(JSON.stringify(initPosts.slice(0, 5)));
         });
     });
   });
