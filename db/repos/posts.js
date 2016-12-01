@@ -2,7 +2,7 @@
 
 const squel = require("squel");
 const sql = require('../sql').posts;
-const Constants = require('../../Constants');
+const PARAMS = require('../../Constants').PARAMS;
 const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
@@ -12,8 +12,8 @@ module.exports = (rep, pgp) => {
     genParams: (params = {}) => {
       let defaultParams = {
         userids: [],
-        sort: 'create_time',
-        order: 'desc',
+        sort: PARAMS.SORT.CREATED_TIME,
+        order: PARAMS.ORDER.DESC,
         limit: 5,
         page: 1,
         offset: function() { return this.limit * (this.page - 1); }

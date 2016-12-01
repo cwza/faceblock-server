@@ -1,10 +1,14 @@
-const ORDERBY = {
-  recent: 'create_time',
-  popular: 'popular',
+const PARAMS = {
+  ORDER: {
+    ASC: 'asc',
+    DESC: 'desc'
+  },
+  SORT: {
+    CREATED_TIME: 'created_time',
+    ID: 'id'
+  }
 }
 
-const COUNT = 15;
-
 module.exports = {
-  ORDERBY, COUNT
+  PARAMS
 }
