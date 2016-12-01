@@ -21,9 +21,9 @@ let findByParams = (queryParams) => {
       return data;
     }).catch(error => {
       let err = {
-        shortMessage: 'undefined error',
-        longMessage: JSON.stringify(error),
-      };
+        message: error.message,
+        longMessage: error
+      }
       throw err;
     })
 }

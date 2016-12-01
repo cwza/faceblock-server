@@ -21,7 +21,15 @@ describe('route.posts', function() {
         .get(path)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(200, expectedResponse, done);
+        .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(err);
+            console.log('res.body: ', res.body);
+            console.log('expectedResponse: ', expectedResponse);
+            throw err;
+          }
+          done();
+        });
     });
   });
   describe('GET /posts', function() {
@@ -32,7 +40,15 @@ describe('route.posts', function() {
         .get(path)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(200, expectedResponse, done);
+        .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(err);
+            console.log('res.body: ', res.body);
+            console.log('expectedResponse: ', expectedResponse);
+            throw err;
+          }
+          done();
+        });
     });
   });
 });

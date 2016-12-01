@@ -20,7 +20,16 @@ app.set('view engine', 'pug');
 app.use(morganLogger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator());
+app.use(expressValidator({
+  customValidators: {
+    isArray: function(param) {
+      return Array.isArray(JSON.parse(param));
+    },
+    exactlyMatch: function(param, values) {
+      return values.indexOf(param) !== -1;
+    },
+  }
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -40,7 +49,7 @@ app.use(function(req, res, next) {
 // error = {
 //   status,
 //   errorCode,
-//   shortMessage,
+//   message,
 //   longMessage
 // }
 app.use(function(err, req, res, next) {

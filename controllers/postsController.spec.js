@@ -18,9 +18,10 @@ describe('db.posts', function() {
         order: 'asc',
         page: 2
       }
+      let expectedResponse = initPosts.filter(post => params.userids.indexOf(post.userid) !== -1).slice(5, 10);
       return postsController.findByParams(params)
         .then(data => {
-          console.log(data);
+          expect(data).to.deep.equal(expectedResponse);
         });
     });
   });
