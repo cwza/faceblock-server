@@ -7,19 +7,16 @@ const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Posts';
-
+  let defaultParams = {
+    userids: [],
+    sort: PARAMS.SORT.CREATED_TIME,
+    order: PARAMS.ORDER.DESC,
+    limit: 5,
+    page: 1,
+    offset: function() { return this.limit * (this.page - 1); }
+  };
   return {
-    genParams: (params = {}) => {
-      let defaultParams = {
-        userids: [],
-        sort: PARAMS.SORT.CREATED_TIME,
-        order: PARAMS.ORDER.DESC,
-        limit: 5,
-        page: 1,
-        offset: function() { return this.limit * (this.page - 1); }
-      }
-      return Object.assign({}, defaultParams, params);
-    },
+    defaultParams,
     create: () =>
       rep.none(sql.create),
     add: post => {
@@ -36,7 +33,8 @@ module.exports = (rep, pgp) => {
       rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id),
     customFind: where =>
       rep.any(`SELECT * FROM ${TABLE_NAME} ` + where),
-    findByParams: (params = genParams()) => {
+    findByParams: (inputParams = defaultParams) => {
+      let params = Object.assign({}, defaultParams, inputParams);
       let sql = squel.select().from(TABLE_NAME);
       if(params.userids.length > 0)
         sql = sql.where('userid IN ?', params.userids).order(params.sort, params.order === 'asc').limit(params.limit).offset(params.offset());

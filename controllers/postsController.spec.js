@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const postsController = require('./postsController');
 const dbInit = require('../db/dbInit');
 
-describe('db.posts', function() {
+describe('postsController', function() {
   let initUsers = null, initPosts = null;
   beforeEach(function() {
     return dbInit.initDatabase((initData) => {

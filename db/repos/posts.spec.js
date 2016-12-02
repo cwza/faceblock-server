@@ -13,7 +13,7 @@ describe('db.posts', function() {
     });
   });
   describe('#remove() & find()', function() {
-    it('remove Test post 1 and get null', function() {
+    it('should remove Test post 1 and get null', function() {
       return db.tx(function *(t) {
         let deleteCount = yield db.posts.remove(initPosts[0].id);
         expect(deleteCount).to.equal(1);
@@ -58,12 +58,11 @@ describe('db.posts', function() {
         order: 'asc',
         page: 2
       };
-      params = db.posts.genParams(params);
       return db.posts.findByParams(params)
       .then(posts => {
         expect(posts).to.deep.equal(
           initPosts.filter(post => params.userids.indexOf(post.userid) !== -1)
-            .slice(params.offset(), params.offset() + params.limit)
+            .slice(5, 10)
         );
       });
     });

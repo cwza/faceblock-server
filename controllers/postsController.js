@@ -16,7 +16,7 @@ let queryParamsToParams = (queryParams) => {
 
 let findByParams = (queryParams) => {
   let params = queryParamsToParams(queryParams);
-  return db.posts.findByParams(db.posts.genParams(params))
+  return db.posts.findByParams(params)
     .then(data => {
       return data;
     }).catch(error => {
