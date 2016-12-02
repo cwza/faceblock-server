@@ -10,7 +10,7 @@ module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Posts';
   let defaultQueryParams = {
     userids: [],
-    sort: PARAMS.SORT.CREATED_TIME,
+    sort: PARAMS.SORT.CREATE_TIME,
     order: PARAMS.ORDER.DESC,
     limit: 5,
     page: 1,

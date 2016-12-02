@@ -4,7 +4,7 @@ const PARAMS = {
     DESC: 'desc'
   },
   SORT: {
-    CREATED_TIME: 'created_time',
+    CREATE_TIME: 'create_time',
     ID: 'id'
   }
 }

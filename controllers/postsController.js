@@ -14,8 +14,8 @@ let queryParamsToParams = (queryParams) => {
   return params;
 }
 
-let findByParams = (queryParams) => {
-  let params = queryParamsToParams(queryParams);
+let findByParams = (req) => {
+  let params = queryParamsToParams(req.query);
   return db.posts.findByParams(params)
     .then(data => {
       return data;
