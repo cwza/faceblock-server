@@ -1,6 +1,16 @@
+const expressValidator = require('express-validator')({
+  customValidators: {
+    isArray: function(param) {
+      return Array.isArray(JSON.parse(param));
+    },
+    exactlyMatch: function(param, values) {
+      return values.indexOf(param) !== -1;
+    },
+  }
+});
 // validate req by schema
 // return a promise if validate failed throw error else donothing
-let validate = (req, next, schema) => {
+let validate = (req, schema) => {
   req.check(schema);
   return req.getValidationResult().then(function(result) {
     if (!result.isEmpty()) {
@@ -15,4 +25,6 @@ let validate = (req, next, schema) => {
   }).catch(error => {throw error});
 }
 
-module.exports = validate;
+module.exports = {
+  expressValidator, validate
+}
