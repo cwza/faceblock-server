@@ -6,8 +6,9 @@ let validate = (req, next, schema) => {
     if (!result.isEmpty()) {
       let error = {
         status: 400,
+        errorCode: 400,
         message: 'Params Validation Error',
-        longMessage: result.array()
+        longMessage: JSON.stringify(result.array())
       }
       throw error;
     }

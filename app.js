@@ -40,8 +40,11 @@ app.use('/posts', posts);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  let err = new Error('Not Found');
-  err.status = 404;
+  let err = {
+    status: 404,
+    errorCode: 404,
+    message: 'Not Found'
+  }
   next(err);
 });
 
@@ -55,7 +58,8 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   logger.error(err);
   res.status(err.status || 500);
-  res.json(err);
+  let error = err.errorCode ? {error: err} : {error: {status: 500, message: err.message, longMessage: err}}
+  res.json(error);
 });
 
 module.exports = app;

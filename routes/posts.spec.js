@@ -13,7 +13,7 @@ describe('route.posts', function() {
     });
   });
   describe('GET /posts?userids=[1]&sort=id&order=asc&page=2', function() {
-    let path = '/posts?userids=[1]&sort=id&order=asc&page=2';
+    let path = '/posts?userids=[1]&sort=id&order=asc&page=2&something=sss';
     it('should return the 6th to 10th post which userid is 1', function(done) {
       let userids = [initUsers[0].id];
       let expectedResponse = JSON.stringify(initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10));
@@ -23,9 +23,7 @@ describe('route.posts', function() {
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
-            console.log(err);
-            console.log('res.body: ', res.body);
-            console.log('expectedResponse: ', expectedResponse);
+            console.log(res.body);
             throw err;
           }
           done();
@@ -42,9 +40,7 @@ describe('route.posts', function() {
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
-            console.log(err);
-            console.log('res.body: ', res.body);
-            console.log('expectedResponse: ', expectedResponse);
+            console.log(res.body);
             throw err;
           }
           done();

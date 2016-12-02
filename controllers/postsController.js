@@ -19,12 +19,6 @@ let findByParams = (queryParams) => {
   return db.posts.findByParams(params)
     .then(data => {
       return data;
-    }).catch(error => {
-      let err = {
-        message: error.message,
-        longMessage: error
-      }
-      throw err;
     })
 }
 

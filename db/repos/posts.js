@@ -3,11 +3,12 @@
 const squel = require("squel");
 const sql = require('../sql').posts;
 const PARAMS = require('../../Constants').PARAMS;
+const utils = require('../../utils');
 const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Posts';
-  let defaultParams = {
+  let defaultQueryParams = {
     userids: [],
     sort: PARAMS.SORT.CREATED_TIME,
     order: PARAMS.ORDER.DESC,
@@ -16,7 +17,7 @@ module.exports = (rep, pgp) => {
     offset: function() { return this.limit * (this.page - 1); }
   };
   return {
-    defaultParams,
+    defaultQueryParams,
     create: () =>
       rep.none(sql.create),
     add: post => {
@@ -33,8 +34,8 @@ module.exports = (rep, pgp) => {
       rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id),
     customFind: where =>
       rep.any(`SELECT * FROM ${TABLE_NAME} ` + where),
-    findByParams: (inputParams = defaultParams) => {
-      let params = Object.assign({}, defaultParams, inputParams);
+    findByParams: (inputParams = defaultQueryParams) => {
+      let params = utils.interMergeObject(inputParams, defaultQueryParams);
       let sql = squel.select().from(TABLE_NAME);
       if(params.userids.length > 0)
         sql = sql.where('userid IN ?', params.userids).order(params.sort, params.order === 'asc').limit(params.limit).offset(params.offset());
