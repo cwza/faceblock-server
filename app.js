@@ -23,6 +23,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// for CORS TODO: now allow all domain should add specific domain for production
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 //routers
 app.use('/', index);
