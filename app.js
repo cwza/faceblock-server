@@ -39,6 +39,10 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+// response = {
+//   data:{},
+//   link:{}
+// }
 // error handler
 // error = {
 //   status,

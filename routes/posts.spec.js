@@ -16,7 +16,9 @@ describe('route.posts', function() {
     let path = '/posts?userids=[1]&sort=id&order=asc&page=2&something=sss';
     it('should return the 6th to 10th post which userid is 1', function(done) {
       let userids = [initUsers[0].id];
-      let expectedResponse = JSON.stringify(initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10));
+      let expectedResponse = JSON.stringify({
+        data: initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10)
+      });
       request(app)
         .get(path)
         .set('Accept', 'application/json')
@@ -33,7 +35,9 @@ describe('route.posts', function() {
   describe('GET /posts', function() {
     let path = '/posts?sort=id&order=asc';
     it('should return the first 5 posts', function(done) {
-      let expectedResponse = JSON.stringify(initPosts.slice(0, 5));
+      let expectedResponse = JSON.stringify({
+        data: initPosts.slice(0, 5)
+      });
       request(app)
         .get(path)
         .set('Accept', 'application/json')
