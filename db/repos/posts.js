@@ -1,6 +1,6 @@
 'use strict';
 
-const squel = require("squel");
+const squel = require("squel").useFlavour('postgres');
 const sql = require('../sql').posts;
 const PARAMS = require('../../Constants').PARAMS;
 const utils = require('../../utils');
@@ -21,8 +21,12 @@ module.exports = (rep, pgp) => {
     create: () =>
       rep.none(sql.create),
     add: post => {
-      let sqlString = squel.insert().into(TABLE_NAME).setFieldsRows([post]).toString() + ' RETURNING *';
-      return rep.one(sqlString, post => post);
+      let sql = squel.insert().into(TABLE_NAME).setFieldsRows([post]).returning('*');
+      return rep.one(sql.toString(), post => post);
+    },
+    addMulti: posts => {
+      let sql = squel.insert().into(TABLE_NAME).setFieldsRows(posts).returning('*');
+      return rep.any(sql.toString(), posts => posts);
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),

@@ -1,7 +1,8 @@
 'use strict';
 
-const squel = require("squel");
+const squel = require("squel").useFlavour('postgres');
 const sql = require('../sql').users;
+const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Users';
@@ -11,8 +12,12 @@ module.exports = (rep, pgp) => {
     init: () =>
       rep.tx('Demo-Users', t => t.map(sql.init, null, row => row.id)),
     add: user => {
-      let sqlString = squel.insert().into(TABLE_NAME).setFieldsRows([user]).toString() + ' RETURNING *';
-      return rep.one(sqlString, user => user);
+      let sql = squel.insert().into(TABLE_NAME).setFieldsRows([user]).returning('*');
+      return rep.one(sql.toString(), user => user);
+    },
+    multiAdd: users => {
+      let sql = squel.insert().into(TABLE_NAME).setFieldsRows(users).returning('*');
+      return rep.any(sql.toString(), users => users);
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),

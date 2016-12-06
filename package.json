@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "PORT=3001 DEBUG=myapp:* node ./bin/www",
-    "test": "./node_modules/mocha/bin/mocha  './**/*.spec.js'",
-    "test-single": "./node_modules/mocha/bin/mocha",
+    "test": "./node_modules/mocha/bin/mocha --timeout 10000 './**/*.spec.js'",
+    "test-single": "./node_modules/mocha/bin/mocha --timeout 10000",
     "db-init": "node -e \"require('./db/dbInit').initDatabase()\""
   },
   "dependencies": {

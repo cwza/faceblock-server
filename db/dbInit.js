@@ -23,29 +23,29 @@ let genPosts = (n, userid) => {
 }
 
 function *initTable() {
+  console.time('createAllTable');
   yield db.database.createAllTable();
+  console.timeEnd('createAllTable');
+  console.time('truncateAllTable');
   yield db.database.truncateAllTable();
+  console.timeEnd('truncateAllTable');
 }
 
 function *initUsersData() {
   initUsers = genUsers(3);
-  yield* initUsers.map((user, i) => {
-    return db.users.add(user)
-    .then((returnedUser) => {
-      initUsers[i] = returnedUser;
+    yield db.users.multiAdd(initUsers)
+    .then((returnedUsers) => {
+      initUsers = returnedUsers;
     });
-  });
   dummy_num = 1;
   initUsers.sort((a, b) => a.id - b.id);
 }
 
 function *initPostsData() {
   initPosts = [...genPosts(25, initUsers[0].id), ...genPosts(10, initUsers[1].id)];
-  yield* initPosts.map((post, i) => {
-    return db.posts.add(post)
-    .then((returnedPost) => {
-      initPosts[i] = returnedPost;
-    });
+  yield db.posts.addMulti(initPosts)
+  .then((returnedPosts) => {
+    initPosts = returnedPosts;
   });
   dummy_num = 1;
   initPosts.sort((a, b) => a.id - b.id);
@@ -60,8 +60,12 @@ function *initTestData() {
 // return id sorted initUsers, initPosts by callback
 let initDatabase = (resolver = null) => {
   return db.tx(function *(t) {
+    console.time('initTable');
     yield* initTable();
+    console.timeEnd('initTable');
+    console.time('initTestData');
     yield* initTestData();
+    console.timeEnd('initTestData');
   })
   .then(() => {
     resolver? resolver({initUsers, initPosts}): console.log('init database end');
@@ -69,5 +73,5 @@ let initDatabase = (resolver = null) => {
 }
 
 module.exports = {
-  initDatabase,
+  initDatabase, initTestData, initUsersData, initPostsData
 }

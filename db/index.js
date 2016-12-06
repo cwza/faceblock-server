@@ -31,9 +31,9 @@ let env = process.env.NODE_ENV || 'development';
 var config = {
   host: env === 'development' ? 'localhost' : process.env.DB_HOST,
   port: 5432,
-  database: 'faceblock',
-  user: 'faceblock',
-  password: env === 'development' ? 'faceblock' : process.env.DB_PWD
+  database: 'postgres',
+  user: 'postgres',
+  password: env === 'development' ? 'postgres' : process.env.DB_PWD
 };
 
 // Load and initialize pg-promise:

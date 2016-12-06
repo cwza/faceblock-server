@@ -12,4 +12,9 @@ describe.skip('db.database', function() {
       return db.database.createAllTable();
     });
   });
+  describe.skip('#truncateAllTable()', function() {
+    it('truncateAllTable', function() {
+      return db.database.truncateAllTable();
+    });
+  });
 });
