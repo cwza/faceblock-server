@@ -12,3 +12,7 @@ Test:
 
 Log:
   winston
+
+config files:
+  ./db/index.js
+  ./logger.js
