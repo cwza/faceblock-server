@@ -9,7 +9,7 @@ const logger = require('../../logger').logger;
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Posts';
   let defaultQueryParams = {
-    userids: [],
+    q: '',
     sort: PARAMS.SORT.CREATE_TIME,
     order: PARAMS.ORDER.DESC,
     limit: 5,
@@ -40,13 +40,9 @@ module.exports = (rep, pgp) => {
       rep.any(`SELECT * FROM ${TABLE_NAME} ` + where),
     findByParams: (inputParams = defaultQueryParams) => {
       let params = utils.interMergeObject(inputParams, defaultQueryParams);
-      let sql = squel.select().from(TABLE_NAME);
-      if(params.userids.length > 0)
-        sql = sql.where('userid IN ?', params.userids).order(params.sort, params.order === 'asc').limit(params.limit).offset(params.offset());
-      else
-        sql = sql.order(params.sort, params.order === 'asc').limit(params.limit).offset(params.offset());
-      logger.debug('sqlString for db.posts.findByParams(): ', sql.toString());
-      return rep.any(sql.toString());
+      let sqlString = `SELECT zdb_score('${TABLE_NAME}', ${TABLE_NAME}.ctid) AS score, * FROM ${TABLE_NAME} WHERE zdb('${TABLE_NAME}', ctid) ==> '${params.q}' ORDER BY ${params.sort} ${params.order} LIMIT ${params.limit} OFFSET ${params.offset()}`;
+      logger.debug('sqlString for db.posts.findByParams(): ', sqlString);
+      return rep.any(sqlString);
     },
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`),

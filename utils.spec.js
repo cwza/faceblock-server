@@ -11,4 +11,12 @@ describe('utils', function() {
       expect(interMergedObject).to.deep.equal(expectedObject);
     });
   });
+  describe('#utils.deletePropertiesFromObject()', function() {
+    it('should return interMergedObject', function() {
+      let obj = {name: 'cwz', id: 1, mail:'mail', other: 'xxx'};
+      let expectedObj = {name: 'cwz', mail:'mail'};
+      let returnedObj = utils.deletePropertiesFromObject(obj, ['id', 'other']);
+      expect(returnedObj).to.deep.equal(expectedObj);
+    });
+  });
 });

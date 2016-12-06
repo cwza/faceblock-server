@@ -1,4 +1,5 @@
 const db = require('../db').db;
+const utils = require('../utils');
 
 let queryParamsToParams = (queryParams) => {
   let params = {};
@@ -18,7 +19,7 @@ let findByParams = (req) => {
   let params = queryParamsToParams(req.query);
   return db.posts.findByParams(params)
     .then(data => {
-      return {data: data};
+      return {data: data.map(element => utils.deletePropertiesFromObject(element, ['score']))};
     })
 }
 

@@ -2,6 +2,7 @@ const db = require('../').db;
 const expect = require('chai').expect;
 const dbInit = require('../dbInit');
 const Constants = require('../../Constants');
+const utils = require('../../utils');
 
 describe('db.posts', function() {
   let initUsers = null, initPosts = null;
@@ -52,18 +53,17 @@ describe('db.posts', function() {
   });
   describe('#findByParams()', function() {
     it('get posts by userids orderby id asc at page 2 limit 5', function() {
+      let expectedPosts = initPosts.filter(post => post.userid === 1).slice(5, 10);
       let params = {
-        userids: [initUsers[0].id],
+        q: 'userid:(1)',
         sort: 'id',
         order: 'asc',
         page: 2
       };
       return db.posts.findByParams(params)
       .then(posts => {
-        expect(posts).to.deep.equal(
-          initPosts.filter(post => params.userids.indexOf(post.userid) !== -1)
-            .slice(5, 10)
-        );
+        let postsWithoutScore = posts.map(post => utils.deletePropertiesFromObject(post, ['score']));
+        expect(postsWithoutScore).to.deep.equal(expectedPosts);
       });
     });
   });

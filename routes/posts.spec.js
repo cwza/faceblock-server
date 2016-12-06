@@ -12,31 +12,11 @@ describe('route.posts', function() {
       initPosts = initData.initPosts;
     });
   });
-  describe('GET /posts?userids=[1]&sort=id&order=asc&page=2', function() {
-    let path = '/posts?userids=[1]&sort=id&order=asc&page=2&something=sss';
+  describe('GET /posts?q=userid:(1)&sort=id&order=asc&page=2', function() {
+    let path = '/posts?q=userid:(1)&sort=id&order=asc&page=2&something=sss';
     it('should return the 6th to 10th post which userid is 1', function(done) {
-      let userids = [initUsers[0].id];
       let expectedResponse = JSON.stringify({
-        data: initPosts.filter(post => userids.indexOf(post.userid) !== -1).slice(5, 10)
-      });
-      request(app)
-        .get(path)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200, expectedResponse, (err, res) => {
-          if(err) {
-            console.log(res.body);
-            throw err;
-          }
-          done();
-        });
-    });
-  });
-  describe('GET /posts', function() {
-    let path = '/posts?sort=id&order=asc';
-    it('should return the first 5 posts', function(done) {
-      let expectedResponse = JSON.stringify({
-        data: initPosts.slice(0, 5)
+        data: initPosts.filter(post => post.userid === 1).slice(5, 10)
       });
       request(app)
         .get(path)

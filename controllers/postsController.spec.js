@@ -13,7 +13,7 @@ describe('postsController', function() {
   describe('#findByParams()', function() {
     it('should return first 5 post by userid:1', function() {
       let params = {
-        userids: [1],
+        q: 'userid:(1)',
         sort: 'id',
         order: 'asc',
         page: 2
@@ -22,7 +22,7 @@ describe('postsController', function() {
         query: params
       }
       let expectedResponse = {
-        data: initPosts.filter(post => params.userids.indexOf(post.userid) !== -1).slice(5, 10)
+        data: initPosts.filter(post => post.userid === 1).slice(5, 10)
       };
       return postsController.findByParams(req)
         .then(data => {
