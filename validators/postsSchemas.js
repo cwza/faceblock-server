@@ -20,11 +20,6 @@ let findByParamsSchema = {
     optional: true,
     isInt: {}
   },
-  'userids': {
-    in: 'query',
-    optional: true,
-    isArray: {}
-  }
 }
 
 module.exports = {
