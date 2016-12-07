@@ -5,6 +5,7 @@ const morganLogger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
+const queryParser = require('express-query-int');
 
 const expressValidator = require('./validators/validator').expressValidator;
 const logger = require('./logger').logger;
@@ -23,6 +24,7 @@ app.use(helmet());
 app.use(morganLogger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(queryParser());
 app.use(expressValidator);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -50,7 +52,7 @@ app.use(function(req, res, next) {
 
 // response = {
 //   entities:{posts:[]},
-//   link:{}
+//   link:{nextPage: ''}
 // }
 // error handler
 // error = {

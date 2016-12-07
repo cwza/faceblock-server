@@ -20,6 +20,11 @@ let findByParamsSchema = {
     optional: true,
     isInt: {}
   },
+  'limit': {
+    in: 'query',
+    optional: true,
+    isInt: {}
+  },
 }
 
 module.exports = {

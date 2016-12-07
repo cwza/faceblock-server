@@ -19,4 +19,13 @@ describe('utils', function() {
       expect(returnedObj).to.deep.equal(expectedObj);
     });
   });
+  describe('#genNextPageUrl()', function() {
+    it('should return page + 1', function() {
+      let url = '/posts?q=userid:(1)&sort=id&order=asc&page=2'
+      let expectedUrl = '/posts?q=userid:(1)&sort=id&order=asc&page=3'
+      let nextUrl = utils.genNextPageUrl(url, 2);
+      console.log('nextUrl: ', nextUrl);
+      expect(nextUrl).to.deep.equal(expectedUrl);
+    });
+  });
 });
