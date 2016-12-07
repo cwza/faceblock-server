@@ -1,5 +1,6 @@
 'use strict';
 
+const PQ = require('pg-promise').ParameterizedQuery;
 const squel = require("squel").useFlavour('postgres');
 const sql = require('../sql').posts;
 const PARAMS = require('../../Constants').PARAMS;
@@ -40,9 +41,9 @@ module.exports = (rep, pgp) => {
       rep.any(`SELECT * FROM ${TABLE_NAME} ` + where),
     findByParams: (inputParams = defaultQueryParams) => {
       let params = utils.interMergeObject(inputParams, defaultQueryParams);
-      let sqlString = `SELECT zdb_score('${TABLE_NAME}', ${TABLE_NAME}.ctid) AS score, * FROM ${TABLE_NAME} WHERE zdb('${TABLE_NAME}', ctid) ==> '${params.q}' ORDER BY ${params.sort} ${params.order} LIMIT ${params.limit} OFFSET ${params.offset()}`;
-      logger.debug('sqlString for db.posts.findByParams(): ', sqlString);
-      return rep.any(sqlString);
+      let query = new PQ(`SELECT zdb_score('${TABLE_NAME}', ${TABLE_NAME}.ctid) AS score, * FROM ${TABLE_NAME} WHERE zdb('${TABLE_NAME}', ctid) ==> $1 ORDER BY ${params.sort} ${params.order} LIMIT ${params.limit} OFFSET ${params.offset()}`, params.q);
+      logger.debug('sqlString for db.posts.findByParams(): ', query.toString());
+      return rep.any(query);
     },
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`),

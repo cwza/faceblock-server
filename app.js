@@ -4,6 +4,8 @@ const favicon = require('serve-favicon');
 const morganLogger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const helmet = require('helmet')
+
 const expressValidator = require('./validators/validator').expressValidator;
 const logger = require('./logger').logger;
 
@@ -17,6 +19,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 //middleware
+app.use(helmet());
 app.use(morganLogger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
