@@ -2,9 +2,10 @@ const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
 const moment = require('moment');
 const fs = require('fs');
+const configs = require('./configs');
 
 const env = process.env.NODE_ENV || 'development';
-const dir = '../logs';
+const dir = configs.logger.dir;
 const dateFormat = function() {
 	return moment().format('YYYY-MM-DD HH:mm:ss:SSS');
 };
