@@ -16,7 +16,9 @@ describe('route.posts', function() {
     let path = '/posts?q=userid:(1)&sort=id&order=asc&page=2&something=sss';
     it('should return the 6th to 10th post which userid is 1', function(done) {
       let expectedResponse = JSON.stringify({
-        data: initPosts.filter(post => post.userid === 1).slice(5, 10)
+        entities: {
+          posts: initPosts.filter(post => post.userid === 1).slice(5, 10)
+        }
       });
       request(app)
         .get(path)

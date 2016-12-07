@@ -23,12 +23,8 @@ let genPosts = (n, userid) => {
 }
 
 function *initTable() {
-  console.time('createAllTable');
   yield db.database.createAllTable();
-  console.timeEnd('createAllTable');
-  console.time('truncateAllTable');
   yield db.database.truncateAllTable();
-  console.timeEnd('truncateAllTable');
 }
 
 function *initUsersData() {
@@ -60,12 +56,8 @@ function *initTestData() {
 // return id sorted initUsers, initPosts by callback
 let initDatabase = (resolver = null) => {
   return db.tx(function *(t) {
-    console.time('initTable');
     yield* initTable();
-    console.timeEnd('initTable');
-    console.time('initTestData');
     yield* initTestData();
-    console.timeEnd('initTestData');
   })
   .then(() => {
     resolver? resolver({initUsers, initPosts}): console.log('init database end');

@@ -22,7 +22,9 @@ describe('postsController', function() {
         query: params
       }
       let expectedResponse = {
-        data: initPosts.filter(post => post.userid === 1).slice(5, 10)
+        entities: {
+          posts: initPosts.filter(post => post.userid === 1).slice(5, 10)
+        }
       };
       return postsController.findByParams(req)
         .then(data => {

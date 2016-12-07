@@ -49,7 +49,7 @@ app.use(function(req, res, next) {
 });
 
 // response = {
-//   data:{},
+//   entities:{posts:[]},
 //   link:{}
 // }
 // error handler
