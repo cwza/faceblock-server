@@ -25,7 +25,7 @@ describe('db.posts', function() {
   });
   describe('#add() & get()', function() {
     it('add an post and then get it', function() {
-      let postToBeAdd = {userid: initUsers[0].id, content: 'Test content3'};
+      let postToBeAdd = {userId: initUsers[0].id, content: 'Test content3'};
       return db.tx(function *(t) {
         let postBeAdded = yield db.posts.add(postToBeAdd);
         return postBeAdded;
@@ -52,10 +52,10 @@ describe('db.posts', function() {
     });
   });
   describe('#findByParams()', function() {
-    it('get posts by userids orderby id asc at page 2 limit 5', function() {
-      let expectedPosts = initPosts.filter(post => post.userid === 1).slice(5, 10);
+    it('get posts by userIds orderby id asc at page 2 limit 5', function() {
+      let expectedPosts = initPosts.filter(post => post.userId === 1).slice(5, 10);
       let params = {
-        q: 'userid:(1)',
+        q: 'userId:(1)',
         sort: 'id',
         order: 'asc',
         page: 2

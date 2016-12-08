@@ -7,8 +7,8 @@ let queryParamsToParams = (queryParams) => {
   let params = {};
   for(queryParam in queryParams) {
     switch (queryParam) {
-      case 'userids':
-        params[queryParam] = JSON.parse(queryParams.userids);
+      case 'userIds':
+        params[queryParam] = JSON.parse(queryParams.userIds);
         break;
       default:
         params[queryParam] = queryParams[queryParam];

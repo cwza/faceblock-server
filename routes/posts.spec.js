@@ -13,15 +13,15 @@ describe('route.posts', function() {
       initPosts = initData.initPosts;
     });
   });
-  describe('GET /posts?q=userid:(1)&sort=id&order=asc&page=2', function() {
-    let path = '/posts?q=userid:(1)&sort=id&order=asc&page=2';
-    it('should return the 6th to 10th post which userid is 1', function(done) {
+  describe('GET /posts?q=userId:(1)&sort=id&order=asc&page=2', function() {
+    let path = '/posts?q=userId:(1)&sort=id&order=asc&page=2';
+    it('should return the 6th to 10th post which userId is 1', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
-          posts: initPosts.filter(post => post.userid === 1).slice(5, 10)
+          posts: initPosts.filter(post => post.userId === 1).slice(5, 10)
         },
         links: {
-          nextPage: configs.app.domain + '/posts?q=userid:(1)&sort=id&order=asc&page=3'
+          nextPage: configs.app.domain + '/posts?q=userId:(1)&sort=id&order=asc&page=3'
         }
       });
       request(app)

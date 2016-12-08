@@ -6,7 +6,7 @@ const validate = require('../validators/validator').validate;
 
 const router = express.Router();
 
-//domain/posts?userids=[1, 2]&sort=id&order=asc&page=2
+//domain/posts?q=userIds:(1, 2)&sort=id&order=asc&page=2
 router.get('/', (req, res, next) => {
   logger.debug('req.query: ', req.query);
   validate(req, postsSchemas.findByParamsSchema)

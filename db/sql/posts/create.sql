@@ -8,6 +8,6 @@
 CREATE TABLE ${schema~}.Posts
 (
     id serial PRIMARY KEY,
-    userid int not null references Users(id),
+    user_id int not null references Users(id),
     content text NOT NULL
 );

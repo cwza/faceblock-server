@@ -15,7 +15,6 @@ describe('validator', function() {
       sort: 'id',
       order: 'esc',
       page: 'd',
-      userids: '[1, 2]'
     }
     it('should return error 400 for param error', function() {
       let expectedObject = {

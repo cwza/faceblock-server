@@ -14,7 +14,7 @@ CREATE INDEX IF NOT EXISTS idx_zdb_users
 CREATE TABLE IF NOT EXISTS Posts
 (
     id serial PRIMARY KEY,
-    userid int not null references Users(id) ON DELETE CASCADE,
+    user_id int not null references Users(id) ON DELETE CASCADE,
     content text NOT NULL,
     create_time timestamp default current_timestamp,
     update_time timestamp default current_timestamp
