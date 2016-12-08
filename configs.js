@@ -2,7 +2,7 @@ let env = process.env.NODE_ENV || 'development';
 
 let configs = {
   app: {
-    domain: env === 'development' ? 'http://localhost' : 'http://production'
+    domain: env === 'development' ? 'http://localhost:3001' : 'http://production'
   },
   db: {
     host: env === 'development' ? 'localhost' : process.env.DB_HOST,
