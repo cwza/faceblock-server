@@ -1,6 +1,7 @@
 const db = require('../db').db;
 const utils = require('../utils');
 const domain = require('../configs').app.domain;
+const logger = require('../logger').logger;
 
 let queryParamsToParams = (queryParams) => {
   let params = {};
@@ -13,6 +14,7 @@ let queryParamsToParams = (queryParams) => {
         params[queryParam] = queryParams[queryParam];
     }
   }
+  params.page = params.page || 1;
   return params;
 }
 
@@ -20,42 +22,23 @@ let queryParamsToParams = (queryParams) => {
 // else nextPage will be page + 1
 let findByParams = (req) => {
   let params = queryParamsToParams(req.query);
-  params.page = params.page || 1;
 
-  let nextPagePromise = db.posts.findByParams(Object.assign({}, params, {page: params.page + 1}));
-  let thisPagePromise = db.posts.findByParams(params);
-  let promises = [nextPagePromise, thisPagePromise];
-  return Promise.all(promises)
-    .then( values => {
-      let nextPageData = values[0];
-      let thisPageData = values[1];
-      let nextUrl = domain;
-      if(nextPageData.length > 0)
-        nextUrl += utils.genNextPageUrl(req.originalUrl, params.page);
-      else
-        nextUrl += req.originalUrl;
-      return {
-        entities: {
-          posts: thisPageData.map(element => utils.deletePropertiesFromObject(element, ['score']))
-        },
-        links: {
-          nextPage: nextUrl
-        }
+  return db.task(function *() {
+    let nextPagePosts = yield db.posts.findByParams(Object.assign({}, params, {page: params.page + 1}));
+    let thisPagePosts = yield db.posts.findByParams(params);
+    let nextUrl = domain;
+    nextUrl += nextPagePosts.length > 0 ? utils.genNextPageUrl(req.originalUrl, params.page) : req.originalUrl;
+    let response = {
+      entities: {
+        posts: thisPagePosts.map(element => utils.deletePropertiesFromObject(element, ['score']))
+      },
+      links: {
+        nextPage: nextUrl
       }
-    });
-
-  // let nextUrl = domain + utils.genNextPageUrl(req.originalUrl, params.page);
-  // return db.posts.findByParams(params)
-  //   .then(data => {
-  //     return {
-  //       entities: {
-  //         posts: data.map(element => utils.deletePropertiesFromObject(element, ['score']))
-  //       },
-  //       links: {
-  //         nextPage: nextUrl
-  //       }
-  //     };
-  //   });
+    };
+    logger.debug('response for postsController.findByParams: ', JSON.stringify(response));
+    return response;
+  });
 }
 
 module.exports = {
