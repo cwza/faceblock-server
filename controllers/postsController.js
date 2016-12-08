@@ -27,7 +27,7 @@ let findByParams = (req) => {
     let nextPagePosts = yield db.posts.findByParams(Object.assign({}, params, {page: params.page + 1}));
     let thisPagePosts = yield db.posts.findByParams(params);
     let nextUrl = domain;
-    nextUrl += nextPagePosts.length > 0 ? utils.genNextPageUrl(req.originalUrl, params.page) : req.originalUrl;
+    nextUrl += nextPagePosts.length > 0 ? utils.genNextPageUrl(req.originalUrl, params.page) : '';
     let response = {
       entities: {
         posts: thisPagePosts.map(element => utils.deletePropertiesFromObject(element, ['score']))
