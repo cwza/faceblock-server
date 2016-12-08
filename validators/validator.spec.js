@@ -12,6 +12,7 @@ describe('validator', function() {
   });
   describe('#postsSchema.findByParamsSchema', function() {
     req.query = {
+      q: 'xxx',
       sort: 'id',
       order: 'esc',
       page: 'd',

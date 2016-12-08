@@ -1,6 +1,10 @@
 const PARAMS = require('../Constants').PARAMS;
 
 let findByParamsSchema = {
+  'q': {
+    in: 'query',
+    notEmpty: {}
+  },
   'sort': {
     in: 'query',
     optional: true,

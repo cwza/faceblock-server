@@ -2,6 +2,7 @@ const db = require('../db').db;
 const utils = require('../utils');
 const domain = require('../configs').app.domain;
 const logger = require('../logger').logger;
+const Constants = require('../Constants');
 
 let queryParamsToParams = (queryParams) => {
   let params = {};
@@ -26,8 +27,7 @@ let findByParams = (req) => {
   return db.task(function *() {
     let nextPagePosts = yield db.posts.findByParams(Object.assign({}, params, {page: params.page + 1}));
     let thisPagePosts = yield db.posts.findByParams(params);
-    let nextUrl = domain;
-    nextUrl += nextPagePosts.length > 0 ? utils.genNextPageUrl(req.originalUrl, params.page) : '';
+    nextUrl = nextPagePosts.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
     let response = {
       entities: {
         posts: thisPagePosts.map(element => utils.deletePropertiesFromObject(element, ['score']))

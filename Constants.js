@@ -8,8 +8,10 @@ const PARAMS = {
     ID: 'id',
     SCORE: 'score'
   }
-}
+};
+
+const NO_NEXT_PAGE = 'NO_NEXT_PAGE';
 
 module.exports = {
-  PARAMS
+  PARAMS, NO_NEXT_PAGE
 }
