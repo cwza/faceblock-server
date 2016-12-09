@@ -24,7 +24,7 @@ describe('db.posts', function() {
     });
   });
   describe('#add() & get()', function() {
-    it('add an post and then get it', function() {
+    it('should return added content', function() {
       let postToBeAdd = {userId: initUsers[0].id, content: 'Test content3'};
       return db.tx(function *(t) {
         let postBeAdded = yield db.posts.add(postToBeAdd);
@@ -35,8 +35,8 @@ describe('db.posts', function() {
       });
     });
   });
-  describe.only('#update()', function() {
-    it('add an post and then get it', function() {
+  describe('#update()', function() {
+    it('should return updated content', function() {
       let postToBeUpdate = initPosts[0];
       postToBeUpdate.content += ' updated content';
       return db.posts.update(postToBeUpdate)

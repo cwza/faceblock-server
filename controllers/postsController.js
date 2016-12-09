@@ -5,11 +5,10 @@ const logger = require('../logger').logger;
 const Constants = require('../Constants');
 
 let queryParamsToParams = (queryParams) => {
-  let params = {};
+  let params = Object.assign({}, db.posts.defaultQueryParams, queryParams);
   for(queryParam in queryParams) {
     switch (queryParam) {
-      case 'userIds':
-        params[queryParam] = JSON.parse(queryParams.userIds);
+      case 'maxId':
         break;
       default:
         params[queryParam] = queryParams[queryParam];

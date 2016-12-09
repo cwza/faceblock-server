@@ -29,6 +29,16 @@ let findByParamsSchema = {
     optional: true,
     isInt: {}
   },
+  'maxId': {
+    in: 'query',
+    optional: true,
+    isInt: {}
+  },
+  'sinceId': {
+    in: 'query',
+    optional: true,
+    isInt: {}
+  }
 }
 
 module.exports = {

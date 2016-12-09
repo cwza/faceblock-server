@@ -16,6 +16,7 @@ module.exports = (rep, pgp) => {
     order: PARAMS.ORDER.DESC,
     limit: 5,
     page: 1,
+    maxId: undefined,
     offset: function() { return this.limit * (this.page - 1); }
   };
   return {
@@ -51,7 +52,11 @@ module.exports = (rep, pgp) => {
     findByParams: (inputParams = defaultQueryParams) => {
       let params = utils.interMergeObject(inputParams, defaultQueryParams);
       params.q = humps.decamelize(params.q);
-      let query = new PQ(`SELECT zdb_score('${TABLE_NAME}', ${TABLE_NAME}.ctid) AS score, * FROM ${TABLE_NAME} WHERE zdb('${TABLE_NAME}', ctid) ==> $1 ORDER BY ${params.sort} ${params.order} LIMIT ${params.limit} OFFSET ${params.offset()}`, params.q);
+      params.sort = humps.decamelize(params.sort);
+      let pqStr = `SELECT zdb_score('${TABLE_NAME}', ${TABLE_NAME}.ctid) AS score, * FROM ${TABLE_NAME}`
+        + ` WHERE zdb('${TABLE_NAME}', ctid) ==> $1`
+        + ` ORDER BY ${params.sort} ${params.order} LIMIT ${params.limit} OFFSET ${params.offset()}`;
+      let query = new PQ(pqStr, params.q);
       logger.debug('sqlString for db.posts.findByParams(): ', query.toString());
       return rep.any(query).then(posts => humps.camelizeKeys(posts));
     },
