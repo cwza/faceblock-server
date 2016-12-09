@@ -35,6 +35,16 @@ describe('db.posts', function() {
       });
     });
   });
+  describe.only('#update()', function() {
+    it('add an post and then get it', function() {
+      let postToBeUpdate = initPosts[0];
+      postToBeUpdate.content += ' updated content';
+      return db.posts.update(postToBeUpdate)
+        .then(postBeUpdated => {
+          expect(postToBeUpdate.content).to.equal(postBeUpdated.content);
+        });
+    });
+  });
   describe('#all()', function() {
     it('get all posts', function() {
       return db.posts.all()

@@ -32,6 +32,14 @@ module.exports = (rep, pgp) => {
       let sql = squel.insert().into(TABLE_NAME).setFieldsRows(posts).returning('*');
       return rep.any(sql.toString()).then(posts => humps.camelizeKeys(posts));
     },
+    update: post => {
+      let { id } = post;
+      post = utils.deletePropertiesFromObject(post, ['id', 'createTime', 'updateTime']);
+      post = humps.decamelizeKeys(post);
+      let sql = squel.update().table(TABLE_NAME).set('update_time', 'NOW()').setFields(post).where(`id = ${id}`).returning('*');
+      console.log('update post sqlString: ', sql.toString());
+      return rep.one(sql.toString(), post => humps.camelizeKeys(post));
+    },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),
     empty: () =>
