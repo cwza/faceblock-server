@@ -77,4 +77,21 @@ describe('db.posts', function() {
       });
     });
   });
+  describe('#findByParamsWithNearId()', function() {
+    it('get 5 posts sort by content desc and under nearId: 4', function() {
+      let params = {
+        q: 'test',
+        sort: 'content',
+        nearId: 4,
+        nearCondition: Constants.PARAMS.NEAR_CONDITION.UNDER_NEARID
+      };
+      let postsSortedByContentDesc = initPosts.slice(0).sort((a, b) => b.content.localeCompare(a.content));
+      let indexOfPostsId = postsSortedByContentDesc.findIndex(post => post.id === 4);
+      let expectedPosts = postsSortedByContentDesc.slice(indexOfPostsId + 1, indexOfPostsId + 6);
+      return db.posts.findByParamsWithNearId(params).then(posts => {
+        let postsWithoutScore = posts.map(post => utils.deletePropertiesFromObject(post, ['score']));
+        expect(postsWithoutScore).to.deep.equal(expectedPosts);
+      });
+    });
+  });
 });

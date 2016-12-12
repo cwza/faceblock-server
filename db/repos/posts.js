@@ -16,7 +16,8 @@ module.exports = (rep, pgp) => {
     order: PARAMS.ORDER.DESC,
     limit: 5,
     page: 1,
-    maxId: undefined,
+    nearId: 0,
+    nearCondition: PARAMS.NEAR_CONDITION.UPPER_NEARID,
     offset: function() { return this.limit * (this.page - 1); }
   };
   return {
@@ -59,6 +60,13 @@ module.exports = (rep, pgp) => {
       let query = new PQ(pqStr, params.q);
       logger.debug('sqlString for db.posts.findByParams(): ', query.toString());
       return rep.any(query).then(posts => humps.camelizeKeys(posts));
+    },
+    findByParamsWithNearId: (inputParams = defaultQueryParams) => {
+      let params = utils.interMergeObject(inputParams, defaultQueryParams);
+      params.q = humps.decamelize(params.q);
+      params.sort = humps.decamelize(params.sort);
+      logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithNearId.query, params);
+      return rep.any(sql.findByParamsWithNearId, params).then(posts => humps.camelizeKeys(posts));
     },
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(posts => humps.camelizeKeys(posts)),

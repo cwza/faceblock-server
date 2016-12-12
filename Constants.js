@@ -7,6 +7,10 @@ const PARAMS = {
     CREATE_TIME: 'createTime',
     ID: 'id',
     SCORE: 'score'
+  },
+  NEAR_CONDITION: {
+    UPPER_NEARID: '>',
+    UNDER_NEARID: '<'
   }
 };
 
