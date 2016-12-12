@@ -61,7 +61,7 @@ describe('db.posts', function() {
       });
     });
   });
-  describe('#findByParams()', function() {
+  describe('#findByParamsWithoutNearId()', function() {
     it('get posts by userIds orderby id asc at page 2 limit 5', function() {
       let expectedPosts = initPosts.filter(post => post.userId === 1).slice(5, 10);
       let params = {
@@ -70,7 +70,7 @@ describe('db.posts', function() {
         order: 'asc',
         page: 2
       };
-      return db.posts.findByParams(params)
+      return db.posts.findByParamsWithoutNearId(params)
       .then(posts => {
         let postsWithoutScore = posts.map(post => utils.deletePropertiesFromObject(post, ['score']));
         expect(postsWithoutScore).to.deep.equal(expectedPosts);

@@ -24,8 +24,8 @@ let findByParams = (req) => {
   let params = queryParamsToParams(req.query);
 
   return db.task(function *() {
-    let nextPagePosts = yield db.posts.findByParams(Object.assign({}, params, {page: params.page + 1}));
-    let thisPagePosts = yield db.posts.findByParams(params);
+    let nextPagePosts = yield db.posts.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
+    let thisPagePosts = yield db.posts.findByParamsWithoutNearId(params);
     nextUrl = nextPagePosts.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
     let response = {
       entities: {

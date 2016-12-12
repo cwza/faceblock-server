@@ -51,6 +51,7 @@ module.exports = {
   },
   posts: {
     create: sql('posts/create.sql'),
+    findByParamsWithoutNearId: sql('posts/findByParamsWithoutNearId.sql'),
     findByParamsWithNearId: sql('posts/findByParamsWithNearId.sql')
   },
   database: {
