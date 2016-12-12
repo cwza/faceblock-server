@@ -8,7 +8,7 @@ let queryParamsToParams = (queryParams) => {
   let params = Object.assign({}, db.posts.defaultQueryParams, queryParams);
   for(queryParam in queryParams) {
     switch (queryParam) {
-      case 'maxId':
+      case 'upperNearId':
         break;
       default:
         params[queryParam] = queryParams[queryParam];
@@ -20,9 +20,8 @@ let queryParamsToParams = (queryParams) => {
 
 //if nextPage has no record nextPage will be the same to req
 // else nextPage will be page + 1
-let findByParams = (req) => {
-  let params = queryParamsToParams(req.query);
-
+let findByParamsWithoutNearId = (req, params) => {
+  logger.debug('findByParamsWithoutNearId()...');
   return db.task(function *() {
     let nextPagePosts = yield db.posts.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
     let thisPagePosts = yield db.posts.findByParamsWithoutNearId(params);
@@ -35,9 +34,33 @@ let findByParams = (req) => {
         nextPage: nextUrl
       }
     };
-    logger.debug('response for postsController.findByParams: ', JSON.stringify(response));
+    logger.debug('response for postsController.findByParamsWithoutNearId: ', JSON.stringify(response));
     return response;
   });
+}
+
+let findByParamsWithNearId = (req, params) => {
+  logger.debug('findByParamsWithNearId()...');
+  return db.task(function *() {
+    let posts = params.underNearId ? yield db.posts.findByParamsWithUnderNearId(params) : yield db.posts.findByParamsWithUpperNearId(params);
+    let response = {
+      entities: {
+        posts: posts.map(element => utils.deletePropertiesFromObject(element, ['score']))
+      },
+    };
+    logger.debug('response for postsController.findByParamsWithNearId: ', JSON.stringify(response));
+    return response;
+  });
+}
+
+let findByParams = (req) => {
+  let params = queryParamsToParams(req.query);
+
+  if(params.upperNearId || params.underNearId) {
+    return findByParamsWithNearId(req, params);
+  } else {
+    return findByParamsWithoutNearId(req, params);
+  }
 }
 
 module.exports = {

@@ -29,12 +29,12 @@ let findByParamsSchema = {
     optional: true,
     isInt: {}
   },
-  'maxId': {
+  'upperNearId': {
     in: 'query',
     optional: true,
     isInt: {}
   },
-  'sinceId': {
+  'underNearId': {
     in: 'query',
     optional: true,
     isInt: {}

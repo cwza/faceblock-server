@@ -4,10 +4,10 @@ FROM
     JOIN
         ( SELECT ${sort:raw}
           FROM Posts
-          WHERE id = ${nearId}
+          WHERE id = ${underNearId}
         ) AS o
-      ON t.${sort:raw} = o.${sort:raw} AND t.id < ${nearId}
-      OR t.${sort:raw} ${nearCondition:raw} o.${sort:raw}
+      ON t.${sort:raw} = o.${sort:raw} AND t.id < ${underNearId}
+      OR t.${sort:raw} < o.${sort:raw}
 WHERE zdb('Posts', t.ctid) ==> ${q}
 ORDER BY
     t.${sort:raw} ${order:raw}, t.id ASC
@@ -23,7 +23,7 @@ ORDER BY
 --           FROM posts
 --           WHERE id = 4
 --         ) AS o
---       ON t.content = o.content AND t.id < 4 
+--       ON t.content = o.content AND t.id < 4
 --       OR t.content < o.content
 -- ORDER BY
 --     t.content DESC, t.id DESC

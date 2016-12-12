@@ -12,7 +12,7 @@ describe('postsController', function() {
       initPosts = initData.initPosts;
     });
   });
-  describe('#findByParams()', function() {
+  describe('#findByParams() withoutNearId', function() {
     it('should return first 5 post by userId:1', function() {
       let params = {
         q: 'userId:(1)',
@@ -56,6 +56,52 @@ describe('postsController', function() {
         },
         links: {
           nextPage: Constants.NO_NEXT_PAGE
+        }
+      };
+      return postsController.findByParams(req)
+        .then(data => {
+          expect(data).to.deep.equal(expectedResponse);
+        });
+    });
+  });
+  describe('#findByParams() withUnderNearId', function() {
+    it('should return 6 posts from id 14 to id 19', function() {
+      let params = {
+        q: 'test',
+        sort: 'id',
+        order: 'desc',
+        limit: 6,
+        underNearId: 20
+      }
+      let req = {
+        query: params,
+      }
+      let expectedResponse = {
+        entities: {
+          posts: initPosts.slice(0).sort((a, b) => b.id - a.id).filter(post => post.id >= 14 && post.id < 20)
+        }
+      };
+      return postsController.findByParams(req)
+        .then(data => {
+          expect(data).to.deep.equal(expectedResponse);
+        });
+    });
+  });
+  describe('#findByParams() withUpperNearId', function() {
+    it('should return 6 posts from id 21 to id 26', function() {
+      let params = {
+        q: 'test',
+        sort: 'id',
+        order: 'desc',
+        limit: 6,
+        upperNearId: 20
+      }
+      let req = {
+        query: params,
+      }
+      let expectedResponse = {
+        entities: {
+          posts: initPosts.slice(0).sort((a, b) => b.id - a.id).filter(post => post.id > 20 && post.id <= 26)
         }
       };
       return postsController.findByParams(req)

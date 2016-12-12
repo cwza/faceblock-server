@@ -16,8 +16,9 @@ module.exports = (rep, pgp) => {
     order: PARAMS.ORDER.DESC,
     limit: 5,
     page: 1,
-    nearId: 0,
-    nearCondition: PARAMS.NEAR_CONDITION.UPPER_NEARID,
+    underNearId: 0,
+    upperNearId: 0,
+    orderReverse: function() { return this.order === PARAMS.ORDER.DESC ? PARAMS.ORDER.ASC : PARAMS.ORDER.DESC },
     offset: function() { return this.limit * (this.page - 1); },
   };
   let createNamedParameterObject = (params) => {
@@ -25,6 +26,7 @@ module.exports = (rep, pgp) => {
     result.q = humps.decamelize(result.q);
     result.sort = humps.decamelize(result.sort);
     result.offset = result.offset();
+    result.orderReverse = result.orderReverse();
     return result;
   }
   return {
@@ -62,10 +64,15 @@ module.exports = (rep, pgp) => {
       logger.debug('sqlString for db.posts.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
       return rep.any(sql.findByParamsWithoutNearId, params).then(posts => humps.camelizeKeys(posts));
     },
-    findByParamsWithNearId: (inputParams = defaultQueryParams) => {
+    findByParamsWithUnderNearId: (inputParams = defaultQueryParams) => {
       let params = createNamedParameterObject(inputParams);
-      logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithNearId.query, params);
-      return rep.any(sql.findByParamsWithNearId, params).then(posts => humps.camelizeKeys(posts));
+      logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUnderNearId.query, params);
+      return rep.any(sql.findByParamsWithUnderNearId, params).then(posts => humps.camelizeKeys(posts));
+    },
+    findByParamsWithUpperNearId: (inputParams = defaultQueryParams) => {
+      let params = createNamedParameterObject(inputParams);
+      logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUpperNearId.query, params);
+      return rep.any(sql.findByParamsWithUpperNearId, params).then(posts => humps.camelizeKeys(posts));
     },
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(posts => humps.camelizeKeys(posts)),
