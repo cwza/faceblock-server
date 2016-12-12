@@ -37,4 +37,46 @@ describe('route.posts', function() {
         });
     });
   });
+  describe('GET /posts?q=test&sort=id&order=desc&underNearId=20&limit=6', function() {
+    let path = '/posts?q=test&sort=id&order=desc&underNearId=20&limit=6';
+    it('should return posts which id from 14 to 19', function(done) {
+      let expectedResponse = JSON.stringify({
+        entities: {
+          posts: initPosts.slice(0).sort((a, b) => b.id - a.id).filter(post => post.id >= 14 && post.id < 20)
+        },
+      });
+      request(app)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
+          done();
+        });
+    });
+  });
+  describe('GET /posts?q=test&sort=id&order=desc&upperNearId=20&limit=6', function() {
+    let path = '/posts?q=test&sort=id&order=desc&upperNearId=20&limit=6';
+    it('should return posts which id from 21 to 26', function(done) {
+      let expectedResponse = JSON.stringify({
+        entities: {
+          posts: initPosts.slice(0).sort((a, b) => b.id - a.id).filter(post => post.id > 20 && post.id <= 26)
+        },
+      });
+      request(app)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
+          done();
+        });
+    });
+  });
 });
