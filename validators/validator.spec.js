@@ -23,7 +23,7 @@ describe('validator', function() {
         status: 400, errorCode: 400, message: 'Params Validation Error',
         longMessage: '[{"param":"order","msg":"Invalid value","value":"esc"},{"param":"page","msg":"Invalid value","value":"d"}]'
       }
-      return validate(req, postsValidator.validateFindByParams)
+      return validate(() => postsValidator.validateFindByParams(req))
         .then(() => {
 
         }).catch( error => {

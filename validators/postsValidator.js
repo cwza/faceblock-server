@@ -9,6 +9,7 @@ let validateFindByParams = req => {
   req.checkQuery('limit').optional().isInt();
   req.checkQuery('upperNearId').optional().isInt();
   req.checkQuery('underNearId').optional().isInt();
+  return req;
 }
 
 module.exports = {

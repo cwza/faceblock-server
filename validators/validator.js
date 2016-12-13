@@ -10,8 +10,8 @@ const expressValidator = require('express-validator')({
 });
 // validate req by schema
 // return a promise if validate failed throw error else donothing
-let validate = (req, validator) => {
-  validator(req);
+let validate = (validator) => {
+  req = validator();
   return req.getValidationResult().then(function(result) {
     if (!result.isEmpty()) {
       let error = {

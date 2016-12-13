@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
   //     .then(data => res.status(200).json(data))
   //     .catch(error => next(error));
   // }, 3000)
-  validate(req, postsValidator.validateFindByParams)
+  validate(() => postsValidator.validateFindByParams(req))
     .then(() => postsController.findByParams(req))
     .then(data => res.status(200).json(data))
     .catch(error => next(error));
