@@ -1,7 +1,7 @@
 const express = require('express');
 const postsController = require('../controllers/postsController');
 const logger = require('../logger').logger;
-const postsSchemas = require('../validators/postsSchemas');
+const postsValidator = require('../validators/postsValidator');
 const validate = require('../validators/validator').validate;
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
   //     .then(data => res.status(200).json(data))
   //     .catch(error => next(error));
   // }, 3000)
-  validate(req, postsSchemas.findByParamsSchema)
+  validate(req, postsValidator.validateFindByParams)
     .then(() => postsController.findByParams(req))
     .then(data => res.status(200).json(data))
     .catch(error => next(error));

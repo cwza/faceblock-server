@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const expressValidator = require('./validator').expressValidator;
 const validate = require('./validator').validate;
-const postsSchemas = require('./postsSchemas');
+const postsValidator = require('./postsValidator');
 
 describe('validator', function() {
   let req = {
@@ -16,16 +16,18 @@ describe('validator', function() {
       sort: 'id',
       order: 'esc',
       page: 'd',
+      verbos: 'verbos'
     }
     it('should return error 400 for param error', function() {
       let expectedObject = {
         status: 400, errorCode: 400, message: 'Params Validation Error',
-        longMessage: '[{"param":"order","msg":"Invalid param","value":"esc"},{"param":"page","msg":"Invalid param","value":"d"}]'
+        longMessage: '[{"param":"order","msg":"Invalid value","value":"esc"},{"param":"page","msg":"Invalid value","value":"d"}]'
       }
-      return validate(req, postsSchemas.findByParamsSchema)
+      return validate(req, postsValidator.validateFindByParams)
         .then(() => {
 
         }).catch( error => {
+          // console.log(error);
           expect(error).to.deep.equal(expectedObject);
         });
     });
