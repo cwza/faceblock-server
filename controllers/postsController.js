@@ -3,20 +3,22 @@ const utils = require('../utils');
 const domain = require('../configs').app.domain;
 const logger = require('../logger').logger;
 const Constants = require('../Constants');
+const postsValidatorSchema = require('../validators/postsValidatorSchema');
 
-let queryParamsToParams = (queryParams) => {
-  let params = Object.assign({}, db.posts.defaultQueryParams, queryParams);
-  for(queryParam in queryParams) {
-    switch (queryParam) {
-      case 'upperNearId':
-        break;
-      default:
-        params[queryParam] = queryParams[queryParam];
-    }
-  }
-  params.page = params.page || 1;
-  return params;
-}
+// let queryParamsToParams = (queryParams) => {
+//   let params = {};
+//   for(queryParam in queryParams) {
+//     switch (queryParam) {
+//       case 'upperNearId':
+//         params['upperNearId'] = queryParams['upperNearId'];
+//         break;
+//       default:
+//         params[queryParam] = queryParams[queryParam];
+//     }
+//   }
+//   params.page = params.page || 1;
+//   return params;
+// }
 
 //if nextPage has no record nextPage will be the same to req
 // else nextPage will be page + 1
@@ -54,8 +56,13 @@ let findByParamsWithNearId = (req, params) => {
 }
 
 let findByParams = (req) => {
-  let params = queryParamsToParams(req.query);
-
+  let params = req.query;
+  try {
+    params = utils.validateObjectBySchema(params, postsValidatorSchema.queryParamsSchema);
+  } catch(error) {
+    error.status = 400, error.errorCode = 400;
+    throw error;
+  }
   if(params.upperNearId || params.underNearId) {
     return findByParamsWithNearId(req, params);
   } else {

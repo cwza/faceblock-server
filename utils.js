@@ -1,3 +1,11 @@
+const Joi = require('joi');
+
+let validateObjectBySchema = (object, schema) => {
+  let result = Joi.validate(object, schema);
+  if(result.error) throw result.error;
+  return result.value;
+}
+
 let interMergeObject = (inputObject, defaultObject) => {
   let interMergedObject = Object.assign({}, defaultObject);
   Object.keys(inputObject)
@@ -31,5 +39,5 @@ let genNextPageUrl = (url, page) => {
 }
 
 module.exports = {
-  interMergeObject, extendObject, deletePropertiesFromObject, genNextPageUrl
+  interMergeObject, extendObject, deletePropertiesFromObject, genNextPageUrl, validateObjectBySchema
 }

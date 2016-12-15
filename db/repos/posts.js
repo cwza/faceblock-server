@@ -1,36 +1,33 @@
 'use strict';
 
-const PQ = require('pg-promise').ParameterizedQuery;
 const squel = require('squel').useFlavour('postgres');
 const humps = require('humps');
 const sql = require('../sql').posts;
 const PARAMS = require('../../Constants').PARAMS;
 const utils = require('../../utils');
 const logger = require('../../logger').logger;
+const Joi = require('joi');
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'Posts';
-  let defaultQueryParams = {
-    q: '',
-    sort: PARAMS.SORT.CREATE_TIME,
-    order: PARAMS.ORDER.DESC,
-    limit: 5,
-    page: 1,
-    underNearId: 0,
-    upperNearId: 0,
-    orderReverse: function() { return this.order === PARAMS.ORDER.DESC ? PARAMS.ORDER.ASC : PARAMS.ORDER.DESC },
-    offset: function() { return this.limit * (this.page - 1); },
-  };
+  const queryParamsSchema = Joi.object().keys({
+    q: Joi.string().required(),
+    sort: Joi.string().default(PARAMS.SORT.CREATE_TIME),
+    order: Joi.string().default(PARAMS.ORDER.DESC),
+    limit: Joi.number().integer().positive().default(5),
+    page: Joi.number().integer().positive().default(1),
+    underNearId: Joi.number().integer(),
+    upperNearId: Joi.number().integer(),
+  }).without('underNearId', 'upperNearId');
   let createNamedParameterObject = (params) => {
-    let result = utils.interMergeObject(params, defaultQueryParams);
-    result.q = humps.decamelize(result.q);
-    result.sort = humps.decamelize(result.sort);
-    result.offset = result.offset();
-    result.orderReverse = result.orderReverse();
-    return result;
+    let namedParameterObject = utils.validateObjectBySchema(params, queryParamsSchema);
+    namedParameterObject.q = humps.decamelize(namedParameterObject.q);
+    namedParameterObject.sort = humps.decamelize(namedParameterObject.sort);
+    namedParameterObject.orderReverse = namedParameterObject.order === PARAMS.ORDER.DESC ? PARAMS.ORDER.ASC : PARAMS.ORDER.DESC;
+    namedParameterObject.offset = namedParameterObject.limit * (namedParameterObject.page - 1);
+    return namedParameterObject;
   }
   return {
-    defaultQueryParams,
     create: () =>
       rep.none(sql.create),
     add: post => {
@@ -59,17 +56,17 @@ module.exports = (rep, pgp) => {
       rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
     find: id =>
       rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id, post => humps.camelizeKeys(post)),
-    findByParamsWithoutNearId: (inputParams = defaultQueryParams) => {
+    findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
       return rep.any(sql.findByParamsWithoutNearId, params).then(posts => humps.camelizeKeys(posts));
     },
-    findByParamsWithUnderNearId: (inputParams = defaultQueryParams) => {
+    findByParamsWithUnderNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUnderNearId.query, params);
       return rep.any(sql.findByParamsWithUnderNearId, params).then(posts => humps.camelizeKeys(posts));
     },
-    findByParamsWithUpperNearId: (inputParams = defaultQueryParams) => {
+    findByParamsWithUpperNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUpperNearId.query, params);
       return rep.any(sql.findByParamsWithUpperNearId, params).then(posts => humps.camelizeKeys(posts));
