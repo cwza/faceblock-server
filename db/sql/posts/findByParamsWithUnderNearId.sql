@@ -10,7 +10,7 @@ FROM
       OR t.${sort:raw} < o.${sort:raw}
 WHERE zdb('Posts', t.ctid) ==> ${q}
 ORDER BY
-    t.${sort:raw} ${order:raw}, t.id ASC
+    t.${sort:raw} ${order:raw}, t.id DESC
   LIMIT ${limit} OFFSET ${offset};
 
 

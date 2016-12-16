@@ -7,10 +7,10 @@ SELECT A.* FROM (
               FROM Posts
               WHERE id = ${upperNearId}
             ) AS o
-          ON t.${sort:raw} = o.${sort:raw} AND t.id < ${upperNearId}
+          ON t.${sort:raw} = o.${sort:raw} AND t.id > ${upperNearId}
           OR t.${sort:raw} > o.${sort:raw}
     WHERE zdb('Posts', t.ctid) ==> ${q}
     ORDER BY
-        t.${sort:raw} ${orderReverse:raw}, t.id ASC
+        t.${sort:raw} ${orderReverse:raw}, t.id DESC
       LIMIT ${limit} OFFSET ${offset}
 ) AS A ORDER BY A.${sort:raw} ${order:raw};
