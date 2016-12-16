@@ -1,25 +1,31 @@
 'use strict';
 
-const squel = require('squel').useFlavour('postgres');
 const humps = require('humps');
 const sql = require('../sql').users;
 const logger = require('../../logger').logger;
+const Joi = require('joi');
+const utils = require('../../utils');
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'users';
+  const userAddSchema = Joi.object().keys({
+    mail: Joi.string().email().required(),
+  });
   return {
     create: () =>
       rep.none(sql.create),
     init: () =>
       rep.tx('Demo-Users', t => t.map(sql.init, null, row => row.id)),
     add: user => {
+      user = utils.validateObjectBySchema(user, userAddSchema);
       user = humps.decamelizeKeys(user);
-      let sql = squel.insert().into(TABLE_NAME).setFieldsRows([user]).returning('*');
+      let sql = pgp.helpers.insert(user, null, TABLE_NAME) + ' returning *';
       return rep.one(sql.toString(), user => humps.camelizeKeys(user));
     },
     multiAdd: users => {
+      users = users.map(user => utils.validateObjectBySchema(user, userAddSchema));
       users = humps.decamelizeKeys(users);
-      let sql = squel.insert().into(TABLE_NAME).setFieldsRows(users).returning('*');
+      let sql = pgp.helpers.insert(users, Object.keys(users[0]), TABLE_NAME) + ' returning *';
       return rep.any(sql.toString()).then(users => humps.camelizeKeys(users));
     },
     drop: () =>

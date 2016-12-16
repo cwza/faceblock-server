@@ -26,7 +26,6 @@
     "pg-promise": "^5.4.3",
     "pug": "~2.0.0-beta6",
     "serve-favicon": "~2.3.0",
-    "squel": "^5.5.0",
     "winston": "^2.3.0",
     "winston-daily-rotate-file": "^1.4.0"
   },

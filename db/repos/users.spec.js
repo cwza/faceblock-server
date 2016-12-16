@@ -22,7 +22,7 @@ describe('db.users', function() {
   });
   describe('#add() & get()', function() {
     it('add an user and then get it', function() {
-      let userToBeAdd = {mail: 'Test user 3'};
+      let userToBeAdd = {mail: 'tA@gmail.com'};
       return db.tx(function *(t) {
         let userBeAdded = yield db.users.add(userToBeAdd);
         return userBeAdded;

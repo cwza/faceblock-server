@@ -6,7 +6,7 @@ let dummy_num = 1;
 
 let genUsers = (n) => {
   let users = _.range(dummy_num, dummy_num + n).map( num => {
-    return { mail: 'Test user t' + num }
+    return { mail: 't' + num + '@gmail.com'}
   });
   dummy_num += n;
   return users;
