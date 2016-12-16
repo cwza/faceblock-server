@@ -12,6 +12,11 @@ const queryParamsSchema = Joi.object().keys({
   upperNearId: Joi.number().integer(),
 }).without('underNearId', 'upperNearId');
 
+const addPostSchema = Joi.object().keys({
+  userId: Joi.number().integer().positive().required(),
+  content: Joi.string().required()
+})
+
 module.exports = {
-  queryParamsSchema
-}
+  queryParamsSchema, addPostSchema
+};

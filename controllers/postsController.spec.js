@@ -3,6 +3,7 @@ const postsController = require('./postsController');
 const dbInit = require('../db/dbInit');
 const configs = require('../configs');
 const Constants = require('../Constants');
+const db = require('../db').db;
 
 describe('postsController', function() {
   let initUsers = null, initPosts = null;
@@ -107,6 +108,21 @@ describe('postsController', function() {
       return postsController.findByParams(req)
         .then(data => {
           expect(data).to.deep.equal(expectedResponse);
+        });
+    });
+  });
+  describe('#addPost()', function() {
+    it('should return add content', function() {
+      let body = {
+        content: 'xxx',
+        userId: 1
+      }
+      let req = {
+        body
+      }
+      return postsController.addPost(req)
+        .then(data => {
+          expect(data.entities.posts[0].content).to.deep.equal('xxx');
         });
     });
   });

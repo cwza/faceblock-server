@@ -70,6 +70,25 @@ let findByParams = (req) => {
   }
 }
 
+let addPost = (req) => {
+  let body = req.body;
+  try {
+    post = utils.validateObjectBySchema(body, postsValidatorSchema.addPostSchema);
+  } catch(error) {
+    error.status = 400, error.errorCode = 400;
+    throw error;
+  }
+  return db.posts.add(post)
+    .then(post => {
+      let response = {
+        entities: {
+          posts: [ post ]
+        }
+      };
+      return response;
+    });
+}
+
 module.exports = {
-  findByParams
+  findByParams, addPost
 }
