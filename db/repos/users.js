@@ -6,7 +6,7 @@ const sql = require('../sql').users;
 const logger = require('../../logger').logger;
 
 module.exports = (rep, pgp) => {
-  const TABLE_NAME = 'Users';
+  const TABLE_NAME = 'users';
   return {
     create: () =>
       rep.none(sql.create),

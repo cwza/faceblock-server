@@ -1,6 +1,5 @@
 'use strict';
 
-const squel = require('squel').useFlavour('postgres');
 const humps = require('humps');
 const sql = require('../sql').posts;
 const PARAMS = require('../../Constants').PARAMS;
@@ -9,7 +8,7 @@ const logger = require('../../logger').logger;
 const Joi = require('joi');
 
 module.exports = (rep, pgp) => {
-  const TABLE_NAME = 'Posts';
+  const TABLE_NAME = 'posts';
   const queryParamsSchema = Joi.object().keys({
     q: Joi.string().required(),
     sort: Joi.string().default(PARAMS.SORT.CREATE_TIME),
@@ -19,6 +18,17 @@ module.exports = (rep, pgp) => {
     underNearId: Joi.number().integer(),
     upperNearId: Joi.number().integer(),
   }).without('underNearId', 'upperNearId');
+  const postAddSchema = Joi.object().keys({
+    userId: Joi.number().integer().positive().required(),
+    content: Joi.string().required()
+  });
+  const postUpdateSchema = Joi.object().keys({
+    id: Joi.number().integer().positive().required(),
+    userId: Joi.number().integer().positive().required(),
+    content: Joi.string().required(),
+    createTime: Joi.date(),
+    updateTime: Joi.date()
+  });
   let createNamedParameterObject = (params) => {
     let namedParameterObject = utils.validateObjectBySchema(params, queryParamsSchema);
     namedParameterObject.q = humps.decamelize(namedParameterObject.q);
@@ -31,22 +41,25 @@ module.exports = (rep, pgp) => {
     create: () =>
       rep.none(sql.create),
     add: post => {
+      post = utils.validateObjectBySchema(post, postAddSchema);
       post = humps.decamelizeKeys(post);
-      let sql = squel.insert().into(TABLE_NAME).setFieldsRows([post]).returning('*');
-      return rep.one(sql.toString(), post => humps.camelizeKeys(post));
+      let sql = pgp.helpers.insert(post, null, TABLE_NAME) + ' returning *';
+      return rep.one(sql, post => humps.camelizeKeys(post));
     },
     addMulti: posts => {
+      posts = posts.map(post => utils.validateObjectBySchema(post, postAddSchema));
       posts = humps.decamelizeKeys(posts);
-      let sql = squel.insert().into(TABLE_NAME).setFieldsRows(posts).returning('*');
+      let sql = pgp.helpers.insert(posts, Object.keys(posts[0]), TABLE_NAME) + ' returning *';
       return rep.any(sql.toString()).then(posts => humps.camelizeKeys(posts));
     },
     update: post => {
+      post = utils.validateObjectBySchema(post, postUpdateSchema);
       let { id } = post;
       post = utils.deletePropertiesFromObject(post, ['id', 'createTime', 'updateTime']);
+      post.updateTime = 'NOW()';
       post = humps.decamelizeKeys(post);
-      let sql = squel.update().table(TABLE_NAME).set('update_time', 'NOW()').setFields(post).where(`id = ${id}`).returning('*');
-      console.log('update post sqlString: ', sql.toString());
-      return rep.one(sql.toString(), post => humps.camelizeKeys(post));
+      let sql = pgp.helpers.update(post, Object.keys(post), TABLE_NAME) + ' WHERE id = ' + id + ' returning *';
+      return rep.one(sql, post => humps.camelizeKeys(post));
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),

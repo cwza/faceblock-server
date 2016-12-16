@@ -41,7 +41,8 @@ describe('db.posts', function() {
       postToBeUpdate.content += ' updated content';
       return db.posts.update(postToBeUpdate)
         .then(postBeUpdated => {
-          expect(postToBeUpdate.content).to.equal(postBeUpdated.content);
+          expect(postBeUpdated.content).to.equal(postToBeUpdate.content);
+          expect(postBeUpdated.update_time).to.not.equal(postToBeUpdate.update_time);
         });
     });
   });

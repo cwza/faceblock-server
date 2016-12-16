@@ -1,6 +1,6 @@
 BEGIN;
 CREATE EXTENSION IF NOT EXISTS zombodb;
-CREATE TABLE IF NOT EXISTS Users
+CREATE TABLE IF NOT EXISTS users
 (
     id serial PRIMARY KEY,
     mail text NOT NULL UNIQUE,
@@ -11,7 +11,7 @@ CREATE INDEX IF NOT EXISTS idx_zdb_users
           ON users
        USING zombodb(zdb('users', ctid), zdb(users))
         WITH (url='http://docker_zombodb_elastic_1:9200/');
-CREATE TABLE IF NOT EXISTS Posts
+CREATE TABLE IF NOT EXISTS posts
 (
     id serial PRIMARY KEY,
     user_id int not null references Users(id) ON DELETE CASCADE,

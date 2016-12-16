@@ -5,9 +5,9 @@
     to pre-format SQL with static formatting parameters when needs to be.
 */
 
-CREATE TABLE ${schema~}.Posts
+CREATE TABLE ${schema~}.posts
 (
     id serial PRIMARY KEY,
-    user_id int not null references Users(id),
+    user_id int not null references users(id),
     content text NOT NULL
 );

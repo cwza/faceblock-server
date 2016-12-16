@@ -1,14 +1,14 @@
-SELECT zdb_score('Posts', t.ctid) AS score, t.*
+SELECT zdb_score('posts', t.ctid) AS score, t.*
 FROM
-        Posts AS t
+        posts AS t
     JOIN
         ( SELECT ${sort:raw}
-          FROM Posts
+          FROM posts
           WHERE id = ${underNearId}
         ) AS o
       ON t.${sort:raw} = o.${sort:raw} AND t.id < ${underNearId}
       OR t.${sort:raw} < o.${sort:raw}
-WHERE zdb('Posts', t.ctid) ==> ${q}
+WHERE zdb('posts', t.ctid) ==> ${q}
 ORDER BY
     t.${sort:raw} ${order:raw}, t.id DESC
   LIMIT ${limit} OFFSET ${offset};

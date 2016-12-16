@@ -1,3 +1,3 @@
-SELECT zdb_score('Posts', Posts.ctid) AS score, * FROM Posts
-WHERE zdb('Posts', ctid) ==> ${q}
+SELECT zdb_score('posts', posts.ctid) AS score, * FROM posts
+WHERE zdb('posts', ctid) ==> ${q}
 ORDER BY ${sort:raw} ${order:raw}, id DESC LIMIT ${limit} OFFSET ${offset}
