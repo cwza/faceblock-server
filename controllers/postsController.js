@@ -24,9 +24,9 @@ const postsValidatorSchema = require('../validators/postsValidatorSchema');
 // else nextPage will be page + 1
 let findByParamsWithoutNearId = (req, params) => {
   logger.debug('findByParamsWithoutNearId()...');
-  return db.task(function *() {
-    let nextPagePosts = yield db.posts.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
-    let thisPagePosts = yield db.posts.findByParamsWithoutNearId(params);
+  return db.task(function *(t) {
+    let nextPagePosts = yield t.posts.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
+    let thisPagePosts = yield t.posts.findByParamsWithoutNearId(params);
     nextUrl = nextPagePosts.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
     let response = {
       entities: {
@@ -43,8 +43,8 @@ let findByParamsWithoutNearId = (req, params) => {
 
 let findByParamsWithNearId = (req, params) => {
   logger.debug('findByParamsWithNearId()...');
-  return db.task(function *() {
-    let posts = params.underNearId ? yield db.posts.findByParamsWithUnderNearId(params) : yield db.posts.findByParamsWithUpperNearId(params);
+  return db.task(function *(t) {
+    let posts = params.underNearId ? yield t.posts.findByParamsWithUnderNearId(params) : yield t.posts.findByParamsWithUpperNearId(params);
     let response = {
       entities: {
         posts: posts.map(element => utils.deletePropertiesFromObject(element, ['score']))
