@@ -16,9 +16,9 @@ describe('db.posts', function() {
   describe('#remove() & find()', function() {
     it('should remove Test post 1 and get null', function() {
       return db.tx(function *(t) {
-        let deleteCount = yield db.posts.remove(initPosts[0].id);
+        let deleteCount = yield t.posts.remove(initPosts[0].id);
         expect(deleteCount).to.equal(1);
-        let post = yield db.posts.find(initPosts[0].id);
+        let post = yield t.posts.find(initPosts[0].id);
         expect(post).to.equal(null);
       });
     });
@@ -27,7 +27,7 @@ describe('db.posts', function() {
     it('should return added content', function() {
       let postToBeAdd = {userId: initUsers[0].id, content: 'Test content3'};
       return db.tx(function *(t) {
-        let postBeAdded = yield db.posts.add(postToBeAdd);
+        let postBeAdded = yield t.posts.add(postToBeAdd);
         return postBeAdded;
       })
       .then((postBeAdded) => {

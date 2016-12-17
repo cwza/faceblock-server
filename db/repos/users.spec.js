@@ -13,9 +13,9 @@ describe('db.users', function() {
   describe('#remove() & find()', function() {
     it('remove Test User 1 and get null', function() {
       return db.tx(function *(t) {
-        let deleteCount = yield db.users.remove(initUsers[0].id);
+        let deleteCount = yield t.users.remove(initUsers[0].id);
         expect(deleteCount).to.equal(1);
-        let user = yield db.users.find(initUsers[0].id);
+        let user = yield t.users.find(initUsers[0].id);
         expect(user).to.equal(null);
       });
     });
@@ -24,7 +24,7 @@ describe('db.users', function() {
     it('add an user and then get it', function() {
       let userToBeAdd = {mail: 'tA@gmail.com'};
       return db.tx(function *(t) {
-        let userBeAdded = yield db.users.add(userToBeAdd);
+        let userBeAdded = yield t.users.add(userToBeAdd);
         return userBeAdded;
       })
       .then((userBeAdded) => {

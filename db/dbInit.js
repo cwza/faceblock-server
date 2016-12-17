@@ -22,14 +22,14 @@ let genPosts = (n, userId) => {
   return posts;
 }
 
-function *initTable() {
-  yield db.database.createAllTable();
-  yield db.database.truncateAllTable();
+function *initTable(t) {
+  yield t.database.createAllTable();
+  yield t.database.truncateAllTable();
 }
 
-function *initUsersData() {
+function *initUsersData(t) {
   initUsers = genUsers(3);
-    yield db.users.multiAdd(initUsers)
+    yield t.users.multiAdd(initUsers)
     .then((returnedUsers) => {
       initUsers = returnedUsers;
     });
@@ -37,9 +37,9 @@ function *initUsersData() {
   initUsers.sort((a, b) => a.id - b.id);
 }
 
-function *initPostsData() {
+function *initPostsData(t) {
   initPosts = [...genPosts(25, initUsers[0].id), ...genPosts(10, initUsers[1].id)];
-  yield db.posts.addMulti(initPosts)
+  yield t.posts.addMulti(initPosts)
   .then((returnedPosts) => {
     initPosts = returnedPosts;
   });
@@ -47,17 +47,17 @@ function *initPostsData() {
   initPosts.sort((a, b) => a.id - b.id);
 }
 
-function *initTestData() {
-  yield* initUsersData();
-  yield* initPostsData();
+function *initTestData(t) {
+  yield* initUsersData(t);
+  yield* initPostsData(t);
 }
 
 // delete all table, recreate table, and add test data to tables.
 // return id sorted initUsers, initPosts by callback
 let initDatabase = (resolver = null) => {
   return db.tx(function *(t) {
-    yield* initTable();
-    yield* initTestData();
+    yield* initTable(t);
+    yield* initTestData(t);
   })
   .then(() => {
     resolver? resolver({initUsers, initPosts}): console.log('init database end');

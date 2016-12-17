@@ -10,14 +10,14 @@ describe.skip('db.dbInit', function() {
   describe.skip('#initTestData()', function() {
     it('initTestData', function() {
       return db.tx(function *(t) {
-        yield* dbInit.initTestData();
+        yield* dbInit.initTestData(t);
       })
     });
   });
   describe.skip('#initUsersData()', function() {
     it('initUsersData', function() {
       return db.tx(function *(t) {
-        yield* dbInit.initUsersData();
+        yield* dbInit.initUsersData(t);
       });
     });
   });
