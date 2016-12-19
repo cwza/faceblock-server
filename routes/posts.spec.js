@@ -3,6 +3,7 @@ const app = require('../app');
 const db = require('../db').db;
 const dbInit = require('../db/dbInit');
 const configs = require('../configs');
+const expect = require('chai').expect;
 
 describe('route.posts', function() {
   let initUsers = null, initPosts = null;
@@ -75,6 +76,26 @@ describe('route.posts', function() {
             console.log(res.body);
             throw err;
           }
+          done();
+        });
+    });
+  });
+  describe('POST ', function() {
+    let path = '/posts';
+    it('should returned created post', function(done) {
+      let body = {
+        content: 'xxx',
+        userId: 1
+      }
+      request(app)
+        .post(path)
+        .set('Accept', 'application/json')
+        .send(body)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          if(err) throw err;
+          expect(res.body.entities.posts[0].content).to.deep.equal('xxx');
           done();
         });
     });

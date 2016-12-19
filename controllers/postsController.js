@@ -23,7 +23,7 @@ const postsValidatorSchema = require('../validators/postsValidatorSchema');
 //if nextPage has no record nextPage will be the same to req
 // else nextPage will be page + 1
 let findByParamsWithoutNearId = (req, params) => {
-  logger.debug('findByParamsWithoutNearId()...');
+  logger.info('findByParamsWithoutNearId()...');
   return db.task(function *(t) {
     let nextPagePosts = yield t.posts.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
     let thisPagePosts = yield t.posts.findByParamsWithoutNearId(params);
@@ -42,7 +42,7 @@ let findByParamsWithoutNearId = (req, params) => {
 }
 
 let findByParamsWithNearId = (req, params) => {
-  logger.debug('findByParamsWithNearId()...');
+  logger.info('findByParamsWithNearId()...');
   return db.task(function *(t) {
     let posts = params.underNearId ? yield t.posts.findByParamsWithUnderNearId(params) : yield t.posts.findByParamsWithUpperNearId(params);
     let response = {
@@ -56,6 +56,7 @@ let findByParamsWithNearId = (req, params) => {
 }
 
 let findByParams = (req) => {
+  logger.info('findByParams()...');
   let params = req.query;
   try {
     params = utils.validateObjectBySchema(params, postsValidatorSchema.queryParamsSchema);
@@ -71,6 +72,7 @@ let findByParams = (req) => {
 }
 
 let addPost = (req) => {
+  logger.info('addPost()...');
   let body = req.body;
   try {
     post = utils.validateObjectBySchema(body, postsValidatorSchema.addPostSchema);

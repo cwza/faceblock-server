@@ -11,6 +11,7 @@
 var os = require('os');
 var fs = require('fs');
 var monitor = require('pg-monitor');
+let logFileDir = require('../configs').logger.dir;
 
 monitor.setTheme('matrix'); // changing the default theme;
 
@@ -18,7 +19,7 @@ monitor.setTheme('matrix'); // changing the default theme;
 var $DEV = process.env.NODE_ENV === 'development';
 
 // Log file for database-related errors:
-var logFile = './db/errors.log';
+var logFile = logFileDir + '/db.error.log';
 
 // Below we are logging errors exactly the way they are reported by pg-monitor,
 // which you can tweak any way you like, as parameter 'info' provides all the

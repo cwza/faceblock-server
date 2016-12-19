@@ -2,10 +2,13 @@ Docker:
   zombodb
 
 DB:
-  postgres, elasticsearch, zombodb, pg-promise, squel
+  postgres, elasticsearch, zombodb, pg-promise
 
 Restful:
-  express, express-validator
+  express
+
+Validator:
+  Joi
 
 Test:
   Mocha, Chai, supertest

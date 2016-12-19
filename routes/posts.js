@@ -4,18 +4,25 @@ const logger = require('../logger').logger;
 
 const router = express.Router();
 
-//domain/posts?q=userIds:(1, 2)&sort=id&order=asc&page=2
+//req: domain/posts?q=userIds:(1, 2)&sort=createTime&order=desc&limit=5&underNearId=18
+// res: {
+//   entities:{
+//     posts:[]
+//   }
+// }
 router.get('/', (req, res, next) => {
   logger.debug('req.query: ', req.query);
   // setTimeout(() => {
-  //   validate(req, postsSchemas.findByParamsSchema)
-  //     .then(() => postsController.findByParams(req))
-  //     .then(data => res.status(200).json(data))
-  //     .catch(error => next(error));
   // }, 3000)
   postsController.findByParams(req)
     .then(data => res.status(200).json(data))
     .catch(error => next(error));
 });
 
+router.post('/', (req, res, next) => {
+  logger.debug('req.body: ', req.body);
+  postsController.addPost(req)
+    .then(data => res.status(201).json(data))
+    .catch(error => next(error));
+});
 module.exports = router;
