@@ -152,4 +152,19 @@ describe('postsController', function() {
         });
     });
   });
+  describe('#updatePost()', function() {
+    it('should return updated post', function() {
+      let req = {
+        params: {id: 1},
+        body: {
+          content: 'xxx'
+        }
+      }
+      return postsController.updatePost(req)
+        .then(data => {
+          expect(data.entities.posts[0].content).to.equal('xxx');
+          expect(data.entities.posts[0].updateTime).to.not.equal(initPosts.filter(post => post.id === 1)[0].updateTime);
+        });
+    });
+  });
 });

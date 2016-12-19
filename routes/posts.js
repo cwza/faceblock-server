@@ -39,4 +39,12 @@ router.get('/:id', (req, res, next) => {
     .then(data => res.status(200).json(data))
     .catch(error => next(error));
 });
+
+router.put('/:id', (req, res, next) => {
+  logger.debug('req.params: ', req.params);
+  logger.debug('req.body: ', req.body);
+  postsController.updatePost(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
+});
 module.exports = router;

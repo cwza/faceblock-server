@@ -76,6 +76,7 @@ let addPost = (req) => {
           posts: [ post ]
         }
       };
+      logger.debug('response for addPost: ', response);
       return response;
     });
 }
@@ -97,10 +98,30 @@ let findPost = req => {
           posts: [ post ]
         }
       };
+      logger.debug('response for findPost: ', response);
       return response;
     });
 }
 
+let updatePost = req => {
+  logger.info('updatePost()...');
+  let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
+  let postFromReq = controller.validate(req.body, postsValidatorSchema.updatePostSchema);
+  return db.tx(function *(t) {
+    let postFromDB = yield t.posts.find(postId);
+    if(!postFromDB) throw {status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND, name: 'OBJECT_NOT_FOUND', message: 'OBJECT_NOT_FOUND'}
+    let post = utils.interMergeObject(postFromReq, postFromDB);
+    post = yield t.posts.update(post);
+    let response = {
+      entities: {
+        posts: [ post ]
+      },
+    };
+    logger.debug('response for updatePost: ', response);
+    return response;
+  });
+}
+
 module.exports = {
-  findByParams, addPost, removePost, findPost
+  findByParams, addPost, removePost, findPost, updatePost
 }

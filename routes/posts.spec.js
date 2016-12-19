@@ -153,4 +153,47 @@ describe('route.posts', function() {
         });
     });
   });
+  describe('PUT posts/1', function() {
+    let path = '/posts/1';
+    it('should returned updated id:1 post', function(done) {
+      let body = { content: 'xxx' };
+      request(app)
+        .put(path)
+        .send(body)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
+          expect(res.body.entities.posts[0].content).to.equal('xxx');
+          expect(res.body.entities.posts[0].updateTime).to.not.equal(initPosts.filter(post => post.id === 1)[0].updateTime);
+          done();
+        });
+    });
+  });
+  describe('PUT posts/9999', function() {
+    let path = '/posts/9999';
+    it('should return error OBJECT_NOT_FOUND', function(done) {
+      let body = { content: 'xxx' };
+      let expectedResponse = JSON.stringify({
+        error: {
+          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND, name: 'OBJECT_NOT_FOUND', message: 'OBJECT_NOT_FOUND',
+        }
+      });
+      request(app)
+        .put(path)
+        .send(body)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(404, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
+          done();
+        });
+    });
+  });
 });
