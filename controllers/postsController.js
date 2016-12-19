@@ -91,6 +91,7 @@ let findPost = req => {
   let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
   return db.posts.find(postId)
     .then(post => {
+      if(!post) throw {status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND, name: 'OBJECT_NOT_FOUND', message: 'OBJECT_NOT_FOUND'}
       let response = {
         entities: {
           posts: [ post ]

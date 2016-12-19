@@ -42,8 +42,9 @@ app.use('/posts', posts);
 app.use(function(req, res, next) {
   let err = {
     status: 404,
-    errorCode: 404,
-    message: 'Not Found'
+    errorCode: Constants.ERROR.PAGE_NOT_FOUND,
+    message: 'PAGE_NOT_FOUND',
+    name: 'PAGE_NOT_FOUND'
   }
   next(err);
 });
@@ -54,20 +55,26 @@ app.use(function(req, res, next) {
 // }
 // error handler
 // error = {
-//   status,
-//   errorCode,
-//   message,
-//   longMessage
+//   status,     //standard http status
+//   errorCode,  //custom error code
+//   name,       //custom error name
+//   message,    //custom error name or error message from other library
+//   longMessage //optional
 // }
 app.use(function(err, req, res, next) {
   logger.error(err);
   if(err.status) {
     res.status(err.status);
-    response = {error: {status: err.status, errorCode: err.errorCode, message: err.message, longMessage: err.longMessage || JSON.stringify(err)}};
   } else {
     res.status(500);
-    response = {error: {status: err.status, errorCode: 500, message: err.message, longMessage: err.longMessage || JSON.stringify(err)}};
+    err.status = 500, err.errorCode = Constants.ERROR.OTHER_ERROR, err.name = 'OTHER_ERROR';
+    err.longMessage = JSON.stringify(err);
   }
+  response = {
+    error: {
+      status: err.status, errorCode: err.errorCode, name: err.name, message: err.message, longMessage: err.longMessage
+    }
+  };
   res.json(response);
 });
 

@@ -4,6 +4,8 @@ const db = require('../db').db;
 const dbInit = require('../db/dbInit');
 const configs = require('../configs');
 const expect = require('chai').expect;
+const Constants = require('../Constants');
+const utils = require('../utils');
 
 describe('route.posts', function() {
   let initUsers = null, initPosts = null;
@@ -122,6 +124,27 @@ describe('route.posts', function() {
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
+          done();
+        });
+    });
+  });
+  describe('GET posts/99999', function() {
+    let path = '/posts/99999';
+    it('should return error OBJECT_NOT_FOUND', function(done) {
+      let expectedResponse = JSON.stringify({
+        error: {
+          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND, name: 'OBJECT_NOT_FOUND', message: 'OBJECT_NOT_FOUND',
+        }
+      });
+      request(app)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(404, expectedResponse, (err, res) => {
           if(err) {
             console.log(res.body);
             throw err;
