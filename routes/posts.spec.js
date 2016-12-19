@@ -80,7 +80,7 @@ describe('route.posts', function() {
         });
     });
   });
-  describe('POST ', function() {
+  describe('POST /posts {content: "xxx", userId: 1}', function() {
     let path = '/posts';
     it('should returned created post', function(done) {
       let body = {
@@ -96,6 +96,36 @@ describe('route.posts', function() {
         .end((err, res) => {
           if(err) throw err;
           expect(res.body.entities.posts[0].content).to.deep.equal('xxx');
+          done();
+        });
+    });
+  });
+  describe('DELETE posts/1', function() {
+    let path = '/posts/1';
+    it('should returned created post', function(done) {
+      request(app)
+        .delete(path)
+        .set('Accept', 'application/json')
+        .expect(200, done);
+    });
+  });
+  describe('GET posts/1', function() {
+    let path = '/posts/1';
+    it('should returned id:1 post', function(done) {
+      let expectedResponse = JSON.stringify({
+        entities: {
+          posts: initPosts.filter(post => post.id === 1)
+        },
+      });
+      request(app)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
           done();
         });
     });

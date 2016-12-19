@@ -15,8 +15,12 @@ const queryParamsSchema = Joi.object().keys({
 const addPostSchema = Joi.object().keys({
   userId: Joi.number().integer().positive().required(),
   content: Joi.string().required()
-})
+});
+
+const idSchema = Joi.object().keys({
+  id: Joi.number().integer().positive().required(),
+});
 
 module.exports = {
-  queryParamsSchema, addPostSchema
+  queryParamsSchema, addPostSchema, idSchema
 };

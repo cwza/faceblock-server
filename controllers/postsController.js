@@ -4,6 +4,7 @@ const domain = require('../configs').app.domain;
 const logger = require('../logger').logger;
 const Constants = require('../Constants');
 const postsValidatorSchema = require('../validators/postsValidatorSchema');
+const controller = require('./controller');
 
 // let queryParamsToParams = (queryParams) => {
 //   let params = {};
@@ -57,13 +58,7 @@ let findByParamsWithNearId = (req, params) => {
 
 let findByParams = (req) => {
   logger.info('findByParams()...');
-  let params = req.query;
-  try {
-    params = utils.validateObjectBySchema(params, postsValidatorSchema.queryParamsSchema);
-  } catch(error) {
-    error.status = 400, error.errorCode = 400;
-    throw error;
-  }
+  let params = controller.validate(req.query, postsValidatorSchema.queryParamsSchema);
   if(params.upperNearId || params.underNearId) {
     return findByParamsWithNearId(req, params);
   } else {
@@ -73,13 +68,7 @@ let findByParams = (req) => {
 
 let addPost = (req) => {
   logger.info('addPost()...');
-  let body = req.body;
-  try {
-    post = utils.validateObjectBySchema(body, postsValidatorSchema.addPostSchema);
-  } catch(error) {
-    error.status = 400, error.errorCode = 400;
-    throw error;
-  }
+  let post = controller.validate(req.body, postsValidatorSchema.addPostSchema);
   return db.posts.add(post)
     .then(post => {
       let response = {
@@ -91,6 +80,26 @@ let addPost = (req) => {
     });
 }
 
+let removePost = req => {
+  logger.info('removePost()...');
+  let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
+  return db.posts.remove(postId);
+}
+
+let findPost = req => {
+  logger.info('findPost()...');
+  let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
+  return db.posts.find(postId)
+    .then(post => {
+      let response = {
+        entities: {
+          posts: [ post ]
+        }
+      };
+      return response;
+    });
+}
+
 module.exports = {
-  findByParams, addPost
+  findByParams, addPost, removePost, findPost
 }

@@ -113,16 +113,42 @@ describe('postsController', function() {
   });
   describe('#addPost()', function() {
     it('should return add content', function() {
-      let body = {
-        content: 'xxx',
-        userId: 1
-      }
       let req = {
-        body
+        body: {
+          content: 'xxx',
+          userId: 1
+        }
       }
       return postsController.addPost(req)
         .then(data => {
           expect(data.entities.posts[0].content).to.deep.equal('xxx');
+        });
+    });
+  });
+  describe('#removePost()', function() {
+    it('should return 1', function() {
+      let req = {
+        params: {id: 1}
+      }
+      return postsController.removePost(req)
+        .then(rowCount => {
+          expect(rowCount).to.equal(1);
+        });
+    });
+  });
+  describe('#findPost()', function() {
+    it('should return id:1 post', function() {
+      let req = {
+        params: {id: 1}
+      }
+      let expectedResponse = {
+        entities: {
+          posts: initPosts.filter(post => post.id === 1)
+        }
+      };
+      return postsController.findPost(req)
+        .then(data => {
+          expect(data).to.deep.equal(expectedResponse);
         });
     });
   });
