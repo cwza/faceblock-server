@@ -42,9 +42,9 @@ app.use('/posts', posts);
 app.use(function(req, res, next) {
   let err = {
     status: 404,
-    errorCode: Constants.ERROR.PAGE_NOT_FOUND,
-    message: 'PAGE_NOT_FOUND',
-    name: 'PAGE_NOT_FOUND'
+    errorCode: Constants.ERROR.PAGE_NOT_FOUND.code,
+    message: Constants.ERROR.PAGE_NOT_FOUND.name,
+    name: Constants.ERROR.PAGE_NOT_FOUND.name
   }
   next(err);
 });
@@ -67,12 +67,12 @@ app.use(function(err, req, res, next) {
     res.status(err.status);
   } else {
     res.status(500);
-    err.status = 500, err.errorCode = Constants.ERROR.OTHER_ERROR, err.name = 'OTHER_ERROR';
+    err.status = 500, err.errorCode = Constants.ERROR.OTHER_ERROR.code, err.name = Constants.ERROR.OTHER_ERROR.name ;
     err.longMessage = JSON.stringify(err);
   }
   response = {
     error: {
-      status: err.status, errorCode: err.errorCode, name: err.name, message: err.message, longMessage: err.longMessage
+      status: err.status, errorCode: err.errorCode, name: err.name, message: err.message, longMessage: err.longMessname
     }
   };
   res.json(response);

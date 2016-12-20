@@ -6,7 +6,7 @@ let validate = (obj , schema) => {
     obj = utils.validateObjectBySchema(obj, schema);
     return obj;
   } catch(error) {
-    error.status = 400, error.errorCode = Constants.ERROR.VALIDATION_ERROR, error.name = 'VALIDATION_ERROR';
+    error.status = 400, error.errorCode = Constants.ERROR.VALIDATION_ERROR.code, error.name = Constants.ERROR.VALIDATION_ERROR.name;
     throw error;
   }
 }

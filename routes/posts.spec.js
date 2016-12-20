@@ -137,7 +137,7 @@ describe('route.posts', function() {
     it('should return error OBJECT_NOT_FOUND', function(done) {
       let expectedResponse = JSON.stringify({
         error: {
-          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND, name: 'OBJECT_NOT_FOUND', message: 'OBJECT_NOT_FOUND',
+          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND.code, name: Constants.ERROR.OBJECT_NOT_FOUND.name, message: Constants.ERROR.OBJECT_NOT_FOUND.name,
         }
       });
       request(app)
@@ -179,7 +179,7 @@ describe('route.posts', function() {
       let body = { content: 'xxx' };
       let expectedResponse = JSON.stringify({
         error: {
-          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND, name: 'OBJECT_NOT_FOUND', message: 'OBJECT_NOT_FOUND',
+          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND.code, name: Constants.ERROR.OBJECT_NOT_FOUND.name, message: Constants.ERROR.OBJECT_NOT_FOUND.name,
         }
       });
       request(app)
