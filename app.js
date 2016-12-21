@@ -1,4 +1,5 @@
 const express = require('express');
+const postgraphql = require('postgraphql').postgraphql;
 const path = require('path');
 const favicon = require('serve-favicon');
 const morganLogger = require('morgan');
@@ -8,17 +9,16 @@ const helmet = require('helmet')
 const queryParser = require('express-query-int');
 
 const logger = require('./logger').logger;
+const Constants = require('./Constants');
+const configs = require('./configs');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
 const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 //middleware
+app.use(postgraphql(configs.db, 'public', {graphiql: true}));
 app.use(helmet());
 app.use(morganLogger('dev'));
 app.use(bodyParser.json());

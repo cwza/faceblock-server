@@ -24,6 +24,7 @@
     "node-fetch": "^1.6.3",
     "pg-monitor": "^0.5.11",
     "pg-promise": "^5.4.3",
+    "postgraphql": "^2.4.0",
     "pug": "~2.0.0-beta6",
     "serve-favicon": "~2.3.0",
     "winston": "^2.3.0",
