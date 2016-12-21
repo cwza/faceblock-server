@@ -2,7 +2,7 @@ Docker:
   zombodb
 
 DB:
-  postgres, elasticsearch, zombodb, pg-promise
+  postgres, elasticsearch, zombodb, pg-promise, postgraphql
 
 Restful:
   express
