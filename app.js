@@ -62,7 +62,7 @@ app.use(function(req, res, next) {
 //   longMessage //optional
 // }
 app.use(function(err, req, res, next) {
-  logger.error(err);
+  logger.error('err: ', err);
   if(err.status) {
     res.status(err.status);
   } else {
@@ -75,6 +75,7 @@ app.use(function(err, req, res, next) {
       status: err.status, errorCode: err.errorCode, name: err.name, message: err.message, longMessage: err.longMessname
     }
   };
+  logger.debug('error res: ', JSON.stringify(response, null, 2));
   res.json(response);
 });
 
