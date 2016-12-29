@@ -7,10 +7,10 @@ const expect = require('chai').expect;
 const Constants = require('../Constants');
 const utils = require('../utils');
 const Errors = require('../Errors');
+const createJwt = require('../controllers/authenticationController').private.createJwt;
 
 describe('route.posts', function() {
   let initUsers = null, initPosts = null;
-
   beforeEach(function() {
     return dbInit.initDatabase((initData) => {
       initUsers = initData.initUsers;
@@ -31,10 +31,12 @@ describe('route.posts', function() {
       request(app)
         .get(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
             console.log(res.body);
+            console.log(err);
             throw err;
           }
           done();
@@ -52,6 +54,7 @@ describe('route.posts', function() {
       request(app)
         .get(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -73,6 +76,7 @@ describe('route.posts', function() {
       request(app)
         .get(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -93,6 +97,7 @@ describe('route.posts', function() {
       request(app)
         .post(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .send(body)
         .expect('Content-Type', /json/)
         .expect(201)
@@ -109,6 +114,7 @@ describe('route.posts', function() {
       request(app)
         .delete(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect(200, done);
     });
   });
@@ -123,6 +129,7 @@ describe('route.posts', function() {
       request(app)
         .get(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -142,6 +149,7 @@ describe('route.posts', function() {
       request(app)
         .get(path)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(404, expectedResponse, (err, res) => {
           if(err) {
@@ -160,6 +168,7 @@ describe('route.posts', function() {
         .put(path)
         .send(body)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(200, (err, res) => {
           if(err) {
@@ -183,6 +192,7 @@ describe('route.posts', function() {
         .put(path)
         .send(body)
         .set('Accept', 'application/json')
+        .set('faceblock_token', createJwt(initUsers[0]))
         .expect('Content-Type', /json/)
         .expect(404, expectedResponse, (err, res) => {
           if(err) {

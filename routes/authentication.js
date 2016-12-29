@@ -10,8 +10,8 @@ router.post('/login', (req, res, next) => {
     .catch(error => next(error));
 });
 
-router.post('/logout', (req, res, next) => {
-  logger.debug('req', req);
-});
+// router.post('/logout', (req, res, next) => {
+//   logger.debug('req', req);
+// });
 
 module.exports = router;

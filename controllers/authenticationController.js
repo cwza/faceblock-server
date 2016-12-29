@@ -11,7 +11,7 @@ const controllerUtils = require('./controllerUtils');
 const socialProvider = {
   google: 'https://www.googleapis.com/oauth2/v2/userinfo?alt=json'
 }
-const expiresIn = '24h';
+const expiresIn = '2h';
 
 const getUserInfoFromSocial = (socialSite, socialToken) => {
   return fetch(socialProvider[socialSite] + '&access_token=' + socialToken)
@@ -28,6 +28,19 @@ const createJwt = (user) => {
         expiresIn: expiresIn,
         issuer: configs.app.name,
     });
+}
+
+const verifyJwt = (jwtString) => {
+  return jwt.verify(jwtString, configs.app.privateKey, {
+        issuer: configs.app.name,
+    });
+}
+
+const getFaceblockToken = (req) => {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    return req.headers.authorization.split(' ')[1];
+  }
+  return '';
 }
 
 // if user not found, create it. and return user and generated jwt
@@ -67,10 +80,23 @@ const login = (req) => {
     })
 }
 
+const authenticate = (req) => {
+  logger.info('authenticate()...');
+  try {
+    let faceblockToken = req.headers['faceblock_token'];
+    logger.debug('faceblockToken: ', faceblockToken);
+    let userFromJwt = verifyJwt(faceblockToken);
+    return db.users.find(userFromJwt.id);
+  } catch(error) {
+    logger.debug('authenticationError: ', JSON.stringify(error));
+    throw Errors.authenticationError(error);
+  }
+}
+
 module.exports = {
-  login
+  login, authenticate
 }
 
 module.exports.private = {
-  getUserInfoFromSocial, createJwt, checkUser, login
+  getUserInfoFromSocial, createJwt, checkUser, login, authenticate
 }

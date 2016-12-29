@@ -61,4 +61,19 @@ describe('authenticationController', function() {
         })
     });
   });
+  describe('#authenticate()', function() {
+    it('should return initUsers[0]', function() {
+      let req = {
+        headers: {
+          faceblock_token: authenticationController.createJwt(initUsers[0])
+        }
+      }
+      return authenticationController.authenticate(req)
+        .then(response => {
+          expect(response).to.deep.equal(initUsers[0]);
+        }).catch(error => {
+          console.log('error: ', JSON.stringify(error));
+        })
+    });
+  });
 });
