@@ -4,7 +4,7 @@ const domain = require('../configs').app.domain;
 const logger = require('../logger').logger;
 const Constants = require('../Constants');
 const postsValidatorSchema = require('../validators/postsValidatorSchema');
-const controller = require('./controller');
+const controllerUtils = require('./controllerUtils');
 const Errors = require('../Errors')
 
 // let queryParamsToParams = (queryParams) => {
@@ -59,7 +59,7 @@ let findByParamsWithNearId = (req, params) => {
 
 let findByParams = (req) => {
   logger.info('findByParams()...');
-  let params = controller.validate(req.query, postsValidatorSchema.queryParamsSchema);
+  let params = controllerUtils.validate(req.query, postsValidatorSchema.queryParamsSchema);
   if(params.upperNearId || params.underNearId) {
     return findByParamsWithNearId(req, params);
   } else {
@@ -69,7 +69,7 @@ let findByParams = (req) => {
 
 let addPost = (req) => {
   logger.info('addPost()...');
-  let post = controller.validate(req.body, postsValidatorSchema.addPostSchema);
+  let post = controllerUtils.validate(req.body, postsValidatorSchema.addPostSchema);
   return db.posts.add(post)
     .then(post => {
       let response = {
@@ -84,13 +84,13 @@ let addPost = (req) => {
 
 let removePost = req => {
   logger.info('removePost()...');
-  let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
+  let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
   return db.posts.remove(postId);
 }
 
 let findPost = req => {
   logger.info('findPost()...');
-  let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
+  let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
   return db.posts.find(postId)
     .then(post => {
       if(!post) throw Errors.objectNotFound();
@@ -106,8 +106,8 @@ let findPost = req => {
 
 let updatePost = req => {
   logger.info('updatePost()...');
-  let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
-  let postFromReq = controller.validate(req.body, postsValidatorSchema.updatePostSchema);
+  let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
+  let postFromReq = controllerUtils.validate(req.body, postsValidatorSchema.updatePostSchema);
   return db.tx(function *(t) {
     let postFromDB = yield t.posts.find(postId);
     if(!postFromDB) throw Errors.objectNotFound();

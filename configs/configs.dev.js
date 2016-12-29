@@ -1,6 +1,8 @@
 let configs = {
   app: {
-    domain: 'http://localhost:3001'
+    domain: 'http://localhost:3001',
+    name: 'faceblock',
+    privateKey: 'slakdjfalkdjsflkasdfjA123109238109',
   },
   db: {
     host: 'localhost',

@@ -1,6 +1,8 @@
 let configs = {
   app: {
-    domain: 'http://production'
+    domain: 'http://production',
+    name: 'faceblock',
+    privateKey: process.env.PRIVATE_KEY,
   },
   db: {
     host: process.env.DB_HOST,

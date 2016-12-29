@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const logger = require('../logger').logger;
+const authenticationController = require('../controllers/authenticationController');
 
-router.get('/login', (req, res, next) => {
-  logger.debug('req.query: ', req.query);
+router.post('/login', (req, res, next) => {
+  logger.debug('req.body: ', req.body);
+  authenticationController.login(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
 });
 
-router.get('/logout', (req, res, next) => {
+router.post('/logout', (req, res, next) => {
   logger.debug('req', req);
 });
 

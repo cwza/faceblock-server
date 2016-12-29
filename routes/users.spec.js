@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+require('isomorphic-fetch');
 const expect = require('chai').expect;
 const db = require('../db').db;
 const dbInit = require('../db/dbInit');

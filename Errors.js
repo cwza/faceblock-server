@@ -1,4 +1,4 @@
-let otherError = (error) => {
+let otherError = (error={}) => {
   return {
     status: 500,
     errorCode: 500,
@@ -26,7 +26,7 @@ let objectNotFound = () => {
   }
 }
 
-let validationError = (error) => {
+let validationError = (error={}) => {
   return {
     status: 400,
     errorCode: 400,
@@ -44,6 +44,16 @@ let conflictObject = () => {
   }
 }
 
+let authenticationError = (error={}) => {
+  return {
+    status: 401,
+    errorCode: 401,
+    name: 'AUTHENTICATION_ERROR',
+    message: 'AUTHENTICATION_ERROR',
+    longMessage: JSON.stringify(error),
+  }
+}
+
 module.exports = {
-  otherError, pageNotFound, objectNotFound, validationError, conflictObject
+  otherError, pageNotFound, objectNotFound, validationError, conflictObject, authenticationError
 }

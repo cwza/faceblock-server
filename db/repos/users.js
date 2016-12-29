@@ -36,6 +36,8 @@ module.exports = (rep, pgp) => {
       rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
     find: id =>
       rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id, user => humps.camelizeKeys(user)),
+    findByMail: mail =>
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE mail = $1`, mail, user => humps.camelizeKeys(user)),
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(users => humps.camelizeKeys(users)),
     total: () =>
