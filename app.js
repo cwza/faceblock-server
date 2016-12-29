@@ -11,10 +11,12 @@ const queryParser = require('express-query-int');
 const logger = require('./logger').logger;
 const Constants = require('./Constants');
 const configs = require('./configs');
+const Errors = require('./Errors');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
+const authentication = require('./routes/authentication');
 const app = express();
 
 //middleware
@@ -38,16 +40,11 @@ app.use(function(req, res, next) {
 app.use('/', index);
 app.use('/users', users);
 app.use('/posts', posts);
+app.use('/authentication', authentication);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  let err = {
-    status: 404,
-    errorCode: Constants.ERROR.PAGE_NOT_FOUND.code,
-    message: Constants.ERROR.PAGE_NOT_FOUND.name,
-    name: Constants.ERROR.PAGE_NOT_FOUND.name
-  }
-  next(err);
+  next(Errors.pageNotFound());
 });
 
 // response = {
@@ -68,14 +65,9 @@ app.use(function(err, req, res, next) {
     res.status(err.status);
   } else {
     res.status(500);
-    err.status = 500, err.errorCode = Constants.ERROR.OTHER_ERROR.code, err.name = Constants.ERROR.OTHER_ERROR.name ;
-    err.longMessage = JSON.stringify(err);
+    err = Errors.otherError(err);
   }
-  response = {
-    error: {
-      status: err.status, errorCode: err.errorCode, name: err.name, message: err.message, longMessage: err.longMessname
-    }
-  };
+  let response = {error: err};
   logger.debug('error res: ', JSON.stringify(response, null, 2));
   res.json(response);
 });

@@ -5,6 +5,7 @@ const logger = require('../logger').logger;
 const Constants = require('../Constants');
 const postsValidatorSchema = require('../validators/postsValidatorSchema');
 const controller = require('./controller');
+const Errors = require('../Errors')
 
 // let queryParamsToParams = (queryParams) => {
 //   let params = {};
@@ -92,7 +93,7 @@ let findPost = req => {
   let postId = controller.validate(req.params, postsValidatorSchema.idSchema).id;
   return db.posts.find(postId)
     .then(post => {
-      if(!post) throw {status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND.code, name: Constants.ERROR.OBJECT_NOT_FOUND.name, message: Constants.ERROR.OBJECT_NOT_FOUND.name}
+      if(!post) throw Errors.objectNotFound();
       let response = {
         entities: {
           posts: [ post ]
@@ -109,7 +110,7 @@ let updatePost = req => {
   let postFromReq = controller.validate(req.body, postsValidatorSchema.updatePostSchema);
   return db.tx(function *(t) {
     let postFromDB = yield t.posts.find(postId);
-    if(!postFromDB) throw {status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND.code, name: Constants.ERROR.OBJECT_NOT_FOUND.name, message: Constants.ERROR.OBJECT_NOT_FOUND.name}
+    if(!postFromDB) throw Errors.objectNotFound();
     let post = utils.interMergeObject(postFromReq, postFromDB);
     post = yield t.posts.update(post);
     let response = {

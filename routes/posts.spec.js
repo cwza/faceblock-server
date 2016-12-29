@@ -6,6 +6,7 @@ const configs = require('../configs');
 const expect = require('chai').expect;
 const Constants = require('../Constants');
 const utils = require('../utils');
+const Errors = require('../Errors');
 
 describe('route.posts', function() {
   let initUsers = null, initPosts = null;
@@ -136,9 +137,7 @@ describe('route.posts', function() {
     let path = '/posts/99999';
     it('should return error OBJECT_NOT_FOUND', function(done) {
       let expectedResponse = JSON.stringify({
-        error: {
-          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND.code, name: Constants.ERROR.OBJECT_NOT_FOUND.name, message: Constants.ERROR.OBJECT_NOT_FOUND.name,
-        }
+        error: Errors.objectNotFound()
       });
       request(app)
         .get(path)
@@ -178,9 +177,7 @@ describe('route.posts', function() {
     it('should return error OBJECT_NOT_FOUND', function(done) {
       let body = { content: 'xxx' };
       let expectedResponse = JSON.stringify({
-        error: {
-          status: 404, errorCode: Constants.ERROR.OBJECT_NOT_FOUND.code, name: Constants.ERROR.OBJECT_NOT_FOUND.name, message: Constants.ERROR.OBJECT_NOT_FOUND.name,
-        }
+        error: Errors.objectNotFound()
       });
       request(app)
         .put(path)

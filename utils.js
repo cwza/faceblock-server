@@ -17,11 +17,12 @@ let interMergeObject = (inputObject, defaultObject) => {
 let extendObject = (inputObject, defaultObject) => Object.assign({}, defaultObject, inputObject);
 
 let deletePropertiesFromObject = (obj, properties) => {
-  let returnedObj = {};
-  Object.keys(obj)
+  return Object.keys(obj)
     .filter(key => !properties.includes(key))
-    .forEach(key => returnedObj[key] = obj[key]);
-  return returnedObj;
+    .reduce((result, key) => {
+      result[key] = obj[key];
+      return result;
+    }, {});
 }
 
 let replaceUrlParam = (url, paramName, paramValue) => {
