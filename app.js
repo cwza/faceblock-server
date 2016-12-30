@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const queryParser = require('express-query-int');
+const cors = require('cors');
 
 const logger = require('./logger').logger;
 const Constants = require('./Constants');
@@ -28,12 +29,7 @@ app.use(queryParser());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // for CORS TODO: now allow all domain should add specific domain for production
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  next();
-});
+app.use(cors());
 
 //routers
 app.use('/', index);
