@@ -1,10 +1,21 @@
 var express = require('express');
 var router = express.Router();
+const logger = require('../logger').logger
 const authenticationController = require('../controllers/authenticationController');
 
-//authentication
+// login
+router.post('/login', (req, res, next) => {
+  logger.debug('req.body: ', req.body);
+  authenticationController.login(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
+});
+
+//authentication middleware exclude /login
 //request header should contains valid faceblock_token to server
 router.all('/*', function(req, res, next) {
+  if(req.originalUrl === '/login')
+    return next();
   authenticationController.authenticate(req)
     .then(user => {
       req.user = user;

@@ -10,11 +10,15 @@ const Errors = require('../Errors');
 const createJwt = require('../controllers/authenticationController').private.createJwt;
 
 describe('route.posts', function() {
-  let initUsers = null, initPosts = null;
+  let initUsers = null, initPosts = null, baseHeader = {};
   beforeEach(function() {
     return dbInit.initDatabase((initData) => {
       initUsers = initData.initUsers;
       initPosts = initData.initPosts;
+      baseHeader = {
+        'faceblock_token': createJwt(initUsers[0]),
+        'Accept': 'application/json',
+      };
     });
   });
   describe('GET /posts?q=userId:(1)&sort=id&order=asc&page=2', function() {
@@ -30,8 +34,7 @@ describe('route.posts', function() {
       });
       request(app)
         .get(path)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -53,8 +56,7 @@ describe('route.posts', function() {
       });
       request(app)
         .get(path)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -75,8 +77,7 @@ describe('route.posts', function() {
       });
       request(app)
         .get(path)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -96,8 +97,7 @@ describe('route.posts', function() {
       }
       request(app)
         .post(path)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .send(body)
         .expect('Content-Type', /json/)
         .expect(201)
@@ -128,8 +128,7 @@ describe('route.posts', function() {
       });
       request(app)
         .get(path)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(200, expectedResponse, (err, res) => {
           if(err) {
@@ -148,8 +147,7 @@ describe('route.posts', function() {
       });
       request(app)
         .get(path)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(404, expectedResponse, (err, res) => {
           if(err) {
@@ -167,8 +165,7 @@ describe('route.posts', function() {
       request(app)
         .put(path)
         .send(body)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(200, (err, res) => {
           if(err) {
@@ -191,8 +188,7 @@ describe('route.posts', function() {
       request(app)
         .put(path)
         .send(body)
-        .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set(baseHeader)
         .expect('Content-Type', /json/)
         .expect(404, expectedResponse, (err, res) => {
           if(err) {
