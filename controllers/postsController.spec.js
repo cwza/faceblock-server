@@ -117,7 +117,7 @@ describe('postsController', function() {
         user: {id: 1},
         body: {
           content: 'xxx',
-          userId: 1
+          userId: 1,
         }
       }
       return postsController.addPost(req)

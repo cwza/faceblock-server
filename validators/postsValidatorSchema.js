@@ -14,7 +14,8 @@ const queryParamsSchema = Joi.object().keys({
 
 const addPostSchema = Joi.object().keys({
   userId: Joi.number().integer().positive().required(),
-  content: Joi.string().required()
+  content: Joi.string().required(),
+  replyTo: Joi.number().integer().positive().allow(null),
 });
 
 const idSchema = Joi.object().keys({
@@ -25,8 +26,9 @@ const updatePostSchema = Joi.object().keys({
   id: Joi.number().integer().positive(),
   userId: Joi.number().integer().positive(),
   content: Joi.string(),
+  replyTo: Joi.number().integer().positive().allow(null),
   createTime: Joi.date(),
-  updateTime: Joi.date()
+  updateTime: Joi.date(),
 });
 
 module.exports = {

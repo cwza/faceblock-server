@@ -20,12 +20,14 @@ module.exports = (rep, pgp) => {
   }).without('underNearId', 'upperNearId');
   const postAddSchema = Joi.object().keys({
     userId: Joi.number().integer().positive().required(),
-    content: Joi.string().required()
+    content: Joi.string().required(),
+    replyTo: Joi.number().integer().positive().allow(null),
   });
   const postUpdateSchema = Joi.object().keys({
     id: Joi.number().integer().positive().required(),
     userId: Joi.number().integer().positive().required(),
     content: Joi.string().required(),
+    replyTo: Joi.number().integer().positive().allow(null),
     createTime: Joi.date(),
     updateTime: Joi.date()
   });
