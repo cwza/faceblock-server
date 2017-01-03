@@ -54,6 +54,16 @@ let authenticationError = (error={}) => {
   }
 }
 
+let authorizationError = () => {
+  return {
+    status: 403,
+    errorCode: 403,
+    name: 'AUTHORIZATION_ERROR',
+    message: 'AUTHORIZATION_ERROR',
+  }
+}
+
 module.exports = {
-  otherError, pageNotFound, objectNotFound, validationError, conflictObject, authenticationError
+  otherError, pageNotFound, objectNotFound, validationError, conflictObject, authenticationError,
+  authorizationError
 }

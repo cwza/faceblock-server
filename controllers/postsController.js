@@ -7,26 +7,16 @@ const postsValidatorSchema = require('../validators/postsValidatorSchema');
 const controllerUtils = require('./controllerUtils');
 const Errors = require('../Errors')
 
-// let queryParamsToParams = (queryParams) => {
-//   let params = {};
-//   for(queryParam in queryParams) {
-//     switch (queryParam) {
-//       case 'upperNearId':
-//         params['upperNearId'] = queryParams['upperNearId'];
-//         break;
-//       default:
-//         params[queryParam] = queryParams[queryParam];
-//     }
-//   }
-//   params.page = params.page || 1;
-//   return params;
-// }
+let checkAuthorization = (reqUser, post) => {
+  if(reqUser.id !== post.userId)
+    throw Errors.authorizationError();
+}
 
 //if nextPage has no record nextPage will be the same to req
 // else nextPage will be page + 1
 let findByParamsWithoutNearId = (req, params) => {
   logger.info('findByParamsWithoutNearId()...');
-  return db.task(function *(t) {
+  return db.task('findByParamsWithoutNearId', function *(t) {
     let nextPagePosts = yield t.posts.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
     let thisPagePosts = yield t.posts.findByParamsWithoutNearId(params);
     nextUrl = nextPagePosts.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
@@ -44,7 +34,7 @@ let findByParamsWithoutNearId = (req, params) => {
 }
 
 let findByParamsWithNearId = (req, params) => {
-  logger.info('findByParamsWithNearId()...');
+  logger.info('findByParamsWithNearId', 'findByParamsWithNearId()...');
   return db.task(function *(t) {
     let posts = params.underNearId ? yield t.posts.findByParamsWithUnderNearId(params) : yield t.posts.findByParamsWithUpperNearId(params);
     let response = {
@@ -57,6 +47,7 @@ let findByParamsWithNearId = (req, params) => {
   });
 }
 
+////////////////////////////////// map to routes ///////////////////////////////
 let findByParams = (req) => {
   logger.info('findByParams()...');
   let params = controllerUtils.validate(req.query, postsValidatorSchema.queryParamsSchema);
@@ -70,6 +61,7 @@ let findByParams = (req) => {
 let addPost = (req) => {
   logger.info('addPost()...');
   let post = controllerUtils.validate(req.body, postsValidatorSchema.addPostSchema);
+  checkAuthorization(req.user, post);
   return db.posts.add(post)
     .then(post => {
       let response = {
@@ -85,7 +77,12 @@ let addPost = (req) => {
 let removePost = req => {
   logger.info('removePost()...');
   let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
-  return db.posts.remove(postId);
+  return db.tx('remove post', function *(t) {
+    let post = yield t.posts.find(postId);
+    if(!post) return;
+    checkAuthorization(req.user, post)
+    return t.posts.remove(postId);
+  });
 }
 
 let findPost = req => {
@@ -112,6 +109,7 @@ let updatePost = req => {
     let postFromDB = yield t.posts.find(postId);
     if(!postFromDB) throw Errors.objectNotFound();
     let post = utils.interMergeObject(postFromReq, postFromDB);
+    checkAuthorization(req.user, post);
     post = yield t.posts.update(post);
     let response = {
       entities: {

@@ -88,12 +88,12 @@ describe('route.posts', function() {
         });
     });
   });
-  describe('POST /posts {content: "xxx", userId: 1}', function() {
+  describe.only('POST /posts {content: "xxx", userId: 1}', function() {
     let path = '/posts';
     it('should returned created post', function(done) {
       let body = {
         content: 'xxx',
-        userId: 1
+        userId: initUsers[0].id
       }
       request(app)
         .post(path)

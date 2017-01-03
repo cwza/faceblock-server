@@ -114,6 +114,7 @@ describe('postsController', function() {
   describe('#addPost()', function() {
     it('should return add content', function() {
       let req = {
+        user: {id: 1},
         body: {
           content: 'xxx',
           userId: 1
@@ -128,6 +129,7 @@ describe('postsController', function() {
   describe('#removePost()', function() {
     it('should return 1', function() {
       let req = {
+        user: {id: 1},
         params: {id: 1}
       }
       return postsController.removePost(req)
@@ -155,6 +157,7 @@ describe('postsController', function() {
   describe('#updatePost()', function() {
     it('should return updated post', function() {
       let req = {
+        user: {id: 1},
         params: {id: 1},
         body: {
           content: 'xxx'
