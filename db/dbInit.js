@@ -28,7 +28,7 @@ function *initTable(t) {
 }
 
 function *initUsersData(t) {
-  initUsers = genUsers(3);
+  initUsers = genUsers(20);
     yield t.users.multiAdd(initUsers)
     .then((returnedUsers) => {
       initUsers = returnedUsers;

@@ -38,7 +38,7 @@ module.exports = (rep, pgp) => {
     namedParameterObject.orderReverse = namedParameterObject.order === PARAMS.ORDER.DESC ? PARAMS.ORDER.ASC : PARAMS.ORDER.DESC;
     namedParameterObject.offset = namedParameterObject.limit * (namedParameterObject.page - 1);
     return namedParameterObject;
-  }
+  };
   return {
     create: () =>
       rep.none(sql.create),
@@ -75,16 +75,43 @@ module.exports = (rep, pgp) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
       return rep.any(sql.findByParamsWithoutNearId, params).then(posts => humps.camelizeKeys(posts));
+      // return rep.task('findByParamsWithoutNearId', t => {
+      //   return t.map(sql.findByParamsWithoutNearId, params, post => {
+      //     return t.one('SELECT * FROM users WHERE id = $1', post.user_id)
+      //       .then(user => {
+      //         post.user = user;
+      //         return humps.camelizeKeys(post);
+      //       });
+      //   }).then(t.batch);
+      // });
     },
     findByParamsWithUnderNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUnderNearId.query, params);
       return rep.any(sql.findByParamsWithUnderNearId, params).then(posts => humps.camelizeKeys(posts));
+      // return rep.task('findByParamsWithUnderNearId', t => {
+      //   return t.map(sql.findByParamsWithUnderNearId, params, post => {
+      //     return t.one('SELECT * FROM users WHERE id = $1', post.user_id)
+      //       .then(user => {
+      //         post.user = user;
+      //         return humps.camelizeKeys(post);
+      //       });
+      //   }).then(t.batch);
+      // });
     },
     findByParamsWithUpperNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUpperNearId.query, params);
       return rep.any(sql.findByParamsWithUpperNearId, params).then(posts => humps.camelizeKeys(posts));
+      // return rep.task('findByParamsWithUpperNearId', t => {
+      //   return t.map(sql.findByParamsWithUpperNearId, params, post => {
+      //     return t.one('SELECT * FROM users WHERE id = $1', post.user_id)
+      //       .then(user => {
+      //         post.user = user;
+      //         return humps.camelizeKeys(post);
+      //       });
+      //   }).then(t.batch);
+      // });
     },
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(posts => humps.camelizeKeys(posts)),

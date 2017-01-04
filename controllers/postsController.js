@@ -34,7 +34,7 @@ let findByParamsWithoutNearId = (req, params) => {
 }
 
 let findByParamsWithNearId = (req, params) => {
-  logger.info('findByParamsWithNearId', 'findByParamsWithNearId()...');
+  logger.info('findByParamsWithNearId()...');
   return db.task(function *(t) {
     let posts = params.underNearId ? yield t.posts.findByParamsWithUnderNearId(params) : yield t.posts.findByParamsWithUpperNearId(params);
     let response = {

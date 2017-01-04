@@ -1,30 +1,29 @@
 const express = require('express');
-const router = express.Router();
-const db = require('../db').db;
+const usersController = require('../controllers/usersController');
+const logger = require('../logger').logger;
 
+const router = express.Router();
+
+//req: domain/users?q=id:(1, 2)&sort=createTime&order=desc&limit=5&underNearId=18
+// res: {
+//   entities:{
+//     users:[]
+//   }
+// }
 router.get('/:id', (req, res, next) => {
-  db.users.find(req.params.id)
-    .then((user) => {
-      if(user === null) {
-        res.status(404).end();
-      } else {
-        res.status(200).json(user);
-      }
-    })
-    .catch((error) => {
-      next(error);
-    });
+  logger.debug('req.params: ', req.params);
+  usersController.findUser(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
 });
 
-/* GET users listing. */
 router.get('/', (req, res, next) => {
-  db.users.all()
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((error) => {
-      next(error);
-    });
+  logger.debug('req.query: ', req.query);
+  // setTimeout(() => {
+  // }, 3000)
+  usersController.findByParams(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
 });
 
 module.exports = router;

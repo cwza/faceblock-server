@@ -48,6 +48,9 @@ module.exports = {
   users: {
     create: sql('users/create.sql'),
     init: sql('users/init.sql'),
+    findByParamsWithoutNearId: sql('users/findByParamsWithoutNearId.sql'),
+    findByParamsWithUnderNearId: sql('users/findByParamsWithUnderNearId.sql'),
+    findByParamsWithUpperNearId: sql('users/findByParamsWithUpperNearId.sql')
   },
   posts: {
     create: sql('posts/create.sql'),
