@@ -11,7 +11,7 @@ const controllerUtils = require('./controllerUtils');
 const socialProvider = {
   google: 'https://www.googleapis.com/oauth2/v2/userinfo?alt=json'
 }
-const expiresIn = '1m';
+const expiresIn = '30m';
 
 const getUserInfoFromSocial = (socialSite, socialToken) => {
   return fetch(socialProvider[socialSite] + '&access_token=' + socialToken)

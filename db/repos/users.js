@@ -36,19 +36,17 @@ module.exports = (rep, pgp) => {
     return namedParameterObject;
   };
   return {
-    create: () =>
-      rep.none(sql.create),
     add: user => {
       user = utils.validateObjectBySchema(user, userAddSchema);
       user = humps.decamelizeKeys(user);
       let sql = pgp.helpers.insert(user, null, TABLE_NAME) + ' returning *';
-      return rep.one(sql.toString(), user => humps.camelizeKeys(user));
+      return rep.one(sql, user => humps.camelizeKeys(user));
     },
-    multiAdd: users => {
+    addMulti: users => {
       users = users.map(user => utils.validateObjectBySchema(user, userAddSchema));
       users = humps.decamelizeKeys(users);
       let sql = pgp.helpers.insert(users, Object.keys(users[0]), TABLE_NAME) + ' returning *';
-      return rep.any(sql.toString()).then(users => humps.camelizeKeys(users));
+      return rep.any(sql).then(users => humps.camelizeKeys(users));
     },
     update: user => {
       user = utils.validateObjectBySchema(user, userUpdateSchema);

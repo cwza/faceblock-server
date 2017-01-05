@@ -17,6 +17,7 @@ const Errors = require('./Errors');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
+const followRelations = require('./routes/followRelations');
 const app = express();
 
 //middleware
@@ -35,6 +36,7 @@ app.use(cors());
 app.use('/', index);
 app.use('/users', users);
 app.use('/posts', posts);
+app.use('/followRelations', followRelations);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

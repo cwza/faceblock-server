@@ -8,6 +8,7 @@ const configs = require('../configs');
 var repos = {
   users: require('./repos/users'),
   posts: require('./repos/posts'),
+  followRelations: require('./repos/followRelations'),
   database: require('./repos/database')
 };
 
@@ -22,6 +23,7 @@ var options = {
     //    for example, to access namespaces `.as` or `.helpers`
     obj.users = repos.users(obj, pgp);
     obj.posts = repos.posts(obj, pgp);
+    obj.followRelations = repos.followRelations(obj, pgp);
     obj.database = repos.database(obj, pgp);
   }
 };

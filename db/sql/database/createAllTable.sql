@@ -24,4 +24,18 @@ CREATE INDEX IF NOT EXISTS idx_zdb_posts
           ON posts
        USING zombodb(zdb('posts', ctid), zdb(posts))
         WITH (url='http://docker_zombodb_elastic_1:9200/');
+CREATE TABLE IF NOT EXISTS follow_relations
+(
+    id serial PRIMARY KEY,
+    user_id int not null references users(id) ON DELETE CASCADE,
+    follower_id int not null references users(id) ON DELETE CASCADE,
+    create_time timestamp default current_timestamp,
+    update_time timestamp default current_timestamp,
+    UNIQUE (user_id, follower_id),
+    CHECK (user_id <> follower_id)
+);
+CREATE INDEX IF NOT EXISTS idx_zdb_follow_relations
+          ON follow_relations
+       USING zombodb(zdb('follow_relations', ctid), zdb(follow_relations))
+        WITH (url='http://docker_zombodb_elastic_1:9200/');
 COMMIT;

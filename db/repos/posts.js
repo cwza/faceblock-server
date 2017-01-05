@@ -40,8 +40,6 @@ module.exports = (rep, pgp) => {
     return namedParameterObject;
   };
   return {
-    create: () =>
-      rep.none(sql.create),
     add: post => {
       post = utils.validateObjectBySchema(post, postAddSchema);
       post = humps.decamelizeKeys(post);
@@ -52,7 +50,7 @@ module.exports = (rep, pgp) => {
       posts = posts.map(post => utils.validateObjectBySchema(post, postAddSchema));
       posts = humps.decamelizeKeys(posts);
       let sql = pgp.helpers.insert(posts, Object.keys(posts[0]), TABLE_NAME) + ' returning *';
-      return rep.any(sql.toString()).then(posts => humps.camelizeKeys(posts));
+      return rep.any(sql).then(posts => humps.camelizeKeys(posts));
     },
     update: post => {
       post = utils.validateObjectBySchema(post, postUpdateSchema);

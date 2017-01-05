@@ -19,6 +19,7 @@ router.all('/*', function(req, res, next) {
   authenticationController.authenticate(req)
     .then(user => {
       req.user = user;
+      logger.info('login user: ', user);
       next();
     }).catch(error => next(error))
 });

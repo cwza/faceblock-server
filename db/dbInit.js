@@ -1,7 +1,7 @@
 const db = require('./').db;
 const _ = require('lodash');
 
-let initUsers = null, initPosts = null;
+let initUsers = null, initPosts = null, initFollowRelations = null;
 let dummy_num = 1;
 
 let genUsers = (n) => {
@@ -22,6 +22,16 @@ let genPosts = (n, userId) => {
   return posts;
 }
 
+let genFollowRelations = (n, userId) => {
+  let followRelations = _.range(dummy_num, dummy_num + n).map( num => {
+    return {
+      userId, followerId: num
+    }
+  });
+  dummy_num += n;
+  return followRelations;
+}
+
 function *initTable(t) {
   yield t.database.createAllTable();
   yield t.database.truncateAllTable();
@@ -29,7 +39,7 @@ function *initTable(t) {
 
 function *initUsersData(t) {
   initUsers = genUsers(20);
-    yield t.users.multiAdd(initUsers)
+    yield t.users.addMulti(initUsers)
     .then((returnedUsers) => {
       initUsers = returnedUsers;
     });
@@ -47,9 +57,20 @@ function *initPostsData(t) {
   initPosts.sort((a, b) => a.id - b.id);
 }
 
+function * initFollowRelationsData(t) {
+  initFollowRelations = [...genFollowRelations(10, initUsers[19].id)]
+  yield t.followRelations.addMulti(initFollowRelations)
+  .then((returnedFollowRelations) => {
+    initFollowRelations = returnedFollowRelations;
+  });
+  dummy_num = 1;
+  initFollowRelations.sort((a, b) => a.id - b.id);
+}
+
 function *initTestData(t) {
   yield* initUsersData(t);
   yield* initPostsData(t);
+  yield* initFollowRelationsData(t);
 }
 
 // delete all table, recreate table, and add test data to tables.
@@ -60,10 +81,10 @@ let initDatabase = (resolver = null) => {
     yield* initTestData(t);
   })
   .then(() => {
-    resolver? resolver({initUsers, initPosts}): console.log('init database end');
+    resolver? resolver({initUsers, initPosts, initFollowRelations}): console.log('init database end');
   });
 }
 
 module.exports = {
-  initDatabase, initTestData, initUsersData, initPostsData
+  initDatabase, initTestData, initUsersData, initPostsData, initFollowRelationsData
 }

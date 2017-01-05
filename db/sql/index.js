@@ -45,15 +45,17 @@ function sql(file) {
 // diverse example here, but you may just as well put all of your queries into SQL files.
 
 module.exports = {
+  followRelations: {
+    findByParamsWithoutNearId: sql('followRelations/findByParamsWithoutNearId.sql'),
+    findByParamsWithUnderNearId: sql('followRelations/findByParamsWithUnderNearId.sql'),
+    findByParamsWithUpperNearId: sql('followRelations/findByParamsWithUpperNearId.sql')
+  },
   users: {
-    create: sql('users/create.sql'),
-    init: sql('users/init.sql'),
     findByParamsWithoutNearId: sql('users/findByParamsWithoutNearId.sql'),
     findByParamsWithUnderNearId: sql('users/findByParamsWithUnderNearId.sql'),
     findByParamsWithUpperNearId: sql('users/findByParamsWithUpperNearId.sql')
   },
   posts: {
-    create: sql('posts/create.sql'),
     findByParamsWithoutNearId: sql('posts/findByParamsWithoutNearId.sql'),
     findByParamsWithUnderNearId: sql('posts/findByParamsWithUnderNearId.sql'),
     findByParamsWithUpperNearId: sql('posts/findByParamsWithUpperNearId.sql')
