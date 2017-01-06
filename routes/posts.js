@@ -20,10 +20,10 @@ router.get('/:id', (req, res, next) => {
 router.get('/', (req, res, next) => {
   logger.debug('req.query: ', req.query);
   // setTimeout(() => {
-  // }, 3000)
   postsController.findByParams(req)
     .then(data => res.status(200).json(data))
     .catch(error => next(error));
+  // }, 10000)
 });
 
 router.post('/', (req, res, next) => {

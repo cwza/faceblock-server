@@ -71,8 +71,8 @@ describe('route.followRelations', function() {
     let path = '/followRelations';
     it('should returned created post', function(done) {
       let body = {
-        userId: initUsers[0].id,
-        followerId: initUsers[11].id,
+        userId: initUsers[11].id,
+        followerId: initUsers[0].id,
       }
       request(app)
         .post(path)
@@ -82,7 +82,7 @@ describe('route.followRelations', function() {
         .expect(201)
         .end((err, res) => {
           if(err) throw err;
-          expect(res.body.entities.followRelations[0].followerId).to.deep.equal(initUsers[11].id);
+          expect(res.body.entities.followRelations[0].userId).to.deep.equal(initUsers[11].id);
           done();
         });
     });

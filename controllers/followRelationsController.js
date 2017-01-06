@@ -8,7 +8,7 @@ const controllerUtils = require('./controllerUtils');
 const Errors = require('../Errors')
 
 const checkAuthorization = (reqUser, followRelation) => {
-  if(reqUser.id !== followRelation.userId)
+  if(reqUser.id !== followRelation.followerId)
     throw Errors.authorizationError();
 }
 
