@@ -2,15 +2,15 @@ SELECT zdb_score('users', t.ctid) AS score, t.*
 FROM
         users AS t
     JOIN
-        ( SELECT ${sort:raw}
+        ( SELECT ${sort:name}
           FROM users
           WHERE id = ${underNearId}
         ) AS o
-      ON t.${sort:raw} = o.${sort:raw} AND t.id < ${underNearId}
-      OR t.${sort:raw} < o.${sort:raw}
+      ON t.${sort:name} = o.${sort:name} AND t.id < ${underNearId}
+      OR t.${sort:name} < o.${sort:name}
 WHERE zdb('users', t.ctid) ==> ${q}
 ORDER BY
-    t.${sort:raw} ${order:raw}, t.id DESC
+    t.${sort:name} ${order:raw}, t.id DESC
   LIMIT ${limit} OFFSET ${offset};
 
 

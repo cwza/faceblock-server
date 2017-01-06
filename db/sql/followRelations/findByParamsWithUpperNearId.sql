@@ -3,14 +3,14 @@ SELECT A.* FROM (
     FROM
             follow_relations AS t
         JOIN
-            ( SELECT ${sort:raw}
+            ( SELECT ${sort:name}
               FROM follow_relations
               WHERE id = ${upperNearId}
             ) AS o
-          ON t.${sort:raw} = o.${sort:raw} AND t.id > ${upperNearId}
-          OR t.${sort:raw} > o.${sort:raw}
+          ON t.${sort:name} = o.${sort:name} AND t.id > ${upperNearId}
+          OR t.${sort:name} > o.${sort:name}
     WHERE zdb('follow_relations', t.ctid) ==> ${q}
     ORDER BY
-        t.${sort:raw} ${orderReverse:raw}, t.id DESC
+        t.${sort:name} ${orderReverse:raw}, t.id DESC
       LIMIT ${limit} OFFSET ${offset}
-) AS A ORDER BY A.${sort:raw} ${order:raw};
+) AS A ORDER BY A.${sort:name} ${order:raw};
