@@ -12,6 +12,20 @@ var repos = {
   database: require('./repos/database')
 };
 
+function camelizeColumns(data) {
+    var template = data[0];
+    for (var prop in template) {
+        var camel = pgp.utils.camelize(prop);
+        if (!(camel in template)) {
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                d[camel] = d[prop];
+                delete d[prop];
+            }
+        }
+    }
+}
+
 // pg-promise initialization options:
 var options = {
   promiseLib: promise,
@@ -25,6 +39,9 @@ var options = {
     obj.posts = repos.posts(obj, pgp);
     obj.followRelations = repos.followRelations(obj, pgp);
     obj.database = repos.database(obj, pgp);
+  },
+  receive: function (data, result, e) {
+    camelizeColumns(data);
   }
 };
 

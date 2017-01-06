@@ -40,13 +40,13 @@ module.exports = (rep, pgp) => {
       user = utils.validateObjectBySchema(user, userAddSchema);
       user = humps.decamelizeKeys(user);
       let sql = pgp.helpers.insert(user, null, TABLE_NAME) + ' returning *';
-      return rep.one(sql).then(user => humps.camelizeKeys(user));
+      return rep.one(sql);
     },
     addMulti: users => {
       users = users.map(user => utils.validateObjectBySchema(user, userAddSchema));
       users = humps.decamelizeKeys(users);
       let sql = pgp.helpers.insert(users, Object.keys(users[0]), TABLE_NAME) + ' returning *';
-      return rep.any(sql).then(users => humps.camelizeKeys(users));
+      return rep.any(sql);
     },
     update: user => {
       user = utils.validateObjectBySchema(user, userUpdateSchema);
@@ -55,36 +55,36 @@ module.exports = (rep, pgp) => {
       user.updateTime = 'NOW()';
       user = humps.decamelizeKeys(user);
       let sql = pgp.helpers.update(user, Object.keys(user), TABLE_NAME) + ' WHERE id = ' + id + ' returning *';
-      return rep.one(sql).then(user => humps.camelizeKeys(user));
+      return rep.one(sql);
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),
     empty: () =>
       rep.none(`TRUNCATE TABLE ${TABLE_NAME} CASCADE`),
     remove: id =>
-      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id).then(r => r.rowCount),
+      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
     find: id =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id).then(user => humps.camelizeKeys(user)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id),
     findByMail: mail =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE mail = $1`, mail).then(user => humps.camelizeKeys(user)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE mail = $1`, mail),
     findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.users.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
-      return rep.any(sql.findByParamsWithoutNearId, params).then(users => humps.camelizeKeys(users));
+      return rep.any(sql.findByParamsWithoutNearId, params);
     },
     findByParamsWithUnderNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.users.findByParamsWithNearId(): ', sql.findByParamsWithUnderNearId.query, params);
-      return rep.any(sql.findByParamsWithUnderNearId, params).then(users => humps.camelizeKeys(users));
+      return rep.any(sql.findByParamsWithUnderNearId, params);
     },
     findByParamsWithUpperNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.users.findByParamsWithNearId(): ', sql.findByParamsWithUpperNearId.query, params);
-      return rep.any(sql.findByParamsWithUpperNearId, params).then(users => humps.camelizeKeys(users));
+      return rep.any(sql.findByParamsWithUpperNearId, params);
     },
     all: () =>
-      rep.any(`SELECT * FROM ${TABLE_NAME}`).then(users => humps.camelizeKeys(users)),
+      rep.any(`SELECT * FROM ${TABLE_NAME}`),
     total: () =>
-      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, []).then(a => +a.count)
+      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, [], a => +a.count)
   };
 };

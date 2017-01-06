@@ -44,13 +44,13 @@ module.exports = (rep, pgp) => {
       post = utils.validateObjectBySchema(post, postAddSchema);
       post = humps.decamelizeKeys(post);
       let sql = pgp.helpers.insert(post, null, TABLE_NAME) + ' returning *';
-      return rep.one(sql).then(post => humps.camelizeKeys(post));
+      return rep.one(sql);
     },
     addMulti: posts => {
       posts = posts.map(post => utils.validateObjectBySchema(post, postAddSchema));
       posts = humps.decamelizeKeys(posts);
       let sql = pgp.helpers.insert(posts, Object.keys(posts[0]), TABLE_NAME) + ' returning *';
-      return rep.any(sql).then(posts => humps.camelizeKeys(posts));
+      return rep.any(sql);
     },
     update: post => {
       post = utils.validateObjectBySchema(post, postUpdateSchema);
@@ -59,26 +59,26 @@ module.exports = (rep, pgp) => {
       post.updateTime = 'NOW()';
       post = humps.decamelizeKeys(post);
       let sql = pgp.helpers.update(post, Object.keys(post), TABLE_NAME) + ' WHERE id = ' + id + ' returning *';
-      return rep.one(sql).then(post => humps.camelizeKeys(post));
+      return rep.one(sql);
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),
     empty: () =>
       rep.none(`TRUNCATE TABLE ${TABLE_NAME} CASCADE`),
     remove: id =>
-      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id).then(r => r.rowCount),
+      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
     find: id =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id).then(post => humps.camelizeKeys(post)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id),
     findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
-      return rep.any(sql.findByParamsWithoutNearId, params).then(posts => humps.camelizeKeys(posts));
+      return rep.any(sql.findByParamsWithoutNearId, params);
       // return rep.task('findByParamsWithoutNearId', t => {
       //   return t.map(sql.findByParamsWithoutNearId, params, post => {
       //     return t.one('SELECT * FROM users WHERE id = $1', post.user_id)
       //       .then(user => {
       //         post.user = user;
-      //         return humps.camelizeKeys(post);
+      //         return post;
       //       });
       //   }).then(t.batch);
       // });
@@ -86,13 +86,13 @@ module.exports = (rep, pgp) => {
     findByParamsWithUnderNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUnderNearId.query, params);
-      return rep.any(sql.findByParamsWithUnderNearId, params).then(posts => humps.camelizeKeys(posts));
+      return rep.any(sql.findByParamsWithUnderNearId, params);
       // return rep.task('findByParamsWithUnderNearId', t => {
       //   return t.map(sql.findByParamsWithUnderNearId, params, post => {
       //     return t.one('SELECT * FROM users WHERE id = $1', post.user_id)
       //       .then(user => {
       //         post.user = user;
-      //         return humps.camelizeKeys(post);
+      //         return post;
       //       });
       //   }).then(t.batch);
       // });
@@ -100,20 +100,20 @@ module.exports = (rep, pgp) => {
     findByParamsWithUpperNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithNearId(): ', sql.findByParamsWithUpperNearId.query, params);
-      return rep.any(sql.findByParamsWithUpperNearId, params).then(posts => humps.camelizeKeys(posts));
+      return rep.any(sql.findByParamsWithUpperNearId, params);
       // return rep.task('findByParamsWithUpperNearId', t => {
       //   return t.map(sql.findByParamsWithUpperNearId, params, post => {
       //     return t.one('SELECT * FROM users WHERE id = $1', post.user_id)
       //       .then(user => {
       //         post.user = user;
-      //         return humps.camelizeKeys(post);
+      //         return post;
       //       });
       //   }).then(t.batch);
       // });
     },
     all: () =>
-      rep.any(`SELECT * FROM ${TABLE_NAME}`).then(posts => humps.camelizeKeys(posts)),
+      rep.any(`SELECT * FROM ${TABLE_NAME}`),
     total: () =>
-      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, []).then(a => +a.count)
+      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, [], a => +a.count) // `+` is short for `parseInt()`, transform string to int, because of 64bit int returned from postgres
   };
 };
