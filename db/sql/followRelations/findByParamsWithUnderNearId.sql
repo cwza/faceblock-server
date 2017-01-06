@@ -6,11 +6,11 @@ FROM
           FROM follow_relations
           WHERE id = ${underNearId}
         ) AS o
-      ON t.${sort:raw} = o.${sort:raw} AND t.id < ${underNearId}
-      OR t.${sort:raw} < o.${sort:raw}
+      ON t.${sort~} = o.${sort~} AND t.id < ${underNearId}
+      OR t.${sort~} < o.${sort~}
 WHERE zdb('follow_relations', t.ctid) ==> ${q}
 ORDER BY
-    t.${sort:raw} ${order:raw}, t.id DESC
+    t.${sort~} ${order~}, t.id DESC
   LIMIT ${limit} OFFSET ${offset};
 
 
