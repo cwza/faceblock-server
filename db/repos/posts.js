@@ -44,7 +44,7 @@ module.exports = (rep, pgp) => {
       post = utils.validateObjectBySchema(post, postAddSchema);
       post = humps.decamelizeKeys(post);
       let sql = pgp.helpers.insert(post, null, TABLE_NAME) + ' returning *';
-      return rep.one(sql, post => humps.camelizeKeys(post));
+      return rep.one(sql).then(post => humps.camelizeKeys(post));
     },
     addMulti: posts => {
       posts = posts.map(post => utils.validateObjectBySchema(post, postAddSchema));
@@ -59,16 +59,16 @@ module.exports = (rep, pgp) => {
       post.updateTime = 'NOW()';
       post = humps.decamelizeKeys(post);
       let sql = pgp.helpers.update(post, Object.keys(post), TABLE_NAME) + ' WHERE id = ' + id + ' returning *';
-      return rep.one(sql, post => humps.camelizeKeys(post));
+      return rep.one(sql).then(post => humps.camelizeKeys(post));
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),
     empty: () =>
       rep.none(`TRUNCATE TABLE ${TABLE_NAME} CASCADE`),
     remove: id =>
-      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
+      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id).then(r => r.rowCount),
     find: id =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id, post => humps.camelizeKeys(post)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id).then(post => humps.camelizeKeys(post)),
     findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.posts.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
@@ -114,6 +114,6 @@ module.exports = (rep, pgp) => {
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(posts => humps.camelizeKeys(posts)),
     total: () =>
-      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, [], a => +a.count)
+      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, []).then(a => +a.count)
   };
 };

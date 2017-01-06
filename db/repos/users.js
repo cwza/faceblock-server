@@ -40,7 +40,7 @@ module.exports = (rep, pgp) => {
       user = utils.validateObjectBySchema(user, userAddSchema);
       user = humps.decamelizeKeys(user);
       let sql = pgp.helpers.insert(user, null, TABLE_NAME) + ' returning *';
-      return rep.one(sql, user => humps.camelizeKeys(user));
+      return rep.one(sql).then(user => humps.camelizeKeys(user));
     },
     addMulti: users => {
       users = users.map(user => utils.validateObjectBySchema(user, userAddSchema));
@@ -55,18 +55,18 @@ module.exports = (rep, pgp) => {
       user.updateTime = 'NOW()';
       user = humps.decamelizeKeys(user);
       let sql = pgp.helpers.update(user, Object.keys(user), TABLE_NAME) + ' WHERE id = ' + id + ' returning *';
-      return rep.one(sql, user => humps.camelizeKeys(user));
+      return rep.one(sql).then(user => humps.camelizeKeys(user));
     },
     drop: () =>
       rep.none(`DROP TABLE ${TABLE_NAME}`),
     empty: () =>
       rep.none(`TRUNCATE TABLE ${TABLE_NAME} CASCADE`),
     remove: id =>
-      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
+      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id).then(r => r.rowCount),
     find: id =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id, user => humps.camelizeKeys(user)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id).then(user => humps.camelizeKeys(user)),
     findByMail: mail =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE mail = $1`, mail, user => humps.camelizeKeys(user)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE mail = $1`, mail).then(user => humps.camelizeKeys(user)),
     findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.users.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
@@ -85,6 +85,6 @@ module.exports = (rep, pgp) => {
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(users => humps.camelizeKeys(users)),
     total: () =>
-      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, [], a => +a.count)
+      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, []).then(a => +a.count)
   };
 };

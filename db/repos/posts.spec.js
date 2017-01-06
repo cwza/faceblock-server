@@ -42,7 +42,7 @@ describe('db.posts', function() {
       return db.posts.update(postToBeUpdate)
         .then(postBeUpdated => {
           expect(postBeUpdated.content).to.equal(postToBeUpdate.content);
-          expect(postBeUpdated.update_time).to.not.equal(postToBeUpdate.update_time);
+          expect(postBeUpdated.updateTime).to.not.equal(postToBeUpdate.updateTime);
         });
     });
   });

@@ -64,17 +64,17 @@ module.exports = (rep, pgp) => {
     empty: () =>
       rep.none(`TRUNCATE TABLE ${TABLE_NAME} CASCADE`),
     remove: id =>
-      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id, r => r.rowCount),
+      rep.result(`DELETE FROM ${TABLE_NAME} WHERE id = $1`, id).then(r => r.rowCount),
     removeByRelation: (userId, followerId) =>
-      rep.result(`DELETE FROM ${TABLE_NAME} WHERE user_id = $1 AND follower_id = $2`, [userId, followerId], r => r.rowCount),
+      rep.result(`DELETE FROM ${TABLE_NAME} WHERE user_id = $1 AND follower_id = $2`, [userId, followerId]).then(r => r.rowCount),
     find: id =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id, followRelation => humps.camelizeKeys(followRelation)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE id = $1`, id).then(followRelation => humps.camelizeKeys(followRelation)),
     findByUserId: userId =>
       rep.any(`SELECT * FROM ${TABLE_NAME} WHERE user_id = $1`, userId).then(followRelations => humps.camelizeKeys(followRelations)),
     findByFollowerId: followerId =>
       rep.any(`SELECT * FROM ${TABLE_NAME} WHERE follower_id = $1`, followerId).then(followRelations => humps.camelizeKeys(followRelations)),
     findByRelation: (userId, followerId) =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_MAME} WHERE user_id = $1 and follower_id = $2`, [userId, followerId], followRelation => humps.camelizeKeys(followRelation)),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_MAME} WHERE user_id = $1 and follower_id = $2`, [userId, followerId]).then(followRelation => humps.camelizeKeys(followRelation)),
     findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.followRelations.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);
@@ -93,6 +93,6 @@ module.exports = (rep, pgp) => {
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`).then(followRelations => humps.camelizeKeys(followRelations)),
     total: () =>
-      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, [], a => +a.count)
+      rep.one(`SELECT count(*) FROM ${TABLE_NAME}`, []).then(a => +a.count)
   };
 };
