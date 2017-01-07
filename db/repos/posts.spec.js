@@ -69,6 +69,7 @@ describe('db.posts', function() {
         q: 'userId:(1)',
         sort: 'id',
         order: 'asc',
+        limit: 5,
         page: 2
       };
       return db.posts.findByParamsWithoutNearId(params)
@@ -85,7 +86,8 @@ describe('db.posts', function() {
         sort: 'content',
         order: 'desc',
         underNearId: 4,
-        limit: 4
+        limit: 4,
+        page: 1,
       };
       let postsSortedByContentDesc = initPosts.slice(0).sort((a, b) => b.content.localeCompare(a.content));
       let indexOfPostsId = postsSortedByContentDesc.findIndex(post => post.id === 4);
@@ -103,7 +105,8 @@ describe('db.posts', function() {
         sort: 'content',
         order: 'desc',
         upperNearId: 4,
-        limit: 4
+        limit: 4,
+        page: 1,
       };
       let postsSortedByContentDesc = initPosts.slice(0).sort((a, b) => b.content.localeCompare(a.content));
       let indexOfPostsId = postsSortedByContentDesc.findIndex(post => post.id === 4);

@@ -5,30 +5,11 @@ const sql = require('../sql').users;
 const logger = require('../../logger').logger;
 const PARAMS = require('../../Constants').PARAMS;
 const utils = require('../../utils');
-const Joi = require('joi');
 
 module.exports = (rep, pgp) => {
   const TABLE_NAME = 'users';
-  const queryParamsSchema = Joi.object().keys({
-    q: Joi.string().required(),
-    sort: Joi.string().default(PARAMS.SORT.CREATE_TIME),
-    order: Joi.string().default(PARAMS.ORDER.DESC),
-    limit: Joi.number().integer().positive().default(5),
-    page: Joi.number().integer().positive().default(1),
-    underNearId: Joi.number().integer(),
-    upperNearId: Joi.number().integer(),
-  }).without('underNearId', 'upperNearId');
-  const userAddSchema = Joi.object().keys({
-    mail: Joi.string().email().required(),
-  });
-  const userUpdateSchema = Joi.object().keys({
-    id: Joi.number().integer().positive().required(),
-    mail: Joi.string().email().required(),
-    createTime: Joi.date(),
-    updateTime: Joi.date()
-  });
   let createNamedParameterObject = (params) => {
-    let namedParameterObject = utils.validateObjectBySchema(params, queryParamsSchema);
+    let namedParameterObject = Object.assign({}, params);
     namedParameterObject.q = humps.decamelize(namedParameterObject.q);
     namedParameterObject.sort = humps.decamelize(namedParameterObject.sort);
     namedParameterObject.orderReverse = namedParameterObject.order === PARAMS.ORDER.DESC ? PARAMS.ORDER.ASC : PARAMS.ORDER.DESC;
@@ -37,19 +18,16 @@ module.exports = (rep, pgp) => {
   };
   return {
     add: user => {
-      user = utils.validateObjectBySchema(user, userAddSchema);
       user = humps.decamelizeKeys(user);
       let sql = pgp.helpers.insert(user, null, TABLE_NAME) + ' returning *';
       return rep.one(sql);
     },
     addMulti: users => {
-      users = users.map(user => utils.validateObjectBySchema(user, userAddSchema));
       users = humps.decamelizeKeys(users);
       let sql = pgp.helpers.insert(users, Object.keys(users[0]), TABLE_NAME) + ' returning *';
       return rep.any(sql);
     },
     update: user => {
-      user = utils.validateObjectBySchema(user, userUpdateSchema);
       let { id } = user;
       user = utils.deletePropertiesFromObject(user, ['id', 'createTime', 'updateTime']);
       user.updateTime = 'NOW()';
