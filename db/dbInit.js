@@ -12,9 +12,10 @@ let genUsers = (n) => {
   return users;
 }
 
-let genPosts = (n, userId) => {
+let genPosts = (n, userId, replyTo) => {
   let posts = _.range(dummy_num, dummy_num + n).map( num => {
     return {
+      replyTo,
       content: 'Test content t' + num, userId,
     }
   });
@@ -48,7 +49,7 @@ function *initUsersData(t) {
 }
 
 function *initPostsData(t) {
-  initPosts = [...genPosts(25, initUsers[0].id), ...genPosts(10, initUsers[1].id)];
+  initPosts = [...genPosts(25, initUsers[0].id), ...genPosts(10, initUsers[1].id), ...genPosts(3, initUsers[2].id, initUsers[3].id)];
   yield t.posts.addMulti(initPosts)
   .then((returnedPosts) => {
     initPosts = returnedPosts;

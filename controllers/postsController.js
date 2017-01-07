@@ -48,8 +48,21 @@ let findByParamsWithNearId = (req, params) => {
 }
 
 ////////////////////////////////// map to routes ///////////////////////////////
+let getCommentsCount = req => {
+  logger.info('postsController.getCommentsCount()...');
+  let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
+  return db.posts.commentsCount(postId)
+    .then(count => {
+      let response = {
+        count
+      };
+      logger.debug('response for getCommentsCount: ', response);
+      return response;
+    });
+}
+
 let findByParams = (req) => {
-  logger.info('findByParams()...');
+  logger.info('postsController.findByParams()...');
   let params = controllerUtils.validate(req.query, postsValidatorSchema.queryParamsSchema);
   if(params.upperNearId || params.underNearId) {
     return findByParamsWithNearId(req, params);
@@ -59,7 +72,7 @@ let findByParams = (req) => {
 }
 
 let addPost = (req) => {
-  logger.info('addPost()...');
+  logger.info('postsController.addPost()...');
   let post = controllerUtils.validate(req.body, postsValidatorSchema.addPostSchema);
   checkAuthorization(req.user, post);
   return db.posts.add(post)
@@ -75,7 +88,7 @@ let addPost = (req) => {
 }
 
 let removePost = req => {
-  logger.info('removePost()...');
+  logger.info('postsController.emovePost()...');
   let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
   return db.tx('remove post', function *(t) {
     let post = yield t.posts.find(postId);
@@ -86,7 +99,7 @@ let removePost = req => {
 }
 
 let findPost = req => {
-  logger.info('findPost()...');
+  logger.info('postsController.findPost()...');
   let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
   return db.posts.find(postId)
     .then(post => {
@@ -102,7 +115,7 @@ let findPost = req => {
 }
 
 let updatePost = req => {
-  logger.info('updatePost()...');
+  logger.info('postsController.updatePost()...');
   let postId = controllerUtils.validate(req.params, postsValidatorSchema.idSchema).id;
   let postFromReq = controllerUtils.validate(req.body, postsValidatorSchema.updatePostSchema);
   return db.tx(function *(t) {
@@ -122,5 +135,5 @@ let updatePost = req => {
 }
 
 module.exports = {
-  findByParams, addPost, removePost, findPost, updatePost
+  findByParams, addPost, removePost, findPost, updatePost, getCommentsCount
 }

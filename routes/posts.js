@@ -10,6 +10,13 @@ const router = express.Router();
 //     posts:[]
 //   }
 // }
+router.get('/:id/comments/count', (req, res, next) => {
+  logger.debug('req.params: ', req.params);
+  postsController.getCommentsCount(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
+});
+
 router.get('/:id', (req, res, next) => {
   logger.debug('req.params: ', req.params);
   postsController.findPost(req)

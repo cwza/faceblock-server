@@ -199,4 +199,23 @@ describe('route.posts', function() {
         });
     });
   });
+  describe('GET posts/4/comments/count', function() {
+    let path = '/posts/4/comments/count';
+    it('should returned comments count', function(done) {
+      let expectedResponse = JSON.stringify({
+        count: initPosts.filter(post => post.replyTo === 4).length
+      });
+      request(app)
+        .get(path)
+        .set(baseHeader)
+        .expect('Content-Type', /json/)
+        .expect(200, expectedResponse, (err, res) => {
+          if(err) {
+            console.log(res.body);
+            throw err;
+          }
+          done();
+        });
+    });
+  });
 });

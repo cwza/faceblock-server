@@ -85,6 +85,8 @@ module.exports = (rep, pgp) => {
       //   }).then(t.batch);
       // });
     },
+    commentsCount: (postId) =>
+      rep.one(`SELECT count(*) FROM ${TABLE_NAME} WHERE reply_to = $1`, postId, a=> +a.count),
     all: () =>
       rep.any(`SELECT * FROM ${TABLE_NAME}`),
     total: () =>
