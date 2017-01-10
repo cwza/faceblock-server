@@ -22,8 +22,8 @@ describe('route.followRelations', function() {
       };
     });
   });
-  describe('GET /followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc', function() {
-    let path = '/followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc';
+  describe('GET /followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc&limit=5&page=1', function() {
+    let path = '/followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc&limit=5&page=1';
     it('should return followRelation which userId=20, followerId=1', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -46,8 +46,8 @@ describe('route.followRelations', function() {
         });
     });
   });
-  describe('GET /followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3', function() {
-    let path = `/followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3`;
+  describe('GET /followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3&page=1', function() {
+    let path = `/followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3&page=1`;
     it('should return followRelations which id from 21 to 26', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
