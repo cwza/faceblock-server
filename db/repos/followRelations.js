@@ -10,7 +10,7 @@ module.exports = (rep, pgp) => {
   const TABLE_NAME = 'follow_relations';
   let createNamedParameterObject = (params) => {
     let namedParameterObject = Object.assign({}, params);
-    namedParameterObject.q = humps.decamelize(namedParameterObject.q);
+    namedParameterObject.q = humps.decamelize(namedParameterObject.q.toString());
     namedParameterObject.sort = humps.decamelize(namedParameterObject.sort);
     namedParameterObject.orderReverse = namedParameterObject.order === PARAMS.ORDER.DESC ? PARAMS.ORDER.ASC : PARAMS.ORDER.DESC;
     namedParameterObject.offset = namedParameterObject.limit * (namedParameterObject.page - 1);
