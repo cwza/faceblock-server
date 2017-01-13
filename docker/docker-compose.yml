@@ -1,9 +1,9 @@
-faceblock:
-  build: ./faceblock
-  ports:
-   - "3001:3000"
-  links:
-   - zombodb_postgres
+# faceblock:
+#   build: ./faceblock
+#   ports:
+#    - "3001:3000"
+#   links:
+#    - zombodb_postgres
 zombodb_postgres:
   build: ./postgres
   ports:

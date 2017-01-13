@@ -16,7 +16,7 @@ if (!fs.existsSync(dir)) {
 const consoleLoggerTransport = new (winston.transports.Console)({
   name: 'console',
   timestamp:dateFormat,
-  level: env === 'development' ? 'debug' : 'info',
+  level: env === 'production' ? 'info' : 'debug',
   // handleExceptions: true,
   colorize:true
 });
