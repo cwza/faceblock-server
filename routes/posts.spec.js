@@ -17,7 +17,7 @@ describe('route.posts', function() {
       initUsers = initData.initUsers;
       initPosts = initData.initPosts;
       baseHeader = {
-        'faceblock_token': createJwt(initUsers[0]),
+        'faceblock-token': createJwt(initUsers[0]),
         'Accept': 'application/json',
         'Origin': 'http://localhost:3000',
       };
@@ -117,7 +117,6 @@ describe('route.posts', function() {
         .delete(path)
         .set(baseHeader)
         .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
         .expect(200, done);
     });
   });

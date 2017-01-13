@@ -83,7 +83,7 @@ const login = (req) => {
 const authenticate = (req) => {
   logger.info('authenticate()...');
   try {
-    let faceblockToken = req.headers['faceblock_token'];
+    let faceblockToken = req.headers['faceblock-token'];
     logger.debug('faceblockToken: ', faceblockToken);
     let userFromJwt = verifyJwt(faceblockToken);
     return db.users.find(userFromJwt.id);

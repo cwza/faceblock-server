@@ -65,7 +65,7 @@ describe('authenticationController', function() {
     it('should return initUsers[0]', function() {
       let req = {
         headers: {
-          faceblock_token: authenticationController.createJwt(initUsers[0])
+          "faceblock-token": authenticationController.createJwt(initUsers[0])
         }
       }
       return authenticationController.authenticate(req)

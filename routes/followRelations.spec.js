@@ -18,7 +18,7 @@ describe('route.followRelations', function() {
       initPosts = initData.initPosts;
       initFollowRelations = initData.initFollowRelations;
       baseHeader = {
-        'faceblock_token': createJwt(initUsers[0]),
+        'faceblock-token': createJwt(initUsers[0]),
         'Accept': 'application/json',
         'Origin': 'http://localhost:3000',
       };
@@ -96,7 +96,7 @@ describe('route.followRelations', function() {
         .delete(path)
         .set(baseHeader)
         .set('Accept', 'application/json')
-        .set('faceblock_token', createJwt(initUsers[0]))
+        .set('faceblock-token', createJwt(initUsers[0]))
         .expect(200, done);
     });
   });

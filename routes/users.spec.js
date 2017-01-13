@@ -18,7 +18,7 @@ describe('route.users', function() {
       initUsers = initData.initUsers;
       initPosts = initData.initPosts;
       baseHeader = {
-        'faceblock_token': createJwt(initUsers[0]),
+        'faceblock-token': createJwt(initUsers[0]),
         'Accept': 'application/json',
         'Origin': 'http://localhost:3000',
       };

@@ -12,7 +12,7 @@ router.post('/login', (req, res, next) => {
 });
 
 //authentication middleware exclude /login
-//request header should contains valid faceblock_token to server
+//request header should contains valid faceblock-token to server
 router.all('/*', function(req, res, next) {
   if(req.originalUrl === '/login')
     return next();
