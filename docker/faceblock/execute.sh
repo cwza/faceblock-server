@@ -5,4 +5,4 @@ nvm use 7.4
 service nginx start
 cd ~/faceblock/faceblock-server
 git pull
-PORT=3001 NODE_ENV=production node ~/faceblock/faceblock-server/bin/www
+PORT=3001 NODE_ENV=docker node ~/faceblock/faceblock-server/bin/www
