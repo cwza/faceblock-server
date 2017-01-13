@@ -29,3 +29,5 @@ RUN chmod +x /zombodb-entrypoint.sh
 ENTRYPOINT ["/zombodb-entrypoint.sh"]
 
 CMD ["postgres"]
+
+EXPOSE 5432

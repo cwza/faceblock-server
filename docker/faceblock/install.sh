@@ -16,9 +16,9 @@ npm install forever -g
 mkdir ~/faceblock
 git clone https://github.com/cwza/faceblock-server.git ~/faceblock/faceblock-server
 cd ~/faceblock/faceblock-server
-npm install
+npm install --production
 
 # nginx
 apt-get install -y nginx
-cp ~/faceblock/faceblock-server/docker/faceblock/dev/nginx.conf /etc/nginx/sites-available/faceblock
+cp ~/faceblock/faceblock-server/docker/faceblock/nginx.conf /etc/nginx/sites-available/faceblock
 ln -s /etc/nginx/sites-available/faceblock /etc/nginx/sites-enabled/faceblock
