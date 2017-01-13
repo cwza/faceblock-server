@@ -3,6 +3,7 @@ let configs = {
     domain: 'http://localhost:3001',
     name: 'faceblock',
     privateKey: 'slakdjfalkdjsflkasdfjA123109238109',
+    corsOrigins: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   },
   db: {
     host: 'localhost',

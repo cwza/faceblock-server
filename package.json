@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 DEBUG=myapp:* node ./bin/www",
+    "start": "PORT=3001 node ./bin/www",
     "test": "./node_modules/mocha/bin/mocha --timeout 10000 './**/*.spec.js'",
     "test-single": "./node_modules/mocha/bin/mocha --timeout 10000",
     "db-init": "node -e \"require('./db/dbInit').initDatabase()\""
@@ -26,7 +26,6 @@
     "morgan": "~1.7.0",
     "pg-monitor": "^0.5.11",
     "pg-promise": "^5.4.3",
-    "postgraphql": "^2.4.0",
     "pug": "~2.0.0-beta6",
     "serve-favicon": "~2.3.0",
     "winston": "^2.3.0",

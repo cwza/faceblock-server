@@ -11,6 +11,7 @@ const createJwt = require('../controllers/authenticationController').private.cre
 
 describe('route.users', function() {
   let initUsers = null, initPosts = null, baseHeader = null;
+  const pathRoot = '/api';
 
   beforeEach(function() {
     return dbInit.initDatabase((initData) => {
@@ -19,18 +20,19 @@ describe('route.users', function() {
       baseHeader = {
         'faceblock_token': createJwt(initUsers[0]),
         'Accept': 'application/json',
+        'Origin': 'http://localhost:3000',
       };
     });
   });
   describe('GET /users?q=mail:(*gmail.com)&sort=id&order=asc&page=2', function() {
-    let path = '/users?q=mail:(*gmail.com)&sort=id&order=asc&page=2';
+    let path = pathRoot + '/users?q=mail:(*gmail.com)&sort=id&order=asc&page=2';
     it('should return the 6th to 10th user', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
           users: initUsers.slice(5, 10)
         },
         links: {
-          nextPage: configs.app.domain + '/users?q=mail:(*gmail.com)&sort=id&order=asc&page=3'
+          nextPage: configs.app.domain + pathRoot + '/users?q=mail:(*gmail.com)&sort=id&order=asc&page=3'
         }
       });
       request(app)
@@ -48,7 +50,7 @@ describe('route.users', function() {
     });
   });
   describe('GET /users?q=mail:(*gmail.com)&sort=id&order=desc&underNearId=10&limit=6', function() {
-    let path = '/users?q=mail:(*gmail.com)&sort=id&order=desc&underNearId=10&limit=6';
+    let path = pathRoot + '/users?q=mail:(*gmail.com)&sort=id&order=desc&underNearId=10&limit=6';
     it('should return users which id from 4 to 9', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -69,7 +71,7 @@ describe('route.users', function() {
     });
   });
   describe('GET /users?q=mail:(*gmail.com)&sort=id&order=desc&upperNearId=10&limit=6', function() {
-    let path = '/users?q=mail:(*gmail.com)&sort=id&order=desc&upperNearId=10&limit=6';
+    let path = pathRoot + '/users?q=mail:(*gmail.com)&sort=id&order=desc&upperNearId=10&limit=6';
     it('should return users which id from 11 to 16', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -90,7 +92,7 @@ describe('route.users', function() {
     });
   });
   describe('GET users/1', function() {
-    let path = '/users/1';
+    let path = pathRoot + '/users/1';
     it('should returned id:1 user', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -111,7 +113,7 @@ describe('route.users', function() {
     });
   });
   describe('GET users/99999', function() {
-    let path = '/users/99999';
+    let path = pathRoot + '/users/99999';
     it('should return error OBJECT_NOT_FOUND', function(done) {
       let expectedResponse = JSON.stringify({
         error: Errors.objectNotFound()

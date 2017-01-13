@@ -11,6 +11,7 @@ const createJwt = require('../controllers/authenticationController').private.cre
 
 describe('route.followRelations', function() {
   let initUsers = null, initPosts = null, initFollowRelations = null, baseHeader = {};
+  const pathRoot = '/api';
   beforeEach(function() {
     return dbInit.initDatabase((initData) => {
       initUsers = initData.initUsers;
@@ -19,11 +20,12 @@ describe('route.followRelations', function() {
       baseHeader = {
         'faceblock_token': createJwt(initUsers[0]),
         'Accept': 'application/json',
+        'Origin': 'http://localhost:3000',
       };
     });
   });
   describe('GET /followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc&limit=5&page=1', function() {
-    let path = '/followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc&limit=5&page=1';
+    let path = pathRoot + '/followRelations?q=userId:(20) and followerId:(1)&sort=id&order=desc&limit=5&page=1';
     it('should return followRelation which userId=20, followerId=1', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -47,7 +49,7 @@ describe('route.followRelations', function() {
     });
   });
   describe('GET /followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3&page=1', function() {
-    let path = `/followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3&page=1`;
+    let path = pathRoot + `/followRelations?q=userId:(20)&sort=id&order=desc&upperNearId=5&limit=3&page=1`;
     it('should return followRelations which id from 21 to 26', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -68,7 +70,7 @@ describe('route.followRelations', function() {
     });
   });
   describe('POST /followRelations {userId: 1, followerId: 12}', function() {
-    let path = '/followRelations';
+    let path = pathRoot + '/followRelations';
     it('should returned created post', function(done) {
       let body = {
         userId: initUsers[11].id,
@@ -88,17 +90,18 @@ describe('route.followRelations', function() {
     });
   });
   describe('DELETE followRelations/1', function() {
-    let path = '/followRelations/1';
+    let path = pathRoot + '/followRelations/1';
     it('should return 200', function(done) {
       request(app)
         .delete(path)
+        .set(baseHeader)
         .set('Accept', 'application/json')
         .set('faceblock_token', createJwt(initUsers[0]))
         .expect(200, done);
     });
   });
   describe('GET followRelations/1', function() {
-    let path = '/followRelations/1';
+    let path = pathRoot + '/followRelations/1';
     it('should returned id:1 followRelation', function(done) {
       let expectedResponse = JSON.stringify({
         entities: {
@@ -119,7 +122,7 @@ describe('route.followRelations', function() {
     });
   });
   describe('GET followRelations/99999', function() {
-    let path = '/followRelations/99999';
+    let path = pathRoot + '/followRelations/99999';
     it('should return error OBJECT_NOT_FOUND', function(done) {
       let expectedResponse = JSON.stringify({
         error: Errors.objectNotFound()

@@ -1,5 +1,5 @@
 const express = require('express');
-const postgraphql = require('postgraphql').postgraphql;
+// const postgraphql = require('postgraphql').postgraphql;
 const path = require('path');
 const favicon = require('serve-favicon');
 const morganLogger = require('morgan');
@@ -21,7 +21,7 @@ const followRelations = require('./routes/followRelations');
 const app = express();
 
 //middleware
-app.use(postgraphql(configs.db, 'public', {graphiql: true}));
+// app.use(postgraphql(configs.db, 'public', {graphiql: true}));
 app.use(helmet());
 app.use(morganLogger('dev'));
 app.use(bodyParser.json());
@@ -29,14 +29,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(queryParser());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// for CORS TODO: now allow all domain should add specific domain for production
-app.use(cors());
+var corsOptions = {
+  origin: function (origin, callback) {
+    logger.debug('origin: ', origin);
+    let originIsWhitelisted = configs.app.corsOrigins.indexOf(origin) !== -1
+    callback(originIsWhitelisted ? null : 'Bad Request', originIsWhitelisted)
+  }
+}
+app.use(cors(corsOptions));
 
 //routers
-app.use('/', index);
-app.use('/users', users);
-app.use('/posts', posts);
-app.use('/followRelations', followRelations);
+app.use('/api', index);
+app.use('/api/users', users);
+app.use('/api/posts', posts);
+app.use('/api/followRelations', followRelations);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
