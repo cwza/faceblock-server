@@ -37,6 +37,7 @@ var corsOptions = {
   }
 }
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 //routers
 app.use('/api', index);
