@@ -38,11 +38,12 @@ describe('authenticationController', function() {
   });
   describe('#checkUser()', function() {
     it('should return userWithJwt', function() {
-      let userInfo = {email: initUsers[0].mail}
+      let userInfo = {email: initUsers[0].mail, picture: 'http://google.com/test.jpg'}
       return authenticationController.checkUser(userInfo)
         .then(userWithJwt=> {
           expect(userWithJwt.faceblockToken).to.not.equal(undefined);
-          expect(userWithJwt.user).to.deep.equal(initUsers[0]);
+          expect(userWithJwt.user.mail).to.equal(userInfo.email);
+          expect(userWithJwt.user.picture).to.equal(userInfo.picture);
         })
     });
   });

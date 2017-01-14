@@ -47,10 +47,14 @@ const getFaceblockToken = (req) => {
 const checkUser = (userInfo) => {
   logger.debug('userInfo: ', userInfo);
   let mail = userInfo.email;
+  let picture = userInfo.picture;
   return db.tx('authenticationController.checkUser', function* (t) {
     let user = yield t.users.findByMail(mail);
     if(!user) {
-      user = yield t.users.add({mail: mail});
+      user = yield t.users.add({mail, picture});
+    } else if(user.picture !== picture){
+      user.picture = picture;
+      user = yield t.users.update(user);
     }
     return {user, faceblockToken: createJwt(user)};
   });

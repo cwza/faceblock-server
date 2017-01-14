@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users
 (
     id serial PRIMARY KEY,
     mail text NOT NULL UNIQUE,
+    picture text,
     create_time timestamp default current_timestamp,
     update_time timestamp default current_timestamp
 );
