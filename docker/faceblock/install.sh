@@ -3,6 +3,7 @@
 apt-get -y update
 apt-get install -y build-essential libssl-dev
 apt-get install -y git
+apt-get install openssl
 
 # nvm and nodejs
 apt-get install -y curl
@@ -22,3 +23,5 @@ npm install --production
 apt-get install -y nginx
 cp ~/faceblock/faceblock-server/docker/faceblock/nginx.conf /etc/nginx/sites-available/faceblock
 ln -s /etc/nginx/sites-available/faceblock /etc/nginx/sites-enabled/faceblock
+mkdir /etc/nginx/ssl
+openssl req -nodes -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -subj "/C=TW/ST=Taiwan/L=Taipei/O=Faceblock/OU=Personal/CN=faceblock.com”
