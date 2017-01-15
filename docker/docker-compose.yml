@@ -1,10 +1,11 @@
-faceblock:
-  build: ./faceblock
-  ports:
-   - "3001:3000"
-   - "3043:443"
-  links:
-   - zombodb_postgres
+# faceblock:
+#   build: ./faceblock
+#   ports:
+#    - "3001:3000"
+#    - "3043:443"
+#   links:
+#    - zombodb_postgres
+#   entrypoint: /execute.sh
 zombodb_postgres:
   build: ./postgres
   ports:

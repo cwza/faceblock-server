@@ -10,7 +10,7 @@ git clone https://github.com/cwza/faceblock-server.git faceblock-server
 # docker initial
 ``` bash
 cd ~/faceblock/faceblock-server/docker
-./docker_prod_run.sh
+docker-compose -f ./docker-compose.yml -d up
 ```
 
 # docker production setting
@@ -18,7 +18,8 @@ cd ~/faceblock/faceblock-server/docker
 ``` bash
 docker exec -it docker_zombodb_postgres_1 /bin/bash
 psql --username postgres
-ALTER ROLE postgres WITH PASSWORD 'SECRET'
+\password postgres
+ALTER USER postgres WITH PASSWORD 'SECRET'
 ```
 
 ## faceblock-server use production setting
@@ -31,6 +32,7 @@ export PRIVATE_KEY="SECRET"
 export DB_PWD="SECRET"
 export PORT=3001
 
+#init DB and run faceblock-server
 nvm use 7.4
 cd ~/faceblock/faceblock-server
 git pull
@@ -40,7 +42,7 @@ forever start ~/faceblock/faceblock-server/bin/www
 
 # pull new
 ``` bash
-docker exec -it docker_faceblock /bin/bash
+docker exec -it docker_faceblock_1 /bin/bash
 cd ~/faceblock/faceblock-server
 git pull
 forever restart ~/faceblock/faceblock-server/bin/www
