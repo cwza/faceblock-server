@@ -3,12 +3,16 @@ faceblock:
   ports:
    - "3001:3000"
    - "3043:443"
+  depends_on:
+      - "zombodb_postgres"
   links:
    - zombodb_postgres
 zombodb_postgres:
   build: ./postgres
   ports:
    - "5432:5432"
+  depends_on:
+      - "zombodb_elastic"
   links:
    - zombodb_elastic
 zombodb_elastic:
