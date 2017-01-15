@@ -2,6 +2,7 @@ faceblock:
   build: ./faceblock
   ports:
    - "3001:3000"
+   - "3043:443"
   links:
    - zombodb_postgres
 zombodb_postgres:
