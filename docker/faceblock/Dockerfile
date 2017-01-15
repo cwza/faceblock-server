@@ -4,4 +4,3 @@ COPY execute.sh /
 RUN chmod +x /install.sh
 RUN chmod +x /execute.sh
 RUN bash /install.sh
-CMD ["/execute.sh"]

@@ -3,7 +3,8 @@
 apt-get -y update
 apt-get install -y build-essential libssl-dev
 apt-get install -y git
-apt-get install openssl
+apt-get install -y openssl
+apt-get install -y vim
 
 # nvm and nodejs
 apt-get install -y curl
