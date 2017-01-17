@@ -7,7 +7,7 @@ let configs = {
     corsOrigins: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://cwza.github.io'],
   },
   db: {
-    host: 'docker_zombodb_postgres_1',
+    host: 'localhost',
     port: 5432,
     database: 'postgres',
     user: 'postgres',

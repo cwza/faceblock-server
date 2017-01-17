@@ -16,7 +16,7 @@ if (!fs.existsSync(dir)) {
 const consoleLoggerTransport = new (winston.transports.Console)({
   name: 'console',
   timestamp:dateFormat,
-  level: env === 'production' ? 'info' : 'debug',
+  level: env === 'production' ? 'debug' : 'debug',
   // handleExceptions: true,
   colorize:true
 });
@@ -24,7 +24,7 @@ const allLoggerTransport = new DailyRotateFile({
   name: 'all-file',
   filename: dir + '/all.log',
   timestamp:dateFormat,
-  level: 'info',
+  level: 'debug',
   maxsize:1024*1024*10,
   // handleExceptions: true,
   datePattern:'.yyyy-MM-dd'
