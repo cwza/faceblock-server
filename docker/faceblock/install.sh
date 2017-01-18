@@ -27,5 +27,5 @@ ln -s /etc/nginx/sites-available/faceblock /etc/nginx/sites-enabled/faceblock
 rm /etc/nginx/sites-enabled/default
 mkdir /etc/nginx/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -subj "/C=TW/ST=Taiwan/L=Taipei/O=Faceblock/OU=Personal/CN=faceblock.com"
-mv ~/faceblock/faceblock-server/static /static
+cp ~/faceblock/faceblock-server/static /static
 chown -R www-data:www-data /static
