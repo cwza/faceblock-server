@@ -1,7 +1,7 @@
 //TODO: Add real domain and corsOrigins
 let configs = {
   app: {
-    domain: 'http://188.166.190.233',
+    domain: 'http://cwzc.pw',
     name: 'faceblock',
     privateKey: process.env.PRIVATE_KEY,
     corsOrigins: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://cwza.github.io'],
