@@ -18,3 +18,6 @@ Test:
 
 Log:
   winston
+
+Deploy:
+  Digital Ocean, Namecheap, sslforfree
