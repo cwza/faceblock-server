@@ -39,3 +39,12 @@ forever start ~/faceblock/faceblock-server/bin/www
 ``` bash
 ufw allow 'Nginx Full'
 ```
+
+# digital ocean reboot
+``` bash
+shutdown -h now
+source ~/.bashrc
+compose-up -f ~/faceblock/faceblock-server/docker/docker-compose.yml up -d
+forever start ~/faceblock/faceblock-server/bin/www
+service start nginx
+```

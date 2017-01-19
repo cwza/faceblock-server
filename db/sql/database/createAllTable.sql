@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS users
     id serial PRIMARY KEY,
     mail text NOT NULL UNIQUE,
     picture text,
-    create_time timestamp default current_timestamp,
-    update_time timestamp default current_timestamp
+    create_time timestamptz default current_timestamp,
+    update_time timestamptz default current_timestamp
 );
 CREATE INDEX IF NOT EXISTS idx_zdb_users
           ON users
@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS posts
     user_id int not null references users(id) ON DELETE CASCADE,
     content text NOT NULL,
     reply_to int references posts(id) ON DELETE CASCADE,
-    create_time timestamp default current_timestamp,
-    update_time timestamp default current_timestamp
+    create_time timestamptz default current_timestamp,
+    update_time timestamptz default current_timestamp
 );
 CREATE INDEX IF NOT EXISTS idx_zdb_posts
           ON posts
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS follow_relations
     id serial PRIMARY KEY,
     user_id int not null references users(id) ON DELETE CASCADE,
     follower_id int not null references users(id) ON DELETE CASCADE,
-    create_time timestamp default current_timestamp,
-    update_time timestamp default current_timestamp,
+    create_time timestamptz default current_timestamp,
+    update_time timestamptz default current_timestamp,
     UNIQUE (user_id, follower_id),
     CHECK (user_id <> follower_id)
 );
