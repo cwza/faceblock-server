@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "PORT=3001 node ./bin/www",
-    "test": "./node_modules/mocha/bin/mocha --timeout 10000 './**/*.spec.js'",
+    "test": "./node_modules/mocha/bin/mocha --timeout 10000 './src/**/*.spec.js'",
     "test-single": "./node_modules/mocha/bin/mocha --timeout 10000",
-    "db-init": "node -e \"require('./db/dbInit').initDatabase()\""
+    "db-init": "node -e \"require('./src/db/dbInit').initDatabase()\""
   },
   "dependencies": {
     "bluebird": "^3.4.6",

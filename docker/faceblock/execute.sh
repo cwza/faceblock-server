@@ -7,5 +7,5 @@ cd ~/faceblock/faceblock-server
 git pull
 export NODE_ENV="docker"
 export PORT=3001
-node -e 'require("./db/dbInit").initDatabase()'
+npm run db-init
 node ~/faceblock/faceblock-server/bin/www

@@ -31,7 +31,7 @@ export PORT=3001
 
 source ~/.bashrc
 # init Database
-node -e 'require("./db/dbInit").initDatabase()'
+npm run db-init
 forever start ~/faceblock/faceblock-server/bin/www
 ```
 
