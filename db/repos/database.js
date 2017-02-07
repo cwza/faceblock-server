@@ -10,7 +10,5 @@ module.exports = (rep, pgp) => {
       rep.none(sql.createAllTable),
     truncateAllTable: () =>
       rep.none(sql.truncateAllTable),
-    runRawSql: (sql) =>
-      rep.any(sql)
   };
 };

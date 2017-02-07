@@ -45,7 +45,6 @@ var options = {
   }
 };
 
-let env = process.env.NODE_ENV || 'development';
 
 // Database connection parameters:
 var config = configs.db;
@@ -55,6 +54,9 @@ var pgp = require('pg-promise')(options);
 
 // Create the database instance:
 var db = pgp(config);
+
+// For join-monster and graphOL query
+let dbRaw = require('pg-promise')({promiseLib: promise})(config);
 
 // Load and initialize all the diagnostics:
 var diag = require('./diagnostics');
@@ -69,5 +71,6 @@ module.exports = {
   pgp,
   // Database instance. Only one instance per database is needed
   // within any application.
-  db
+  db,
+  dbRaw,
 };

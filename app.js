@@ -1,5 +1,4 @@
 const express = require('express');
-// const postgraphql = require('postgraphql').postgraphql;
 const path = require('path');
 const favicon = require('serve-favicon');
 const morganLogger = require('morgan');
@@ -8,6 +7,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const queryParser = require('express-query-int');
 const cors = require('cors');
+const graphqlHTTP = require('express-graphql');
 
 const logger = require('./logger').logger;
 const Constants = require('./Constants');
@@ -36,8 +36,15 @@ var corsOptions = {
     callback(originIsWhitelisted ? null : 'Bad Request', originIsWhitelisted)
   }
 }
-app.use(cors(corsOptions));
+app.options('/graphql', cors());
+// graphql
+app.use('/graphql', graphqlHTTP({
+  schema: require('./graphQL/schemas/index'),
+  // TODO should turn off at production
+  graphiql: true
+}));
 
+app.use(cors(corsOptions));
 //routers
 app.use('/api', index);
 app.use('/api/users', users);

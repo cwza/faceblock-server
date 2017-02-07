@@ -17,12 +17,4 @@ describe('db.database', function() {
       return db.database.truncateAllTable();
     });
   });
-  describe.skip('#runRawSql()', function() {
-    it('runRawSql', function() {
-      return db.database.runRawSql('select * from posts')
-        .then(posts => {
-          console.log(JSON.stringify(posts, null, 2));
-        });
-    });
-  })
 });
