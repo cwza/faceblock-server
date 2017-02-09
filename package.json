@@ -6,7 +6,8 @@
     "start": "PORT=3001 node ./bin/www",
     "test": "./node_modules/mocha/bin/mocha --timeout 10000 './src/**/*.spec.js'",
     "test-single": "./node_modules/mocha/bin/mocha --timeout 10000",
-    "db-init": "node -e \"require('./src/db/dbInit').initDatabase()\""
+    "db-init": "node -e \"require('./src/db/dbInit').initDatabase()\"",
+    "eslint": "eslint ./src"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
@@ -37,6 +38,8 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^3.15.0",
+    "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.1.2",
     "supertest": "^2.0.1"
   }

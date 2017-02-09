@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
 const morganLogger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -10,7 +9,6 @@ const cors = require('cors');
 const graphqlHTTP = require('express-graphql');
 
 const logger = require('./logger').logger;
-const Constants = require('./Constants');
 const configs = require('./configs');
 const Errors = require('./Errors');
 

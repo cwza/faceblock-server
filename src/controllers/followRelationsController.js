@@ -24,7 +24,7 @@ const findByParamsWithoutNearId = (req, params) => {
   return db.task('findByParamsWithoutNearId', function *(t) {
     let nextPageFollowRelations = yield t.followRelations.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
     let thisPageFollowRelations = yield t.followRelations.findByParamsWithoutNearId(params);
-    nextUrl = nextPageFollowRelations.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
+    let nextUrl = nextPageFollowRelations.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
     let response = {
       entities: {
         followRelations: thisPageFollowRelations.map(element => utils.deletePropertiesFromObject(element, ['score']))

@@ -1,5 +1,3 @@
-'use strict';
-
 const sql = require('../sql').database;
 
 module.exports = (rep, pgp) => {

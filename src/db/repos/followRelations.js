@@ -1,5 +1,3 @@
-'use strict';
-
 const humps = require('humps');
 const sql = require('../sql').followRelations;
 const PARAMS = require('../../Constants').PARAMS;
@@ -50,7 +48,7 @@ module.exports = (rep, pgp) => {
     findByFollowerId: followerId =>
       rep.any(`SELECT * FROM ${TABLE_NAME} WHERE follower_id = $1`, followerId),
     findByRelation: (userId, followerId) =>
-      rep.oneOrNone(`SELECT * FROM ${TABLE_MAME} WHERE user_id = $1 and follower_id = $2`, [userId, followerId]),
+      rep.oneOrNone(`SELECT * FROM ${TABLE_NAME} WHERE user_id = $1 and follower_id = $2`, [userId, followerId]),
     findByParamsWithoutNearId: (inputParams) => {
       let params = createNamedParameterObject(inputParams);
       logger.debug('sqlString for db.followRelations.findByParamsWithoutNearId(): ', sql.findByParamsWithoutNearId.query, params);

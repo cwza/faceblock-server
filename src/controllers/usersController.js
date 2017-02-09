@@ -7,10 +7,10 @@ const usersValidatorSchema = require('../validators/usersValidatorSchema');
 const controllerUtils = require('./controllerUtils');
 const Errors = require('../Errors')
 
-let checkAuthorization = (reqUser, user) => {
-  if(reqUser.id !== user.id)
-    throw Errors.authorizationError();
-}
+// let checkAuthorization = (reqUser, user) => {
+//   if(reqUser.id !== user.id)
+//     throw Errors.authorizationError();
+// }
 
 //if nextPage has no record nextPage will be the same to req
 // else nextPage will be page + 1
@@ -19,7 +19,7 @@ let findByParamsWithoutNearId = (req, params) => {
   return db.task('findByParamsWithoutNearId', function *(t) {
     let nextPageUsers = yield t.users.findByParamsWithoutNearId(Object.assign({}, params, {page: params.page + 1}));
     let thisPageUsers = yield t.users.findByParamsWithoutNearId(params);
-    nextUrl = nextPageUsers.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
+    let nextUrl = nextPageUsers.length > 0 ? domain + utils.genNextPageUrl(req.originalUrl, params.page) : Constants.NO_NEXT_PAGE;
     let response = {
       entities: {
         users: thisPageUsers.map(element => utils.deletePropertiesFromObject(element, ['score']))

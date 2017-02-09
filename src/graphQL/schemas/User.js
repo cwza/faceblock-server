@@ -1,5 +1,4 @@
 const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLInt } = require('graphql')
-const logger = require('../../logger').logger;
 
 const userType = new GraphQLObjectType({
   description: 'account',

@@ -1,11 +1,8 @@
 const request = require('supertest');
 const app = require('../app');
-const db = require('../db').db;
 const dbInit = require('../db/dbInit');
 const configs = require('../configs');
 const expect = require('chai').expect;
-const Constants = require('../Constants');
-const utils = require('../utils');
 const Errors = require('../Errors');
 const createJwt = require('../controllers/authenticationController').private.createJwt;
 

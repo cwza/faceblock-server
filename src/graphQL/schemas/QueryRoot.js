@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLInt } =  require('graphql')
+const { GraphQLObjectType, GraphQLList, GraphQLString } =  require('graphql')
 const joinMonster = require('join-monster').default;
 const logger = require('../../logger').logger;
 const db = require('../../db').dbRaw;

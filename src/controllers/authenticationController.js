@@ -1,4 +1,4 @@
-require('isomorphic-fetch');
+const fetch = require('isomorphic-fetch');
 const logger = require('../logger').logger;
 const camelizeKeys = require('humps').camelizeKeys;
 const jwt = require('jsonwebtoken');
@@ -36,12 +36,12 @@ const verifyJwt = (jwtString) => {
     });
 }
 
-const getFaceblockToken = (req) => {
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-    return req.headers.authorization.split(' ')[1];
-  }
-  return '';
-}
+// const getFaceblockToken = (req) => {
+//   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+//     return req.headers.authorization.split(' ')[1];
+//   }
+//   return '';
+// }
 
 // if user not found, create it. and return user and generated jwt
 const checkUser = (userInfo) => {
@@ -81,6 +81,7 @@ const login = (req) => {
       return response;
     }).catch(error => {
       if(error.errorFrom) throw Errors.authenticationError(error);
+      throw error;
     })
 }
 

@@ -17,7 +17,7 @@ describe('postsValidatorSchema', function() {
     it('should return Validation Error for order string onlyallow', function() {
       let expectedErrorMessage = 'child "order" fails because ["order" must be one of [asc, desc]]';
       try {
-        let result = utils.validateObjectBySchema(req.query, postsValidatorSchema.queryParamsSchema)
+        utils.validateObjectBySchema(req.query, postsValidatorSchema.queryParamsSchema)
       } catch(error) {
         expect(error.message).to.be.equal(expectedErrorMessage);
       }

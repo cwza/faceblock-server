@@ -1,7 +1,6 @@
 const db = require('../').db;
 const expect = require('chai').expect;
 const dbInit = require('../dbInit');
-const Constants = require('../../Constants');
 const utils = require('../../utils');
 
 describe('db.posts', function() {

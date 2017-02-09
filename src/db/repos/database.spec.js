@@ -1,5 +1,5 @@
 let db = require('../').db;
-let expect = require('chai').expect;
+// let expect = require('chai').expect;
 
 describe('db.database', function() {
   describe.skip('#dropAllTable()', function() {

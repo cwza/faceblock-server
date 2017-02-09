@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const configs = require('../configs');
 const expect = require('chai').expect;
 const dbInit = require('../db/dbInit');
-const utils = require('../utils');
 
 describe('authenticationController', function() {
   const socialToken = 'ya29.CjDDA7ZgPbcaXyWWOqap6VBWUTKoGyLJ5_BojbbGvSK6DkgwUYqzVXH7nIMgZ3xRUtw';

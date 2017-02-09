@@ -3,7 +3,6 @@ const postsController = require('./postsController');
 const dbInit = require('../db/dbInit');
 const configs = require('../configs');
 const Constants = require('../Constants');
-const db = require('../db').db;
 
 describe('postsController', function() {
   let initUsers = null, initPosts = null;

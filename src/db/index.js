@@ -1,5 +1,3 @@
-'use strict';
-
 const promise = require('bluebird');
 const configs = require('../configs');
 

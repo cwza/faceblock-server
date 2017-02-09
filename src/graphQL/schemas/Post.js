@@ -1,5 +1,4 @@
-const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLInt } = require('graphql')
-const logger = require('../../logger').logger;
+const { GraphQLObjectType, GraphQLString, GraphQLInt } = require('graphql')
 const User = require('./User');
 
 const postType = new GraphQLObjectType({

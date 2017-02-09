@@ -1,5 +1,3 @@
-'use strict';
-
 const humps = require('humps');
 const sql = require('../sql').posts;
 const PARAMS = require('../../Constants').PARAMS;
