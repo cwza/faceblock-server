@@ -1,3 +1,5 @@
+const path = require('path');
+
 let configs = {
   app: {
     domain: 'http://localhost:3001',
@@ -13,7 +15,7 @@ let configs = {
     password: 'postgres'
   },
   logger: {
-    dir: './logs'
+    dir: path.resolve(__dirname, '../../logs'),
   }
 }
 

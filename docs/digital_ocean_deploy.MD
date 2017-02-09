@@ -5,7 +5,7 @@ Replace "SECRET" for real private secret settings.
 mkdir ~/faceblock
 cd ~/faceblock
 git clone https://github.com/cwza/faceblock-server.git faceblock-server
-npm install
+npm install --production
 forever restartall
 ```
 

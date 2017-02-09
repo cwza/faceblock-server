@@ -1,4 +1,5 @@
-//TODO: Add real domain and corsOrigins
+const path = require('path');
+
 let configs = {
   app: {
     domain: 'http://cwzc.pw',
@@ -14,7 +15,7 @@ let configs = {
     password: process.env.DB_PWD
   },
   logger: {
-    dir: '../logs'
+    dir: path.resolve(__dirname, '../../../logs'),
   }
 }
 
