@@ -12,8 +12,10 @@ zombodb_postgres:
    - "5432:5432"
   links:
    - zombodb_elastic
+  restart: always
 zombodb_elastic:
   build: ./elasticsearch
   ports:
    - "9200:9200"
    - "9300:9300"
+  restart: always
