@@ -11,6 +11,17 @@ router.post('/login', (req, res, next) => {
     .catch(error => next(error));
 });
 
+// login test just for development
+router.all('/login-test', (req, res, next) => {
+  if(process.env.NODE_ENV === 'production') {
+    next();
+  }
+  logger.debug('req.body: ', req.body);
+  authenticationController.loginTest(req)
+    .then(data => res.status(200).json(data))
+    .catch(error => next(error));
+});
+
 //authentication middleware exclude /login
 //request header should contains valid faceblock-token to server
 router.all('/*', function(req, res, next) {

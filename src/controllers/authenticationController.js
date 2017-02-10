@@ -11,7 +11,8 @@ const controllerUtils = require('./controllerUtils');
 const socialProvider = {
   google: 'https://www.googleapis.com/oauth2/v2/userinfo?alt=json'
 }
-const expiresIn = '30m';
+// const expiresIn = '30m';
+const expiresIn = '3h';
 
 const getUserInfoFromSocial = (socialSite, socialToken) => {
   return fetch(socialProvider[socialSite] + '&access_token=' + socialToken)
@@ -85,6 +86,24 @@ const login = (req) => {
     })
 }
 
+const loginTest = (req) => {
+  logger.info('loginTest()...');
+  return db.users.find(1).then(user => {
+    let userWithJwt = {user, faceblockToken: createJwt(user)};
+    let response = {
+      entities: {
+        users: [userWithJwt.user]
+      },
+      authentication: {
+        userId: userWithJwt.user.id,
+        faceblockToken: userWithJwt.faceblockToken,
+      }
+    }
+    logger.debug('response for login: ', JSON.stringify(response));
+    return response;
+  })
+}
+
 const authenticate = (req) => {
   logger.info('authenticate()...');
   try {
@@ -99,9 +118,9 @@ const authenticate = (req) => {
 }
 
 module.exports = {
-  login, authenticate
+  login, authenticate, loginTest
 }
 
 module.exports.private = {
-  getUserInfoFromSocial, createJwt, checkUser, login, authenticate
+  getUserInfoFromSocial, createJwt, checkUser, login, loginTest, authenticate
 }
