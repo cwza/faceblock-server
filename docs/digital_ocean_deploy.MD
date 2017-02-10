@@ -1,15 +1,13 @@
 Replace "SECRET" for real private secret settings.
 
-# Pull Source and restart faceblock
+# Pull Source
 ``` bash
 mkdir ~/faceblock
 cd ~/faceblock
 git clone https://github.com/cwza/faceblock-server.git faceblock-server
-npm install --production
-forever restartall
 ```
 
-# run ./faceblock/install.sh
+# run ./docker/faceblock/install.sh
 
 # docker initial
 ``` bash
@@ -49,4 +47,12 @@ source ~/.bashrc
 docker-compose -f ~/faceblock/faceblock-server/docker/docker-compose.yml up -d
 forever start ~/faceblock/faceblock-server/bin/www
 service nginx start
+```
+
+# Pull new code and restart faceblock
+``` bash
+cd ~/faceblock/faceblock-server
+git clone
+npm install --production
+forever restartall
 ```

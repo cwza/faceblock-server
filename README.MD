@@ -1,29 +1,38 @@
+Restful API Server for [faceblock-client](https://github.com/cwza/faceblock-client)
+
+# Features
+* posts CRUD
+* users CRUD
+* followRelations CRUD
+* google oauth2 and jwt authentication
+* basic graphql query
+
 # Library
-Docker:
+* Docker:
   zombodb
 
-DB:
+* DB:
   postgres, elasticsearch, zombodb, pg-promise
 
-Restful:
+* Restful:
   express
 
-GraphQL:
+* GraphQL:
   graphql, express-graphql, graphql-relay, join-monster
 
-Validator:
+* Validator:
   Joi
 
-Authentication:
+* Authentication:
   google OAuth2.0, jwtwebtoken
 
-Test:
+* Test:
   Mocha, Chai, supertest
 
-Log:
+* Log:
   winston
 
-Deploy:
+* Deploy:
   Digital Ocean, Namecheap, sslforfree
 
 # API
