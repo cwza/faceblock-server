@@ -15,7 +15,7 @@ zombodb_postgres:
   restart: always
 zombodb_elastic:
   build: ./elasticsearch
-  ports:
-   - "9200:9200"
-   - "9300:9300"
+  # ports:
+  #  - "9200:9200"
+  #  - "9300:9300"
   restart: always
