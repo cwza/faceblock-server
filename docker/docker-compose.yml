@@ -13,9 +13,11 @@ zombodb_postgres:
   links:
    - zombodb_elastic
   restart: always
+  # environment:
+  #  - POSTGRES_PASSWORD=SECRET
 zombodb_elastic:
   build: ./elasticsearch
   # ports:
-  #  - "9200:9200"
-  #  - "9300:9300"
+   - "9200:9200"
+   - "9300:9300"
   restart: always
